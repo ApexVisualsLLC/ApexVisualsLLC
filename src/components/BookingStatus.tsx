@@ -1,8 +1,3 @@
-function getCurrentBookingMonth() {
-  const now = new Date();
-  return now.toLocaleDateString("en-US", { month: "long", year: "numeric" });
-}
-
 export default function BookingStatus({ className = "" }: { className?: string }) {
   return (
     <p
@@ -12,7 +7,7 @@ export default function BookingStatus({ className = "" }: { className?: string }
         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-fg opacity-40" />
         <span className="relative inline-flex h-2 w-2 rounded-full bg-fg" />
       </span>
-      Now Booking for {getCurrentBookingMonth()}
+      Now Booking New Projects
     </p>
   );
 }
