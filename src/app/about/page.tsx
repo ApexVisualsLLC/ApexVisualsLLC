@@ -21,10 +21,10 @@ export const metadata: Metadata = {
 const lede = "I'm Russell — the founder of Apex Visuals and the person behind every shot you see here.";
 
 const bio = [
-  "I started filming because I couldn't stop noticing things other people walked right past. A canyon nobody had mapped. A waterfall tucked inside a jungle most tourists never find. A desert road that looked completely different from 400 feet in the air. I bought a drone, then a cinema camera, then another drone — and somewhere along the way it became a business.",
-  "I'm currently studying Information Systems at BYU in Provo, which means I understand both the creative and the technical side of what I do. I hold an FAA Part 107 commercial drone license and shoot with professional cinema gear — the DJI Mavic 4 Pro, DJI Avata 360, and Sony A7 IV.",
+  "I grew up in Maui, Hawaii, and started filming because I couldn't stop noticing things other people walked right past. A canyon nobody had mapped. A waterfall tucked inside a jungle most tourists never find. A desert road that looked completely different from 400 feet in the air. I bought a drone, then a cinema camera, then another drone — and somewhere along the way it became a passion and a business.",
+  "I'm currently studying at BYU in Provo, which means I get out and film whenever I can. I hold an FAA Part 107 commercial drone license and shoot with only the gear each project actually calls for.",
   "I work with a select number of businesses on a monthly basis to keep their content fresh and their brand visible. My work has taken me from the jungles of Maui to the red rock canyons of Southern Utah — and I bring that same obsessive attention to detail to every client project.",
-  "If you're looking for someone who actually cares about the shot — not just the deliverable — let's work together.",
+  "If you're looking for someone who actually cares about the shot — not just the deliverable — let's work together and create something incredible.",
 ];
 
 export default function AboutPage() {
