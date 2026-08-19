@@ -27,7 +27,7 @@ const faqs = [
   {
     question: "Is there a minimum project fee?",
     answer:
-      "Yes — every project has a $175 minimum. Even a small shoot involves travel, flight time, licensed piloting, and editing, so this covers the baseline cost of doing it right.",
+      "Yes — every project has a $175 minimum. Even a small shoot involves travel, flight time, licensed piloting, professional camera and drone equipment, and editing, so this covers the baseline cost of doing it right.",
   },
   {
     question: "Do you offer monthly retainers?",

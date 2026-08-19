@@ -236,8 +236,9 @@ export default function ServicesPage() {
           </p>
           <p className="mt-2">
             <span className="font-semibold text-fg">Minimum project fee: $175.</span> Every
-            project — however small — involves travel, flight time, FAA-licensed piloting, and
-            professional editing, so this covers the baseline cost of doing it right.
+            project — however small — involves travel, flight time, FAA-licensed piloting,
+            professional camera and drone equipment, and editing, so this covers the baseline
+            cost of doing it right.
           </p>
         </div>
       </Reveal>
