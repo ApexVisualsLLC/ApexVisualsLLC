@@ -30,9 +30,12 @@ const bio = [
 export default function AboutPage() {
   return (
     <div>
-      {/* REPLACE: Photo of Russell with gear, on location */}
       <PlaceholderPhoto
-        label="Russell with gear, on location"
+        label="Russell on location"
+        src="/about-hero-arch.jpg"
+        alt="Russell standing on a red rock arch overlooking Southern Utah at sunset"
+        priority
+        labelPosition="bottom"
         className="h-[55vh] min-h-[360px] w-full"
       />
 
@@ -48,9 +51,10 @@ export default function AboutPage() {
           </Reveal>
 
           <Reveal delay={100}>
-            {/* REPLACE: Portrait photo of Russell */}
             <PlaceholderPhoto
-              label="Portrait of Russell"
+              label="Russell overlooking a canyon"
+              src="/about-portrait-canyon.jpg"
+              alt="Russell standing on a rock overlooking a Southern Utah canyon at dusk"
               className="aspect-[4/5] w-full rounded-2xl"
             />
           </Reveal>
