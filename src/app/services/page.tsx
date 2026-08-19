@@ -230,7 +230,9 @@ export default function ServicesPage() {
             hours for an additional 50% fee.
           </p>
           <p className="mt-2">
-            <span className="font-semibold text-fg">Minimum project fee: $175.</span> No exceptions.
+            <span className="font-semibold text-fg">Minimum project fee: $175.</span> Every
+            project — however small — involves travel, flight time, FAA-licensed piloting, and
+            professional editing, so this covers the baseline cost of doing it right.
           </p>
         </div>
       </Reveal>
