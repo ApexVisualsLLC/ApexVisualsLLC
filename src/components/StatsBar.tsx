@@ -1,7 +1,7 @@
-/* REPLACE: confirm real figures with Russell before launch — these are placeholder estimates */
+/* REPLACE: "Projects Delivered" figure still needs Russell's confirmation — flagged, not yet verified */
 const stats = [
   { value: "50+", label: "Projects Delivered" },
-  { value: "20+", label: "Utah Businesses Served" },
+  { value: "5", label: "Professional Cameras & Drones" },
   { value: "5", label: "Day Avg. Turnaround" },
   { value: "100%", label: "FAA Part 107 Compliant" },
 ];

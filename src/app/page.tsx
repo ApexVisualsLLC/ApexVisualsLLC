@@ -57,7 +57,7 @@ const trustItems = [
   "FAA Part 107 Certified",
   "Professional Cinema Gear",
   "5-Day Delivery",
-  "Utah Based",
+  "Utah Based & Operated",
 ];
 
 export default function HomePage() {
