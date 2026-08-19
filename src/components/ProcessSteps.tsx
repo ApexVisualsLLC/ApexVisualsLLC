@@ -4,7 +4,8 @@ const defaultSteps: Step[] = [
   {
     number: "01",
     title: "Tell Us Your Vision",
-    description: "Reach out with your project — real estate listing, brand film, or a monthly retainer.",
+    description:
+      "Reach out with your project — real estate listing, brand film, or a monthly retainer. We'll go over what it needs — equipment, travel, flight time — and send a clear, no-obligation quote before you commit to anything.",
   },
   {
     number: "02",
