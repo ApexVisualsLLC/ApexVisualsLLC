@@ -3,6 +3,28 @@ import ContactForm from "@/components/ContactForm";
 import Eyebrow from "@/components/Eyebrow";
 import Reveal from "@/components/Reveal";
 import BookingStatus from "@/components/BookingStatus";
+import ProcessSteps from "@/components/ProcessSteps";
+
+const quoteSteps = [
+  {
+    number: "01",
+    title: "Tell Us About Your Project",
+    description:
+      "Share as much detail as you can below — project type, timeline, location, and vision. The more we know, the faster we can quote.",
+  },
+  {
+    number: "02",
+    title: "We Review & Follow Up",
+    description:
+      "We'll look over your details and get back to you within 24 hours — sometimes with a few quick questions to pin down exact scope.",
+  },
+  {
+    number: "03",
+    title: "You Get a Custom Quote",
+    description:
+      "Pricing on our Services page reflects typical starting costs. Once we understand your project, we'll send a clear, no-obligation quote — so you know exactly what to expect before committing to anything.",
+  },
+];
 
 export const metadata: Metadata = {
   title: "Contact — Apex Visuals LLC | Get a Quote for Drone Photography Utah",
@@ -28,7 +50,19 @@ export default function ContactPage() {
       </Reveal>
 
       <Reveal delay={100}>
-        <div className="mt-12">
+        <div className="mt-16 border-t border-border pt-12">
+          <Eyebrow>How It Works</Eyebrow>
+          <h2 className="mt-4 font-serif text-2xl font-bold sm:text-3xl">
+            From Message to Quote
+          </h2>
+          <div className="mt-8">
+            <ProcessSteps steps={quoteSteps} />
+          </div>
+        </div>
+      </Reveal>
+
+      <Reveal delay={150}>
+        <div className="mt-16 border-t border-border pt-12">
           <ContactForm />
         </div>
       </Reveal>

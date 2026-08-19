@@ -1,4 +1,6 @@
-const steps = [
+export type Step = { number: string; title: string; description: string };
+
+const defaultSteps: Step[] = [
   {
     number: "01",
     title: "Tell Us Your Vision",
@@ -21,9 +23,13 @@ const steps = [
   },
 ];
 
-export default function ProcessSteps() {
+export default function ProcessSteps({ steps = defaultSteps }: { steps?: Step[] }) {
   return (
-    <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+    <div
+      className={`grid gap-10 lg:gap-6 sm:grid-cols-2 ${
+        steps.length >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-3"
+      }`}
+    >
       {steps.map((step) => (
         <div key={step.number} className="border-t border-fg/20 pt-6">
           <span className="font-serif text-3xl font-bold text-fg-faint">{step.number}</span>

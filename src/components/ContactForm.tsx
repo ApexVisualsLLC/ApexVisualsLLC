@@ -48,7 +48,8 @@ export default function ContactForm() {
       <div className="rounded-2xl border border-fg/30 bg-panel p-8 text-center">
         <p className="font-serif text-2xl font-bold">Message sent.</p>
         <p className="mt-3 text-fg-muted">
-          Thanks for reaching out — we&apos;ll get back to you within 24 hours.
+          Thanks for reaching out — we&apos;ll review your project and follow up within 24
+          hours with a custom quote.
         </p>
       </div>
     );
