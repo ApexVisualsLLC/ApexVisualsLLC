@@ -1,5 +1,5 @@
 const LINE_MOTIF =
-  "repeating-linear-gradient(115deg, rgba(240,232,216,0.06) 0px, rgba(240,232,216,0.06) 1.5px, transparent 1.5px, transparent 34px)";
+  "repeating-linear-gradient(115deg, rgba(244,243,240,0.06) 0px, rgba(244,243,240,0.06) 1.5px, transparent 1.5px, transparent 34px)";
 const VIGNETTE =
   "radial-gradient(ellipse at center, transparent 35%, rgba(8,5,3,0.55) 100%)";
 const FILM_GRADE = "[filter:sepia(0.35)_contrast(1.08)_brightness(0.96)_saturate(1.1)]";

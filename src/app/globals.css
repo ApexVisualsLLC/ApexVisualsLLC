@@ -2,11 +2,11 @@
 
 :root {
   --color-bg: #14100c;
-  --color-fg: #f0e8d8;
-  --color-fg-muted: rgba(240, 232, 216, 0.62);
-  --color-fg-faint: rgba(240, 232, 216, 0.38);
-  --color-border: rgba(240, 232, 216, 0.14);
-  --color-panel: rgba(240, 232, 216, 0.05);
+  --color-fg: #f4f3f0;
+  --color-fg-muted: rgba(244, 243, 240, 0.62);
+  --color-fg-faint: rgba(244, 243, 240, 0.38);
+  --color-border: rgba(244, 243, 240, 0.14);
+  --color-panel: rgba(244, 243, 240, 0.05);
 }
 
 @theme inline {

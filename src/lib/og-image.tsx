@@ -29,7 +29,7 @@ export function buildOgImage() {
             fontSize: 58,
             fontWeight: 800,
             letterSpacing: 6,
-            color: "#f0e8d8",
+            color: "#f4f3f0",
           }}
         >
           APEX VISUALS LLC
@@ -39,7 +39,7 @@ export function buildOgImage() {
             marginTop: 18,
             fontSize: 26,
             letterSpacing: 1,
-            color: "rgba(240,232,216,0.62)",
+            color: "rgba(244,243,240,0.62)",
           }}
         >
           Aerial Drone Photography &amp; Cinematic Video — Utah
