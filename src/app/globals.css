@@ -40,6 +40,12 @@ body {
   color: var(--color-bg);
 }
 
+:focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;

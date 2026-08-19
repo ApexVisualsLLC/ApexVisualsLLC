@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Eyebrow from "@/components/Eyebrow";
+import Reveal from "@/components/Reveal";
 
 export const metadata: Metadata = {
   title: "Services & Pricing — Apex Visuals LLC | Drone Photography Utah",
@@ -73,8 +75,8 @@ const retainerTiers: Tier[] = [
 function TierCard({ tier, highlighted = false }: { tier: Tier; highlighted?: boolean }) {
   return (
     <div
-      className={`flex flex-col rounded-2xl border p-8 ${
-        highlighted ? "border-fg/40 bg-panel" : "border-border"
+      className={`flex h-full flex-col rounded-2xl border p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(0,0,0,0.35)] ${
+        highlighted ? "border-fg/40 bg-panel" : "border-border hover:border-fg/30"
       }`}
     >
       <h3 className="font-serif text-xl font-bold">{tier.name}</h3>
@@ -92,6 +94,7 @@ function TierCard({ tier, highlighted = false }: { tier: Tier; highlighted?: boo
 
 function PackageSection({
   id,
+  number,
   title,
   tiers,
   highlighted = false,
@@ -99,6 +102,7 @@ function PackageSection({
   crossLink = true,
 }: {
   id: string;
+  number: string;
   title: string;
   tiers: Tier[];
   highlighted?: boolean;
@@ -107,18 +111,23 @@ function PackageSection({
 }) {
   return (
     <section id={id} className="scroll-mt-24 py-14 first:pt-0">
-      <div className="flex flex-wrap items-center gap-3">
-        <h2 className="font-serif text-3xl font-bold sm:text-4xl">{title}</h2>
-        {badge && (
-          <span className="rounded-full bg-fg px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-bg">
-            {badge}
-          </span>
-        )}
-      </div>
+      <Reveal>
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="font-serif text-lg text-fg-faint">{number}</span>
+          <h2 className="font-serif text-3xl font-bold sm:text-4xl">{title}</h2>
+          {badge && (
+            <span className="rounded-full bg-fg px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-bg">
+              {badge}
+            </span>
+          )}
+        </div>
+      </Reveal>
 
       <div className="mt-8 grid gap-6 md:grid-cols-3">
-        {tiers.map((tier) => (
-          <TierCard key={tier.name} tier={tier} highlighted={highlighted} />
+        {tiers.map((tier, i) => (
+          <Reveal key={tier.name} delay={i * 100}>
+            <TierCard tier={tier} highlighted={highlighted} />
+          </Reveal>
         ))}
       </div>
 
@@ -137,17 +146,21 @@ function PackageSection({
 export default function ServicesPage() {
   return (
     <div className="mx-auto max-w-7xl px-6 py-20 md:px-10 md:py-28">
-      <h1 className="font-serif text-4xl font-bold sm:text-5xl">Services &amp; Pricing</h1>
-      <p className="mt-4 max-w-2xl text-fg-muted">
-        Every project starts with a conversation. Pricing below reflects typical project
-        scope — final quotes depend on your specific needs.
-      </p>
+      <Reveal>
+        <Eyebrow>Pricing</Eyebrow>
+        <h1 className="mt-4 font-serif text-4xl font-bold sm:text-5xl">Services &amp; Pricing</h1>
+        <p className="mt-4 max-w-2xl text-fg-muted">
+          Every project starts with a conversation. Pricing below reflects typical project
+          scope — final quotes depend on your specific needs.
+        </p>
+      </Reveal>
 
       <div className="divide-y divide-border">
-        <PackageSection id="aerial" title="Aerial Photography" tiers={aerialTiers} />
-        <PackageSection id="cinematic" title="Cinematic Video" tiers={cinematicTiers} />
+        <PackageSection id="aerial" number="01" title="Aerial Photography" tiers={aerialTiers} />
+        <PackageSection id="cinematic" number="02" title="Cinematic Video" tiers={cinematicTiers} />
         <PackageSection
           id="social-media"
+          number="03"
           title="Social Media Content"
           tiers={retainerTiers}
           highlighted
@@ -156,15 +169,17 @@ export default function ServicesPage() {
         />
       </div>
 
-      <div className="mt-6 rounded-2xl border border-border bg-panel p-6 text-sm text-fg-muted">
-        <p>
-          <span className="font-semibold text-fg">Rush delivery</span> is available within 48
-          hours for an additional 50% fee.
-        </p>
-        <p className="mt-2">
-          <span className="font-semibold text-fg">Minimum project fee: $175.</span> No exceptions.
-        </p>
-      </div>
+      <Reveal>
+        <div className="mt-6 rounded-2xl border border-border bg-panel p-6 text-sm text-fg-muted">
+          <p>
+            <span className="font-semibold text-fg">Rush delivery</span> is available within 48
+            hours for an additional 50% fee.
+          </p>
+          <p className="mt-2">
+            <span className="font-semibold text-fg">Minimum project fee: $175.</span> No exceptions.
+          </p>
+        </div>
+      </Reveal>
     </div>
   );
 }

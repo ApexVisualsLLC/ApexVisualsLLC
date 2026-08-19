@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { VideoThumb } from "@/components/PlaceholderMedia";
+import Reveal from "@/components/Reveal";
 
 type Category = "Commercial" | "Aerial" | "Cinematic";
 const tabs: ("All" | Category)[] = ["All", "Commercial", "Aerial", "Cinematic"];
@@ -49,8 +50,14 @@ export default function WorkGallery() {
       </div>
 
       <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {visible.map((item) => (
-          <VideoThumb key={item.title} {...item} className="rounded-2xl" />
+        {visible.map((item, i) => (
+          <Reveal
+            key={item.title}
+            delay={Math.min(i, 5) * 80}
+            className={i === 0 ? "sm:col-span-2" : ""}
+          >
+            <VideoThumb {...item} featured={i === 0} className="rounded-2xl" />
+          </Reveal>
         ))}
       </div>
     </div>

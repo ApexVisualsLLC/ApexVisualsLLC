@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import GrainOverlay from "@/components/GrainOverlay";
 import "./globals.css";
 
 const editorial = Playfair_Display({
@@ -42,18 +43,20 @@ export const metadata: Metadata = {
     title: "Apex Visuals LLC — Aerial Drone Photography & Cinematic Video | Utah",
     description:
       "FAA Part 107 licensed drone photography and cinematic video production serving Provo and Utah County.",
-    images: [{ url: "/logo-full-white.png", width: 2000, height: 2000, alt: "Apex Visuals LLC" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Apex Visuals LLC — Aerial Drone Photography & Cinematic Video | Utah",
     description:
       "FAA Part 107 licensed drone photography and cinematic video production serving Provo and Utah County.",
-    images: ["/logo-full-white.png"],
   },
   alternates: {
     canonical: "/",
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#111111",
 };
 
 const localBusinessSchema = {
@@ -97,6 +100,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
         />
+        <GrainOverlay />
         <Nav />
         <main className="flex-1">{children}</main>
         <Footer />

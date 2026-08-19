@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import WorkGallery from "@/components/WorkGallery";
+import Eyebrow from "@/components/Eyebrow";
+import Reveal from "@/components/Reveal";
 
 export const metadata: Metadata = {
   title: "Our Work — Apex Visuals LLC | Drone & Cinematic Video Portfolio Utah",
@@ -18,11 +20,14 @@ export const metadata: Metadata = {
 export default function WorkPage() {
   return (
     <div className="mx-auto max-w-7xl px-6 py-20 md:px-10 md:py-28">
-      <h1 className="font-serif text-4xl font-bold sm:text-5xl">Our Work</h1>
-      <p className="mt-4 max-w-xl text-fg-muted">
-        A selection of aerial photography, cinematic video, and commercial projects
-        from across Utah and beyond.
-      </p>
+      <Reveal>
+        <Eyebrow>Portfolio</Eyebrow>
+        <h1 className="mt-4 font-serif text-4xl font-bold sm:text-5xl">Our Work</h1>
+        <p className="mt-4 max-w-xl text-fg-muted">
+          A selection of aerial photography, cinematic video, and commercial projects
+          from across Utah and beyond.
+        </p>
+      </Reveal>
 
       <div className="mt-12">
         <WorkGallery />
