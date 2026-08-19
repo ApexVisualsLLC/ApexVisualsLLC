@@ -63,7 +63,7 @@ export default function ContactForm() {
         <ul className="mt-3 space-y-1.5 text-sm text-fg-muted">
           <li>— Property or shoot location</li>
           <li>— Your ideal timeline or date</li>
-          <li>— Any reference videos or photos you love</li>
+          <li>— Any reference photos or video links you love</li>
         </ul>
       </div>
 
@@ -126,19 +126,20 @@ export default function ContactForm() {
             required
             name="message"
             rows={5}
-            className="mt-2 w-full rounded-lg border border-border bg-transparent px-4 py-3 text-sm text-fg outline-none focus:border-fg/50"
+            placeholder="Have a reference video? Paste a link (YouTube, Instagram, Google Drive, etc.) right here."
+            className="mt-2 w-full rounded-lg border border-border bg-transparent px-4 py-3 text-sm text-fg outline-none placeholder:text-fg-faint/60 focus:border-fg/50"
           />
         </label>
 
         <label className="block">
           <span className="text-sm font-medium text-fg-muted">
-            Upload references, inspiration, or anything that helps describe your vision (optional)
+            Upload reference photos (optional) — for videos, paste a link above instead
           </span>
           <input
             name="attachments"
             type="file"
             multiple
-            accept="image/*,video/*,application/pdf"
+            accept="image/*,application/pdf"
             className="mt-2 w-full rounded-lg border border-dashed border-border bg-transparent px-4 py-3 text-sm text-fg-muted file:mr-4 file:rounded-full file:border-0 file:bg-fg file:px-4 file:py-2 file:text-xs file:font-semibold file:text-bg"
           />
         </label>
