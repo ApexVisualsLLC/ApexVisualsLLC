@@ -64,26 +64,33 @@ export default function AboutPage() {
           ))}
         </div>
 
-        <Reveal>
-          <div className="mt-16">
-            <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.35em] text-fg-faint">
+      </div>
+
+      <section className="border-t border-border bg-panel">
+        <div className="mx-auto max-w-3xl px-6 py-20 text-center md:py-28">
+          <Reveal>
+            <p className="font-mono text-[11px] uppercase tracking-[0.35em] text-fg-faint">
               — Action —
             </p>
-            <Magnetic className="inline-block">
+            <h2 className="mt-4 font-serif text-3xl font-bold sm:text-4xl">
+              Let&apos;s make something worth watching.
+            </h2>
+
+            <Magnetic className="mt-10 inline-block">
               <Link
                 href="/contact"
-                className="group relative inline-block border border-fg/50 px-8 py-3.5 text-sm font-semibold tracking-wide text-fg transition-colors duration-300 hover:bg-fg hover:text-bg"
+                className="group relative inline-block border border-fg/50 px-9 py-4 text-sm font-semibold tracking-wide text-fg transition-colors duration-300 hover:bg-fg hover:text-bg"
               >
-                <span className="pointer-events-none absolute -left-2 -top-2 h-3 w-3 border-l border-t border-fg/50 transition-colors duration-300 group-hover:border-fg" />
-                <span className="pointer-events-none absolute -right-2 -top-2 h-3 w-3 border-r border-t border-fg/50 transition-colors duration-300 group-hover:border-fg" />
-                <span className="pointer-events-none absolute -bottom-2 -left-2 h-3 w-3 border-b border-l border-fg/50 transition-colors duration-300 group-hover:border-fg" />
-                <span className="pointer-events-none absolute -bottom-2 -right-2 h-3 w-3 border-b border-r border-fg/50 transition-colors duration-300 group-hover:border-fg" />
+                <span className="pointer-events-none absolute -left-2.5 -top-2.5 h-4 w-4 border-l border-t border-fg/50 transition-colors duration-300 group-hover:border-fg" />
+                <span className="pointer-events-none absolute -right-2.5 -top-2.5 h-4 w-4 border-r border-t border-fg/50 transition-colors duration-300 group-hover:border-fg" />
+                <span className="pointer-events-none absolute -bottom-2.5 -left-2.5 h-4 w-4 border-b border-l border-fg/50 transition-colors duration-300 group-hover:border-fg" />
+                <span className="pointer-events-none absolute -bottom-2.5 -right-2.5 h-4 w-4 border-b border-r border-fg/50 transition-colors duration-300 group-hover:border-fg" />
                 Start a Project
               </Link>
             </Magnetic>
-          </div>
-        </Reveal>
-      </div>
+          </Reveal>
+        </div>
+      </section>
     </div>
   );
 }
