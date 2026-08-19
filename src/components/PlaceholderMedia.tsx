@@ -1,7 +1,8 @@
 const LINE_MOTIF =
-  "repeating-linear-gradient(115deg, rgba(245,245,245,0.055) 0px, rgba(245,245,245,0.055) 1.5px, transparent 1.5px, transparent 34px)";
+  "repeating-linear-gradient(115deg, rgba(240,232,216,0.06) 0px, rgba(240,232,216,0.06) 1.5px, transparent 1.5px, transparent 34px)";
 const VIGNETTE =
-  "radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.5) 100%)";
+  "radial-gradient(ellipse at center, transparent 35%, rgba(8,5,3,0.55) 100%)";
+const FILM_GRADE = "[filter:sepia(0.35)_contrast(1.08)_brightness(0.96)_saturate(1.1)]";
 
 export function PlaceholderPhoto({
   label,
@@ -14,7 +15,7 @@ export function PlaceholderPhoto({
 }) {
   return (
     <div
-      className={`relative flex overflow-hidden bg-gradient-to-br from-[#1c1c1c] via-[#111111] to-[#0a0a0a] ${
+      className={`relative flex overflow-hidden bg-gradient-to-br from-[#231a10] via-[#14100c] to-[#0a0704] ${FILM_GRADE} ${
         labelPosition === "bottom" ? "items-end pb-10" : "items-center"
       } justify-center ${className}`}
       role="img"
@@ -44,7 +45,7 @@ export function VideoThumb({
 }) {
   return (
     <div
-      className={`group relative flex aspect-video items-center justify-center overflow-hidden bg-gradient-to-br from-[#1c1c1c] via-[#131313] to-[#0a0a0a] transition-transform duration-300 hover:-translate-y-1 ${className}`}
+      className={`group relative flex aspect-video items-center justify-center overflow-hidden bg-gradient-to-br from-[#231a10] via-[#181209] to-[#0a0704] transition-transform duration-300 hover:-translate-y-1 ${FILM_GRADE} ${className}`}
     >
       {/* REPLACE: YouTube embed URL — [Commercial/Aerial/Cinematic] */}
       <div className="absolute inset-0" style={{ backgroundImage: LINE_MOTIF }} />
@@ -72,7 +73,7 @@ export function VideoThumb({
         </svg>
       </span>
 
-      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent p-4">
+      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0a0704]/90 to-transparent p-4">
         <p className={featured ? "text-lg font-medium text-fg" : "text-sm font-medium text-fg"}>
           {title}
         </p>

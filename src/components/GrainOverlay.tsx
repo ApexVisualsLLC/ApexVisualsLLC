@@ -3,10 +3,23 @@ const NOISE_SVG =
 
 export default function GrainOverlay() {
   return (
-    <div
-      aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-[60] opacity-[0.035] mix-blend-overlay"
-      style={{ backgroundImage: `url("${NOISE_SVG}")` }}
-    />
+    <>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed -inset-12 z-[60] opacity-[0.05] mix-blend-overlay"
+        style={{
+          backgroundImage: `url("${NOISE_SVG}")`,
+          animation: "grain-shift 0.5s steps(10) infinite",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-[59]"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, transparent 45%, rgba(6,4,2,0.55) 100%)",
+        }}
+      />
+    </>
   );
 }

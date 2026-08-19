@@ -18,7 +18,7 @@ export function buildOgImage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#111111",
+          backgroundColor: "#14100c",
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -29,7 +29,7 @@ export function buildOgImage() {
             fontSize: 58,
             fontWeight: 800,
             letterSpacing: 6,
-            color: "#f5f5f5",
+            color: "#f0e8d8",
           }}
         >
           APEX VISUALS LLC
@@ -39,7 +39,7 @@ export function buildOgImage() {
             marginTop: 18,
             fontSize: 26,
             letterSpacing: 1,
-            color: "rgba(245,245,245,0.62)",
+            color: "rgba(240,232,216,0.62)",
           }}
         >
           Aerial Drone Photography &amp; Cinematic Video — Utah
