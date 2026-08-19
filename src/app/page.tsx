@@ -54,13 +54,6 @@ const featured: { title: string; location: string; category: string; previewSrc?
   { title: "There's This Place I Go", location: "Maui, Hawaii", category: "Cinematic" },
 ];
 
-const trustItems = [
-  "FAA Part 107 Certified",
-  "Professional Cinema Gear",
-  "5-Day Delivery",
-  "Utah Based & Operated",
-];
-
 export default function HomePage() {
   return (
     <>
@@ -189,19 +182,6 @@ export default function HomePage() {
               </Reveal>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="border-t border-border">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-10 gap-y-4 px-6 py-10 text-center text-xs uppercase tracking-[0.2em] text-fg-faint md:px-10">
-          {trustItems.map((item, i) => (
-            <span key={item} className="flex items-center gap-x-10">
-              {item}
-              {i < trustItems.length - 1 && (
-                <span className="hidden text-fg-faint/50 md:inline">·</span>
-              )}
-            </span>
-          ))}
         </div>
       </section>
 
