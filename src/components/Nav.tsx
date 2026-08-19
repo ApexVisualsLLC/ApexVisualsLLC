@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Magnetic from "@/components/Magnetic";
 
@@ -13,6 +14,7 @@ const links = [
 ];
 
 export default function Nav() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -45,15 +47,23 @@ export default function Nav() {
         </Link>
 
         <nav className="hidden md:flex md:absolute md:left-1/2 md:-translate-x-1/2 md:items-center md:gap-10">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium tracking-wide text-fg/90 transition-colors hover:text-fg"
-            >
-              {link.label}
-            </Link>
-          ))}
+          {links.map((link) => {
+            const active = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={active ? "page" : undefined}
+                className={`text-sm tracking-wide transition-colors ${
+                  active
+                    ? "font-semibold text-fg [text-shadow:0_0_16px_rgba(244,243,240,0.65)]"
+                    : "font-medium text-fg/70 hover:text-fg"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
 
         <Magnetic className="hidden md:inline-block">
@@ -89,16 +99,24 @@ export default function Nav() {
 
       {menuOpen && (
         <nav className="flex flex-col gap-1 border-t border-border bg-bg px-6 pb-6 pt-2 md:hidden">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={closeMenu}
-              className="py-3 text-base font-medium text-fg/90"
-            >
-              {link.label}
-            </Link>
-          ))}
+          {links.map((link) => {
+            const active = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={closeMenu}
+                aria-current={active ? "page" : undefined}
+                className={`py-3 text-base ${
+                  active
+                    ? "font-semibold text-fg [text-shadow:0_0_16px_rgba(244,243,240,0.65)]"
+                    : "font-medium text-fg/70"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
           <Link
             href="/contact"
             onClick={closeMenu}
