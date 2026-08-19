@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const LINE_MOTIF =
   "repeating-linear-gradient(115deg, rgba(244,243,240,0.06) 0px, rgba(244,243,240,0.06) 1.5px, transparent 1.5px, transparent 34px)";
 const VIGNETTE =
@@ -6,10 +8,17 @@ const FILM_GRADE = "[filter:sepia(0.35)_contrast(1.08)_brightness(0.96)_saturate
 
 export function PlaceholderPhoto({
   label,
+  src,
+  alt,
+  priority = false,
   className = "",
   labelPosition = "center",
 }: {
   label: string;
+  /* Real photo path (e.g. "/hero.jpg"). Omit to show the placeholder gradient + label. */
+  src?: string;
+  alt?: string;
+  priority?: boolean;
   className?: string;
   labelPosition?: "center" | "bottom";
 }) {
@@ -18,14 +27,26 @@ export function PlaceholderPhoto({
       className={`relative flex overflow-hidden bg-gradient-to-br from-[#231a10] via-[#14100c] to-[#0a0704] ${FILM_GRADE} ${
         labelPosition === "bottom" ? "items-end pb-10" : "items-center"
       } justify-center ${className}`}
-      role="img"
-      aria-label={label}
+      role={src ? undefined : "img"}
+      aria-label={src ? undefined : label}
     >
-      <div className="absolute inset-0" style={{ backgroundImage: LINE_MOTIF }} />
+      {src && (
+        <Image
+          src={src}
+          alt={alt || label}
+          fill
+          priority={priority}
+          sizes="100vw"
+          className="object-cover"
+        />
+      )}
+      {!src && <div className="absolute inset-0" style={{ backgroundImage: LINE_MOTIF }} />}
       <div className="absolute inset-0" style={{ backgroundImage: VIGNETTE }} />
-      <span className="relative max-w-[80%] text-center text-xs uppercase tracking-[0.25em] text-fg-faint/60">
-        {label}
-      </span>
+      {!src && (
+        <span className="relative max-w-[80%] text-center text-xs uppercase tracking-[0.25em] text-fg-faint/60">
+          {label}
+        </span>
+      )}
     </div>
   );
 }

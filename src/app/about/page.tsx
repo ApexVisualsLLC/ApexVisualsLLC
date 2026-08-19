@@ -32,9 +32,11 @@ const gear = ["DJI Mavic 4 Pro", "DJI Avata 360", "Sony A7 IV", "GoPro 13", "iPh
 export default function AboutPage() {
   return (
     <div>
-      {/* REPLACE: Photo of Russell with gear or in a location */}
       <PlaceholderPhoto
         label="Russell with gear, on location"
+        src="/about-photo.jpg"
+        alt="Russell Bowden, FAA Part 107 licensed drone pilot and founder of Apex Visuals LLC, overlooking a canyon in Maui, Hawaii"
+        priority
         className="h-[55vh] min-h-[360px] w-full"
       />
 
