@@ -67,10 +67,8 @@ const localBusinessSchema = {
   name: "Apex Visuals LLC",
   image: `${siteUrl}/logo-full-white.png`,
   url: siteUrl,
-  /* REPLACE: telephone — Russell's business phone number */
-  telephone: "",
-  /* REPLACE: email — Russell's business email */
-  email: "",
+  telephone: "+1-808-866-4664",
+  email: "russfilmz808@gmail.com",
   address: {
     "@type": "PostalAddress",
     addressLocality: "Provo",

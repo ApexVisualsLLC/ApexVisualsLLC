@@ -39,10 +39,16 @@ export default function Footer() {
           <div className="text-sm text-fg-muted">
             <p className="text-fg-faint">Apex Visuals LLC</p>
             <p>Provo, Utah</p>
-            {/* REPLACE: Russell's business email */}
-            <p>placeholder@apexvisualsutah.com</p>
-            {/* REPLACE: Russell's personal cell number */}
-            <p>(XXX) XXX-XXXX</p>
+            <p>
+              <a href="mailto:russfilmz808@gmail.com" className="hover:text-fg">
+                russfilmz808@gmail.com
+              </a>
+            </p>
+            <p>
+              <a href="tel:+18088664664" className="hover:text-fg">
+                (808) 866-4664
+              </a>
+            </p>
             <p className="mt-2">FAA Part 107 Certified</p>
           </div>
         </div>
