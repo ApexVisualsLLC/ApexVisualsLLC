@@ -2,8 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 
-/* REPLACE: Formspree form endpoint URL from formspree.io */
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/REPLACE_ME";
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xrpzovbw";
 
 const projectTypes = [
   "Monthly Content Retainer",
