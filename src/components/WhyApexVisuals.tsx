@@ -4,9 +4,9 @@ type Point = { title: string; description: string; icon: React.ReactNode };
 
 const points: Point[] = [
   {
-    title: "You Own Your Footage",
+    title: "Your Footage, Your Use",
     description:
-      "Every delivered project comes with full usage rights for marketing and promotional use — no restrictive licensing to navigate.",
+      "Every delivered project comes with full usage rights for your own marketing and promotional use. We may also feature select projects in our own portfolio and social channels.",
     icon: (
       <path
         strokeLinecap="round"
@@ -38,14 +38,14 @@ const points: Point[] = [
     ),
   },
   {
-    title: "Real Utah Terrain",
+    title: "Weather-Safe Scheduling",
     description:
-      "Zion, Southern Utah red rock, and Utah County water parks — shot on location, not stock footage.",
+      "If wind, rain, or visibility make flying unsafe, we reschedule at no additional charge — no rushed, risky flights.",
     icon: (
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M3 18l5.5-8 4 5 2-3L21 18H3z"
+        d="M7 17.5a3.75 3.75 0 010-7.5 5 5 0 019.6-1.5A4 4 0 0117.5 17.5H7z"
       />
     ),
   },

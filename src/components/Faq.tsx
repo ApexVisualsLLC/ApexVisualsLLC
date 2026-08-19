@@ -15,10 +15,9 @@ const faqs = [
       "Safety comes first. If wind, rain, or visibility make flying unsafe, we'll reschedule at no additional charge.",
   },
   {
-    /* REPLACE: confirm exact usage-rights / licensing terms before launch */
     question: "Who owns the final footage?",
     answer:
-      "You receive full usage rights to your delivered content for marketing and promotional use.",
+      "You receive full usage rights to your delivered content for your own marketing and promotional use. We also retain the right to feature select projects in our own portfolio, website, and social media.",
   },
   {
     question: "Is the \"starting at\" price what I'll actually pay?",
