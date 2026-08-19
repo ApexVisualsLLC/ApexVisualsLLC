@@ -56,6 +56,7 @@ export function VideoThumb({
   location,
   category,
   featured = false,
+  photoSrc,
   previewSrc,
   className = "",
 }: {
@@ -63,6 +64,9 @@ export function VideoThumb({
   location: string;
   category: string;
   featured?: boolean;
+  /* Optional static poster photo (e.g. "/desert-road.jpg") shown in place of the gradient
+     placeholder — a real still until a video preview/embed is ready. */
+  photoSrc?: string;
   /* Optional short muted clip (e.g. "/videos/jellystone-aerial.mp4") that plays on hover.
      Drop files into public/videos/ and pass the path here once real footage is ready —
      until then this stays undefined and the static placeholder is shown. */
@@ -74,7 +78,16 @@ export function VideoThumb({
       className={`group relative flex aspect-video items-center justify-center overflow-hidden bg-gradient-to-br from-[#231a10] via-[#181209] to-[#0a0704] transition-transform duration-300 hover:-translate-y-1 ${FILM_GRADE} ${className}`}
     >
       {/* REPLACE: YouTube embed URL — [Commercial/Aerial/Cinematic] */}
-      <div className="absolute inset-0" style={{ backgroundImage: LINE_MOTIF }} />
+      {photoSrc && (
+        <Image
+          src={photoSrc}
+          alt={title}
+          fill
+          sizes="(min-width: 1024px) 33vw, 100vw"
+          className="object-cover"
+        />
+      )}
+      {!photoSrc && <div className="absolute inset-0" style={{ backgroundImage: LINE_MOTIF }} />}
       <div className="absolute inset-0" style={{ backgroundImage: VIGNETTE }} />
       {previewSrc && (
         <video
