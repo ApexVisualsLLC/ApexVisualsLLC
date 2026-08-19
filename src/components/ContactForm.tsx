@@ -56,101 +56,114 @@ export default function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="grid gap-6 sm:grid-cols-2">
-        <label className="block">
-          <span className="text-sm font-medium text-fg-muted">Name *</span>
-          <input
-            required
-            name="name"
-            type="text"
-            autoComplete="name"
-            className="mt-2 w-full rounded-lg border border-border bg-transparent px-4 py-3 text-sm text-fg outline-none focus:border-fg/50"
-          />
-        </label>
-
-        <label className="block">
-          <span className="text-sm font-medium text-fg-muted">Email *</span>
-          <input
-            required
-            name="email"
-            type="email"
-            autoComplete="email"
-            className="mt-2 w-full rounded-lg border border-border bg-transparent px-4 py-3 text-sm text-fg outline-none focus:border-fg/50"
-          />
-        </label>
-      </div>
-
-      <div className="grid gap-6 sm:grid-cols-2">
-        <label className="block">
-          <span className="text-sm font-medium text-fg-muted">Phone (optional)</span>
-          <input
-            name="phone"
-            type="tel"
-            autoComplete="tel"
-            className="mt-2 w-full rounded-lg border border-border bg-transparent px-4 py-3 text-sm text-fg outline-none focus:border-fg/50"
-          />
-        </label>
-
-        <label className="block">
-          <span className="text-sm font-medium text-fg-muted">Project Type *</span>
-          <select
-            required
-            name="project_type"
-            defaultValue={projectTypes[0]}
-            className="mt-2 w-full rounded-lg border border-border bg-bg px-4 py-3 text-sm text-fg outline-none focus:border-fg/50"
-          >
-            {projectTypes.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-
-      <label className="block">
-        <span className="text-sm font-medium text-fg-muted">Message / Project Description *</span>
-        <textarea
-          required
-          name="message"
-          rows={5}
-          className="mt-2 w-full rounded-lg border border-border bg-transparent px-4 py-3 text-sm text-fg outline-none focus:border-fg/50"
-        />
-      </label>
-
-      <label className="block">
-        <span className="text-sm font-medium text-fg-muted">
-          Upload references, inspiration, or anything that helps describe your vision (optional)
-        </span>
-        <input
-          name="attachments"
-          type="file"
-          multiple
-          accept="image/*,video/*,application/pdf"
-          className="mt-2 w-full rounded-lg border border-dashed border-border bg-transparent px-4 py-3 text-sm text-fg-muted file:mr-4 file:rounded-full file:border-0 file:bg-fg file:px-4 file:py-2 file:text-xs file:font-semibold file:text-bg"
-        />
-      </label>
-
-      {status === "error" && (
-        <p className="text-sm text-fg">
-          Something went wrong sending your message. Please try again, or reach out directly
-          using the info below.
+    <>
+      <div className="mb-8 rounded-2xl border border-border bg-panel p-6">
+        <p className="text-xs font-semibold uppercase tracking-wider text-fg">
+          For a faster quote, include:
         </p>
-      )}
+        <ul className="mt-3 space-y-1.5 text-sm text-fg-muted">
+          <li>— Property or shoot location</li>
+          <li>— Your ideal timeline or date</li>
+          <li>— Any reference videos or photos you love</li>
+        </ul>
+      </div>
 
-      <button
-        type="submit"
-        disabled={status === "submitting"}
-        className="w-full rounded-full bg-fg px-8 py-3.5 text-sm font-semibold tracking-wide text-bg transition-opacity hover:opacity-85 disabled:opacity-50 sm:w-auto"
-      >
-        {status === "submitting" ? "Sending…" : "Send It"}
-      </button>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid gap-6 sm:grid-cols-2">
+          <label className="block">
+            <span className="text-sm font-medium text-fg-muted">Name *</span>
+            <input
+              required
+              name="name"
+              type="text"
+              autoComplete="name"
+              className="mt-2 w-full rounded-lg border border-border bg-transparent px-4 py-3 text-sm text-fg outline-none focus:border-fg/50"
+            />
+          </label>
 
-      <p className="text-xs leading-relaxed text-fg-faint">
-        By submitting this form, you agree to be contacted about your project. We respect your
-        privacy and never share your information.
-      </p>
-    </form>
+          <label className="block">
+            <span className="text-sm font-medium text-fg-muted">Email *</span>
+            <input
+              required
+              name="email"
+              type="email"
+              autoComplete="email"
+              className="mt-2 w-full rounded-lg border border-border bg-transparent px-4 py-3 text-sm text-fg outline-none focus:border-fg/50"
+            />
+          </label>
+        </div>
+
+        <div className="grid gap-6 sm:grid-cols-2">
+          <label className="block">
+            <span className="text-sm font-medium text-fg-muted">Phone (optional)</span>
+            <input
+              name="phone"
+              type="tel"
+              autoComplete="tel"
+              className="mt-2 w-full rounded-lg border border-border bg-transparent px-4 py-3 text-sm text-fg outline-none focus:border-fg/50"
+            />
+          </label>
+
+          <label className="block">
+            <span className="text-sm font-medium text-fg-muted">Project Type *</span>
+            <select
+              required
+              name="project_type"
+              defaultValue={projectTypes[0]}
+              className="mt-2 w-full rounded-lg border border-border bg-bg px-4 py-3 text-sm text-fg outline-none focus:border-fg/50"
+            >
+              {projectTypes.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        <label className="block">
+          <span className="text-sm font-medium text-fg-muted">Message / Project Description *</span>
+          <textarea
+            required
+            name="message"
+            rows={5}
+            className="mt-2 w-full rounded-lg border border-border bg-transparent px-4 py-3 text-sm text-fg outline-none focus:border-fg/50"
+          />
+        </label>
+
+        <label className="block">
+          <span className="text-sm font-medium text-fg-muted">
+            Upload references, inspiration, or anything that helps describe your vision (optional)
+          </span>
+          <input
+            name="attachments"
+            type="file"
+            multiple
+            accept="image/*,video/*,application/pdf"
+            className="mt-2 w-full rounded-lg border border-dashed border-border bg-transparent px-4 py-3 text-sm text-fg-muted file:mr-4 file:rounded-full file:border-0 file:bg-fg file:px-4 file:py-2 file:text-xs file:font-semibold file:text-bg"
+          />
+        </label>
+
+        {status === "error" && (
+          <p className="text-sm text-fg">
+            Something went wrong sending your message. Please try again, or reach out directly
+            using the info below.
+          </p>
+        )}
+
+        <button
+          type="submit"
+          disabled={status === "submitting"}
+          className="w-full rounded-full bg-fg px-8 py-3.5 text-sm font-semibold tracking-wide text-bg transition-opacity hover:opacity-85 disabled:opacity-50 sm:w-auto"
+        >
+          {status === "submitting" ? "Sending…" : "Send It"}
+        </button>
+
+        <p className="text-xs leading-relaxed text-fg-faint">
+          By submitting this form, you agree to be contacted about your project. We respect your
+          privacy and never share your information.
+        </p>
+      </form>
+    </>
   );
 }

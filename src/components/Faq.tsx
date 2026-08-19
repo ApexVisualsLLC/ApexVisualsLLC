@@ -21,6 +21,11 @@ const faqs = [
       "You receive full usage rights to your delivered content for marketing and promotional use.",
   },
   {
+    question: "Is the \"starting at\" price what I'll actually pay?",
+    answer:
+      "The prices listed are starting points for typical project scope. Once you tell us about your project through our contact form, we'll review the details and send a clear, no-obligation quote before you commit to anything.",
+  },
+  {
     question: "Is there a minimum project fee?",
     answer: "Yes — every project has a $175 minimum, no exceptions.",
   },
