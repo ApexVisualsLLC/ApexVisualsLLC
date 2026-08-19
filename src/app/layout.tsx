@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import GrainOverlay from "@/components/GrainOverlay";
+import MobileCTABar from "@/components/MobileCTABar";
 import "./globals.css";
 
 const editorial = Playfair_Display({
@@ -104,6 +106,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Nav />
         <main className="flex-1">{children}</main>
         <Footer />
+        <MobileCTABar />
+        <Analytics />
       </body>
     </html>
   );

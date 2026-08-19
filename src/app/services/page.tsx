@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Eyebrow from "@/components/Eyebrow";
 import Reveal from "@/components/Reveal";
+import Faq from "@/components/Faq";
 
 export const metadata: Metadata = {
   title: "Services & Pricing — Apex Visuals LLC | Drone Photography Utah",
@@ -180,6 +181,19 @@ export default function ServicesPage() {
           </p>
         </div>
       </Reveal>
+
+      <div className="mt-24">
+        <Reveal>
+          <Eyebrow>FAQ</Eyebrow>
+          <h2 className="mt-4 font-serif text-3xl font-bold sm:text-4xl">Common Questions</h2>
+        </Reveal>
+
+        <div className="mt-8">
+          <Reveal>
+            <Faq />
+          </Reveal>
+        </div>
+      </div>
     </div>
   );
 }

@@ -145,6 +145,11 @@ export default function ContactForm() {
       >
         {status === "submitting" ? "Sending…" : "Send It"}
       </button>
+
+      <p className="text-xs leading-relaxed text-fg-faint">
+        By submitting this form, you agree to be contacted about your project. We respect your
+        privacy and never share your information.
+      </p>
     </form>
   );
 }
