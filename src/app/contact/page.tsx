@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import ContactForm from "@/components/ContactForm";
 import Eyebrow from "@/components/Eyebrow";
 import Reveal from "@/components/Reveal";
+import BookingStatus from "@/components/BookingStatus";
 
 export const metadata: Metadata = {
   title: "Contact — Apex Visuals LLC | Get a Quote for Drone Photography Utah",
@@ -23,6 +24,7 @@ export default function ContactPage() {
         <Eyebrow>Get in Touch</Eyebrow>
         <h1 className="mt-4 font-serif text-4xl font-bold sm:text-5xl">Let&apos;s Work Together</h1>
         <p className="mt-4 text-fg-muted">We respond within 24 hours.</p>
+        <BookingStatus className="mt-4" />
       </Reveal>
 
       <Reveal delay={100}>

@@ -7,7 +7,12 @@ import Reveal from "@/components/Reveal";
 type Category = "Commercial" | "Aerial" | "Cinematic";
 const tabs: ("All" | Category)[] = ["All", "Commercial", "Aerial", "Cinematic"];
 
-const items: { title: string; location: string; category: Category }[] = [
+type WorkItem = { title: string; location: string; category: Category; previewSrc?: string };
+
+/* REPLACE: add `previewSrc: "/videos/<file>.mp4"` to any item below once Russell drops a
+   short muted preview clip into public/videos/ — it'll autoplay on hover. Until then these
+   fall back to the static placeholder thumbnail. */
+const items: WorkItem[] = [
   { title: "Jellystone Zion — Aerial Grounds Overview", location: "Zion, Utah", category: "Commercial" },
   { title: "Jellystone Zion — Ground Photography", location: "Zion, Utah", category: "Commercial" },
   { title: "Jellystone Zion — Water Park in Slow Motion", location: "Zion, Utah", category: "Commercial" },

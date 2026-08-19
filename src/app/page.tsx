@@ -8,6 +8,7 @@ import ProcessSteps from "@/components/ProcessSteps";
 import StatsBar from "@/components/StatsBar";
 import Testimonials from "@/components/Testimonials";
 import ViewfinderHUD from "@/components/ViewfinderHUD";
+import BookingStatus from "@/components/BookingStatus";
 import Magnetic from "@/components/Magnetic";
 import { PlaceholderPhoto, VideoThumb } from "@/components/PlaceholderMedia";
 
@@ -43,7 +44,10 @@ const services = [
   },
 ];
 
-const featured = [
+/* REPLACE: add `previewSrc: "/videos/<file>.mp4"` to any item below once Russell drops a
+   short muted preview clip into public/videos/ — it'll autoplay on hover. Until then these
+   fall back to the static placeholder thumbnail. */
+const featured: { title: string; location: string; category: string; previewSrc?: string }[] = [
   { title: "Jellystone Zion — Aerial & Ground", location: "Zion, Utah", category: "Commercial" },
   { title: "Red Rock Canyon Flyover", location: "Southern Utah", category: "Aerial" },
   { title: "There's This Place I Go", location: "Maui, Hawaii", category: "Cinematic" },
@@ -88,6 +92,9 @@ export default function HomePage() {
               START A PROJECT
             </Link>
           </Magnetic>
+          <div className="mt-6 flex justify-center">
+            <BookingStatus />
+          </div>
         </div>
       </CursorGlow>
 

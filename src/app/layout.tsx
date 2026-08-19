@@ -102,9 +102,21 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
         />
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-fg focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-bg"
+        >
+          Skip to content
+        </a>
         <GrainOverlay />
         <Nav />
-        <main className="flex-1 animate-[page-fade-in_0.4s_ease-out]">{children}</main>
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="flex-1 animate-[page-fade-in_0.4s_ease-out] outline-none"
+        >
+          {children}
+        </main>
         <Footer />
         <MobileCTABar />
         <Analytics />

@@ -35,12 +35,17 @@ export function VideoThumb({
   location,
   category,
   featured = false,
+  previewSrc,
   className = "",
 }: {
   title: string;
   location: string;
   category: string;
   featured?: boolean;
+  /* Optional short muted clip (e.g. "/videos/jellystone-aerial.mp4") that plays on hover.
+     Drop files into public/videos/ and pass the path here once real footage is ready —
+     until then this stays undefined and the static placeholder is shown. */
+  previewSrc?: string;
   className?: string;
 }) {
   return (
@@ -50,6 +55,16 @@ export function VideoThumb({
       {/* REPLACE: YouTube embed URL — [Commercial/Aerial/Cinematic] */}
       <div className="absolute inset-0" style={{ backgroundImage: LINE_MOTIF }} />
       <div className="absolute inset-0" style={{ backgroundImage: VIGNETTE }} />
+      {previewSrc && (
+        <video
+          src={previewSrc}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        />
+      )}
 
       <span
         className={`absolute left-4 top-4 uppercase tracking-[0.2em] text-fg-faint ${

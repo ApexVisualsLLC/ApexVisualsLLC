@@ -4,6 +4,7 @@ import Eyebrow from "@/components/Eyebrow";
 import Reveal from "@/components/Reveal";
 import Faq from "@/components/Faq";
 import Magnetic from "@/components/Magnetic";
+import PackageComparison from "@/components/PackageComparison";
 
 export const metadata: Metadata = {
   title: "Services & Pricing — Apex Visuals LLC | Drone Photography Utah",
@@ -159,7 +160,13 @@ export default function ServicesPage() {
         </p>
       </Reveal>
 
-      <div className="divide-y divide-border">
+      <Reveal delay={100}>
+        <div className="mt-12">
+          <PackageComparison />
+        </div>
+      </Reveal>
+
+      <div className="mt-8 divide-y divide-border">
         <PackageSection id="aerial" number="01" title="Aerial Photography" tiers={aerialTiers} />
         <PackageSection id="cinematic" number="02" title="Cinematic Video" tiers={cinematicTiers} />
         <PackageSection
