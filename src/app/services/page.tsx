@@ -3,6 +3,7 @@ import Link from "next/link";
 import Eyebrow from "@/components/Eyebrow";
 import Reveal from "@/components/Reveal";
 import Faq from "@/components/Faq";
+import Magnetic from "@/components/Magnetic";
 
 export const metadata: Metadata = {
   title: "Services & Pricing — Apex Visuals LLC | Drone Photography Utah",
@@ -83,12 +84,14 @@ function TierCard({ tier, highlighted = false }: { tier: Tier; highlighted?: boo
       <h3 className="font-serif text-xl font-bold">{tier.name}</h3>
       <p className="mt-2 text-lg font-semibold text-fg">{tier.price}</p>
       <p className="mt-4 flex-1 text-sm leading-relaxed text-fg-muted">{tier.description}</p>
-      <Link
-        href="/contact"
-        className="mt-8 inline-block rounded-full border border-fg/30 px-5 py-2.5 text-center text-sm font-semibold tracking-wide transition-colors hover:border-fg hover:bg-fg hover:text-bg"
-      >
-        Start a Project
-      </Link>
+      <Magnetic className="mt-8 inline-block">
+        <Link
+          href="/contact"
+          className="inline-block rounded-full border border-fg/30 px-5 py-2.5 text-center text-sm font-semibold tracking-wide transition-colors hover:border-fg hover:bg-fg hover:text-bg"
+        >
+          Start a Project
+        </Link>
+      </Magnetic>
     </div>
   );
 }

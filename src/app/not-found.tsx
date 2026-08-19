@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import Magnetic from "@/components/Magnetic";
 
 export const metadata: Metadata = {
   title: "Page Not Found — Apex Visuals LLC",
@@ -19,18 +20,22 @@ export default function NotFound() {
         The page you&apos;re looking for doesn&apos;t exist or has moved.
       </p>
       <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-        <Link
-          href="/"
-          className="rounded-full bg-fg px-6 py-3 text-sm font-semibold tracking-wide text-bg transition-opacity hover:opacity-85"
-        >
-          Back Home
-        </Link>
-        <Link
-          href="/work"
-          className="rounded-full border border-fg/30 px-6 py-3 text-sm font-semibold tracking-wide transition-colors hover:border-fg hover:bg-fg hover:text-bg"
-        >
-          View Our Work
-        </Link>
+        <Magnetic>
+          <Link
+            href="/"
+            className="inline-block rounded-full bg-fg px-6 py-3 text-sm font-semibold tracking-wide text-bg transition-opacity hover:opacity-85"
+          >
+            Back Home
+          </Link>
+        </Magnetic>
+        <Magnetic>
+          <Link
+            href="/work"
+            className="inline-block rounded-full border border-fg/30 px-6 py-3 text-sm font-semibold tracking-wide transition-colors hover:border-fg hover:bg-fg hover:text-bg"
+          >
+            View Our Work
+          </Link>
+        </Magnetic>
       </div>
     </div>
   );

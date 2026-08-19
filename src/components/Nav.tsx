@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Magnetic from "@/components/Magnetic";
 
 const links = [
   { href: "/work", label: "Work" },
@@ -55,12 +56,14 @@ export default function Nav() {
           ))}
         </nav>
 
-        <Link
-          href="/contact"
-          className="hidden rounded-full bg-fg px-5 py-2.5 text-sm font-semibold tracking-wide text-bg transition-opacity hover:opacity-85 md:inline-block"
-        >
-          START A PROJECT
-        </Link>
+        <Magnetic className="hidden md:inline-block">
+          <Link
+            href="/contact"
+            className="inline-block rounded-full bg-fg px-5 py-2.5 text-sm font-semibold tracking-wide text-bg transition-opacity hover:opacity-85"
+          >
+            START A PROJECT
+          </Link>
+        </Magnetic>
 
         <button
           type="button"

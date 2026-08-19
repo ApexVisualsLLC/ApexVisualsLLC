@@ -3,6 +3,7 @@ import Link from "next/link";
 import WorkGallery from "@/components/WorkGallery";
 import Eyebrow from "@/components/Eyebrow";
 import Reveal from "@/components/Reveal";
+import Magnetic from "@/components/Magnetic";
 
 export const metadata: Metadata = {
   title: "Our Work — Apex Visuals LLC | Drone & Cinematic Video Portfolio Utah",
@@ -35,18 +36,22 @@ export default function WorkPage() {
 
       <div className="mt-20 flex flex-wrap items-center gap-4 border-t border-border pt-10">
         <p className="text-fg-muted">Like what you see?</p>
-        <Link
-          href="/services"
-          className="rounded-full border border-fg/30 px-5 py-2.5 text-sm font-semibold tracking-wide transition-colors hover:border-fg hover:bg-fg hover:text-bg"
-        >
-          View Services & Pricing
-        </Link>
-        <Link
-          href="/contact"
-          className="rounded-full bg-fg px-5 py-2.5 text-sm font-semibold tracking-wide text-bg transition-opacity hover:opacity-85"
-        >
-          Start a Project
-        </Link>
+        <Magnetic>
+          <Link
+            href="/services"
+            className="inline-block rounded-full border border-fg/30 px-5 py-2.5 text-sm font-semibold tracking-wide transition-colors hover:border-fg hover:bg-fg hover:text-bg"
+          >
+            View Services & Pricing
+          </Link>
+        </Magnetic>
+        <Magnetic>
+          <Link
+            href="/contact"
+            className="inline-block rounded-full bg-fg px-5 py-2.5 text-sm font-semibold tracking-wide text-bg transition-opacity hover:opacity-85"
+          >
+            Start a Project
+          </Link>
+        </Magnetic>
       </div>
     </div>
   );

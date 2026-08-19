@@ -7,6 +7,9 @@ import Eyebrow from "@/components/Eyebrow";
 import ProcessSteps from "@/components/ProcessSteps";
 import StatsBar from "@/components/StatsBar";
 import Testimonials from "@/components/Testimonials";
+import Marquee from "@/components/Marquee";
+import ViewfinderHUD from "@/components/ViewfinderHUD";
+import Magnetic from "@/components/Magnetic";
 import { PlaceholderPhoto, VideoThumb } from "@/components/PlaceholderMedia";
 
 export const metadata: Metadata = {
@@ -67,6 +70,7 @@ export default function HomePage() {
           />
         </Parallax>
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-bg" />
+        <ViewfinderHUD />
 
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
           <Eyebrow className="mx-auto w-fit justify-center">Licensed Drone Pilot — Utah County</Eyebrow>
@@ -77,14 +81,18 @@ export default function HomePage() {
             Licensed drone pilot and cinematographer serving businesses across Utah.
             FAA Part 107 Certified.
           </p>
-          <Link
-            href="/contact"
-            className="mt-10 inline-block rounded-full bg-fg px-8 py-3.5 text-sm font-semibold tracking-wide text-bg transition-opacity hover:opacity-85"
-          >
-            START A PROJECT
-          </Link>
+          <Magnetic className="mt-10 inline-block">
+            <Link
+              href="/contact"
+              className="inline-block rounded-full bg-fg px-8 py-3.5 text-sm font-semibold tracking-wide text-bg transition-opacity hover:opacity-85"
+            >
+              START A PROJECT
+            </Link>
+          </Magnetic>
         </div>
       </CursorGlow>
+
+      <Marquee />
 
       <section className="mx-auto max-w-7xl px-6 py-20 md:px-10 md:py-28">
         <Reveal>
@@ -208,12 +216,14 @@ export default function HomePage() {
             <h2 className="font-serif text-4xl font-bold sm:text-5xl">
               Ready to elevate your brand?
             </h2>
-            <Link
-              href="/contact"
-              className="mt-10 inline-block rounded-full bg-fg px-8 py-3.5 text-sm font-semibold tracking-wide text-bg transition-opacity hover:opacity-85"
-            >
-              START A PROJECT
-            </Link>
+            <Magnetic className="mt-10 inline-block">
+              <Link
+                href="/contact"
+                className="inline-block rounded-full bg-fg px-8 py-3.5 text-sm font-semibold tracking-wide text-bg transition-opacity hover:opacity-85"
+              >
+                START A PROJECT
+              </Link>
+            </Magnetic>
           </Reveal>
         </div>
       </section>

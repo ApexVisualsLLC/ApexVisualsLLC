@@ -3,6 +3,7 @@ import Link from "next/link";
 import { PlaceholderPhoto } from "@/components/PlaceholderMedia";
 import Eyebrow from "@/components/Eyebrow";
 import Reveal from "@/components/Reveal";
+import Magnetic from "@/components/Magnetic";
 
 export const metadata: Metadata = {
   title: "About — Apex Visuals LLC | FAA Part 107 Drone Pilot Provo Utah",
@@ -67,12 +68,14 @@ export default function AboutPage() {
             <p className="mt-3 text-fg-muted">{gear.join(" · ")}</p>
           </div>
 
-          <Link
-            href="/contact"
-            className="mt-12 inline-block rounded-full bg-fg px-8 py-3.5 text-sm font-semibold tracking-wide text-bg transition-opacity hover:opacity-85"
-          >
-            Start a Project
-          </Link>
+          <Magnetic className="mt-12 inline-block">
+            <Link
+              href="/contact"
+              className="inline-block rounded-full bg-fg px-8 py-3.5 text-sm font-semibold tracking-wide text-bg transition-opacity hover:opacity-85"
+            >
+              Start a Project
+            </Link>
+          </Magnetic>
         </Reveal>
       </div>
     </div>
