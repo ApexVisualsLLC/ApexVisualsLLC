@@ -27,28 +27,36 @@ const bio = [
   "If you're looking for someone who actually cares about the shot — not just the deliverable — let's work together.",
 ];
 
-const gear = ["DJI Mavic 4 Pro", "DJI Avata 360", "Sony A7 IV", "GoPro 13", "iPhone 17 Pro Max"];
-
 export default function AboutPage() {
   return (
     <div>
-      {/* REPLACE: Photo of Russell with gear or in a location */}
+      {/* REPLACE: Photo of Russell with gear, on location */}
       <PlaceholderPhoto
         label="Russell with gear, on location"
         className="h-[55vh] min-h-[360px] w-full"
       />
 
-      <div className="mx-auto max-w-3xl px-6 py-16 md:px-10 md:py-24">
-        <Reveal>
-          <Eyebrow>The Person Behind the Lens</Eyebrow>
-          <h1 className="mt-4 font-serif text-4xl font-bold sm:text-5xl">About Russell</h1>
+      <div className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
+        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16">
+          <Reveal>
+            <Eyebrow>The Person Behind the Lens</Eyebrow>
+            <h1 className="mt-4 font-serif text-4xl font-bold sm:text-5xl">About Russell</h1>
 
-          <p className="mt-8 font-serif text-2xl font-medium leading-snug text-fg sm:text-3xl">
-            {lede}
-          </p>
-        </Reveal>
+            <p className="mt-8 font-serif text-2xl font-medium leading-snug text-fg sm:text-3xl">
+              {lede}
+            </p>
+          </Reveal>
 
-        <div className="mt-8 space-y-5 text-fg-muted">
+          <Reveal delay={100}>
+            {/* REPLACE: Portrait photo of Russell */}
+            <PlaceholderPhoto
+              label="Portrait of Russell"
+              className="aspect-[4/5] w-full rounded-2xl"
+            />
+          </Reveal>
+        </div>
+
+        <div className="mt-12 max-w-3xl space-y-5 text-fg-muted">
           {bio.map((paragraph, i) => (
             <Reveal key={i} delay={i * 60}>
               <p className="leading-relaxed">{paragraph}</p>
@@ -57,15 +65,10 @@ export default function AboutPage() {
         </div>
 
         <Reveal>
-          <div className="mt-12 rounded-2xl border border-fg/30 bg-panel p-6">
+          <div className="mt-12 max-w-3xl rounded-2xl border border-fg/30 bg-panel p-6">
             <p className="text-sm font-semibold uppercase tracking-wider text-fg">
               FAA Part 107 Certified Commercial Drone Pilot
             </p>
-          </div>
-
-          <div className="mt-10">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-fg-faint">Gear</h2>
-            <p className="mt-3 text-fg-muted">{gear.join(" · ")}</p>
           </div>
 
           <Magnetic className="mt-12 inline-block">
