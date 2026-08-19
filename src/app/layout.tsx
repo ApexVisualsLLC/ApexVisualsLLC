@@ -5,9 +5,6 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import GrainOverlay from "@/components/GrainOverlay";
 import MobileCTABar from "@/components/MobileCTABar";
-import FilmLeader from "@/components/FilmLeader";
-import RouteShutter from "@/components/RouteShutter";
-import CustomCursor from "@/components/CustomCursor";
 import "./globals.css";
 
 const editorial = Playfair_Display({
@@ -105,14 +102,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
         />
-        <RouteShutter />
         <GrainOverlay />
         <Nav />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 animate-[page-fade-in_0.4s_ease-out]">{children}</main>
         <Footer />
         <MobileCTABar />
-        <CustomCursor />
-        <FilmLeader />
         <Analytics />
       </body>
     </html>

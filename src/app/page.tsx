@@ -7,7 +7,6 @@ import Eyebrow from "@/components/Eyebrow";
 import ProcessSteps from "@/components/ProcessSteps";
 import StatsBar from "@/components/StatsBar";
 import Testimonials from "@/components/Testimonials";
-import Marquee from "@/components/Marquee";
 import ViewfinderHUD from "@/components/ViewfinderHUD";
 import Magnetic from "@/components/Magnetic";
 import { PlaceholderPhoto, VideoThumb } from "@/components/PlaceholderMedia";
@@ -91,8 +90,6 @@ export default function HomePage() {
           </Magnetic>
         </div>
       </CursorGlow>
-
-      <Marquee />
 
       <section className="mx-auto max-w-7xl px-6 py-20 md:px-10 md:py-28">
         <Reveal>

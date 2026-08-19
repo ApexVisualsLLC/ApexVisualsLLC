@@ -45,8 +45,7 @@ export function VideoThumb({
 }) {
   return (
     <div
-      data-cursor="view"
-      className={`group relative flex aspect-video cursor-none items-center justify-center overflow-hidden bg-gradient-to-br from-[#231a10] via-[#181209] to-[#0a0704] transition-transform duration-300 hover:-translate-y-1 ${FILM_GRADE} ${className}`}
+      className={`group relative flex aspect-video items-center justify-center overflow-hidden bg-gradient-to-br from-[#231a10] via-[#181209] to-[#0a0704] transition-transform duration-300 hover:-translate-y-1 ${FILM_GRADE} ${className}`}
     >
       {/* REPLACE: YouTube embed URL — [Commercial/Aerial/Cinematic] */}
       <div className="absolute inset-0" style={{ backgroundImage: LINE_MOTIF }} />
