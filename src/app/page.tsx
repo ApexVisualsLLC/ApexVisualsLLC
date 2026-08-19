@@ -5,6 +5,7 @@ import CursorGlow from "@/components/CursorGlow";
 import Reveal from "@/components/Reveal";
 import Eyebrow from "@/components/Eyebrow";
 import ProcessSteps from "@/components/ProcessSteps";
+import WhyApexVisuals from "@/components/WhyApexVisuals";
 import StatsBar from "@/components/StatsBar";
 import Testimonials from "@/components/Testimonials";
 import ViewfinderHUD from "@/components/ViewfinderHUD";
@@ -134,6 +135,21 @@ export default function HomePage() {
               </Link>
             </Reveal>
           ))}
+        </div>
+      </section>
+
+      <section className="border-t border-border">
+        <div className="mx-auto max-w-7xl px-6 py-20 md:px-10 md:py-28">
+          <Reveal>
+            <Eyebrow>Why Apex Visuals</Eyebrow>
+            <h2 className="mt-4 font-serif text-3xl font-bold sm:text-4xl">
+              What You Actually Get
+            </h2>
+          </Reveal>
+
+          <div className="mt-12">
+            <WhyApexVisuals />
+          </div>
         </div>
       </section>
 
