@@ -65,9 +65,11 @@ export default function HomePage() {
     <>
       <CursorGlow className="flex min-h-[92vh] items-center justify-center overflow-hidden">
         <Parallax className="absolute inset-0 -top-24 h-[calc(100%+12rem)]" speed={0.25}>
-          {/* REPLACE: Hero background image — Russell's best cinematic landscape shot */}
           <PlaceholderPhoto
             label="Hero background — Russell's landscape shot"
+            src="/hero-desert-road.jpg"
+            alt="Aerial drone photo of a vehicle on a remote desert dirt road in Southern Utah, captured by Apex Visuals LLC"
+            priority
             labelPosition="bottom"
             className="h-full w-full"
           />
