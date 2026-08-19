@@ -30,6 +30,11 @@ const aerialGallery: GalleryPhoto[] = [
   },
 ];
 
+/* REPLACE: once Jellystone/social media content photos are ready, add a
+   `socialGallery: GalleryPhoto[]` array here (same shape as aerialGallery above,
+   images in public/gallery/) and pass it as `gallery={socialGallery}` to the
+   "Social Media Content" PackageSection below. */
+
 export const metadata: Metadata = {
   title: "Services & Pricing — Apex Visuals LLC | Drone Photography Utah",
   description:
