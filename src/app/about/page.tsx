@@ -32,8 +32,8 @@ export default function AboutPage() {
     <div>
       <PlaceholderPhoto
         label="Russell on location"
-        src="/about-hero-arch.jpg"
-        alt="Russell standing on a red rock arch overlooking Southern Utah at sunset"
+        src="/about-hero-maui-ravine.jpg"
+        alt="Russell standing on a rock overlooking a green ravine in Maui, Hawaii"
         priority
         labelPosition="bottom"
         className="h-[55vh] min-h-[360px] w-full"
