@@ -52,9 +52,9 @@ export default function AboutPage() {
 
           <Reveal delay={100}>
             <PlaceholderPhoto
-              label="Russell overlooking a canyon"
-              src="/about-portrait-canyon.jpg"
-              alt="Russell standing on a rock overlooking a Southern Utah canyon at dusk"
+              label="Russell overlooking Haleakala crater"
+              src="/about-portrait-haleakala.jpg"
+              alt="Russell sitting on a rock overlooking Haleakala crater in Maui, Hawaii at sunset"
               className="aspect-[4/5] w-full rounded-2xl"
             />
           </Reveal>
