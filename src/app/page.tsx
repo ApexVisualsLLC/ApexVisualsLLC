@@ -61,8 +61,8 @@ export default function HomePage() {
         <Parallax className="absolute inset-0 -top-24 h-[calc(100%+12rem)]" speed={0.25}>
           <PlaceholderPhoto
             label="Hero background — Russell's landscape shot"
-            src="/hero-utah-canyon.jpg"
-            alt="Scenic mountain highway leading toward red rock cliffs in Southern Utah, captured by Apex Visuals LLC"
+            src="/hero-timp-fence.jpg"
+            alt="Split-rail fence framing a view of Mount Timpanogos in Utah, captured by Apex Visuals LLC"
             priority
             labelPosition="bottom"
             className="h-full w-full"
