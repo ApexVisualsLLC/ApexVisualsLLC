@@ -6,6 +6,7 @@ import Faq from "@/components/Faq";
 import Magnetic from "@/components/Magnetic";
 import PackageComparison from "@/components/PackageComparison";
 import PhotoGallery, { type GalleryPhoto } from "@/components/PhotoGallery";
+import VideoWall from "@/components/VideoWall";
 
 const aerialGallery: GalleryPhoto[] = [
   {
@@ -29,11 +30,6 @@ const aerialGallery: GalleryPhoto[] = [
     alt: "Drone photo overlooking layered red rock mountains in Southern Utah",
   },
 ];
-
-/* REPLACE: once Jellystone/social media content photos are ready, add a
-   `socialGallery: GalleryPhoto[]` array here (same shape as aerialGallery above,
-   images in public/gallery/) and pass it as `gallery={socialGallery}` to the
-   "Social Media Content" PackageSection below. */
 
 export const metadata: Metadata = {
   title: "Services & Pricing — Apex Visuals LLC | Drone Photography Utah",
@@ -135,6 +131,7 @@ function PackageSection({
   badge,
   crossLink = true,
   gallery,
+  children,
 }: {
   id: string;
   number: string;
@@ -144,6 +141,7 @@ function PackageSection({
   badge?: string;
   crossLink?: boolean;
   gallery?: GalleryPhoto[];
+  children?: React.ReactNode;
 }) {
   return (
     <section id={id} className="scroll-mt-24 py-14 first:pt-0">
@@ -167,6 +165,12 @@ function PackageSection({
           <div className="mt-4">
             <PhotoGallery photos={gallery} />
           </div>
+        </Reveal>
+      )}
+
+      {children && (
+        <Reveal delay={80}>
+          <div className="mt-6">{children}</div>
         </Reveal>
       )}
 
@@ -225,7 +229,9 @@ export default function ServicesPage() {
           highlighted
           badge="Most Popular"
           crossLink={false}
-        />
+        >
+          <VideoWall />
+        </PackageSection>
       </div>
 
       <Reveal>
