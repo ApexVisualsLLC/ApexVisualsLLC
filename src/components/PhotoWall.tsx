@@ -41,6 +41,7 @@ export default function PhotoWall() {
           src="/gallery/aerial-04.jpg"
           alt="Drone photo of a red rock canyon at sunset in Southern Utah, captured by Apex Visuals LLC"
           fill
+          quality={90}
           sizes="(min-width: 640px) 45vw, 60vw"
           className={`object-cover ${FILM_GRADE}`}
           style={{
@@ -57,6 +58,7 @@ export default function PhotoWall() {
             src={photo.src}
             alt={photo.alt}
             fill
+            quality={90}
             sizes="(min-width: 640px) 22vw, 30vw"
             className={`object-cover ${FILM_GRADE}`}
             style={{
