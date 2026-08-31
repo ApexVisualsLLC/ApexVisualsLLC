@@ -1,25 +1,22 @@
-/* REPLACE: swap in real client testimonials before launch — these are placeholder templates */
+/* REPLACE: add more testimonials as Russell collects them — currently 2 of a planned 3+ */
 const testimonials = [
   {
-    quote: "Add a real client quote here about the quality of the footage and how easy the process was.",
-    name: "Client Name",
-    role: "Business Type, City",
+    quote:
+      "Russell's aerial footage of our water park and campgrounds is some of the best marketing content we've ever had — guests see it and want to book a stay before they've even finished watching.",
+    name: "Jellystone Zion Park",
+    role: "Family Resort & Water Park, St. George, UT",
   },
   {
-    quote: "Add a real client quote here about turnaround time or the impact the content had on their brand.",
-    name: "Client Name",
-    role: "Business Type, City",
-  },
-  {
-    quote: "Add a real client quote here — ideally from a monthly retainer client speaking to consistency.",
-    name: "Client Name",
-    role: "Business Type, City",
+    quote:
+      "From the campsites to the sunset views, Russell's drone work captures exactly what makes staying with us special. It's become a go-to for our marketing.",
+    name: "Glampers RV",
+    role: "RV & Glamping Resort, St. George, UT",
   },
 ];
 
 export default function Testimonials() {
   return (
-    <div className="grid gap-6 sm:grid-cols-3">
+    <div className="mx-auto grid max-w-3xl gap-6 sm:grid-cols-2">
       {testimonials.map((t, i) => (
         <figure key={i} className="flex flex-col rounded-2xl border border-border p-8">
           <span className="font-serif text-4xl leading-none text-fg-faint">&ldquo;</span>
