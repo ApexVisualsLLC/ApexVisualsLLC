@@ -5,7 +5,7 @@ import Reveal from "@/components/Reveal";
 import Faq from "@/components/Faq";
 import Magnetic from "@/components/Magnetic";
 import PackageComparison from "@/components/PackageComparison";
-import PhotoWall from "@/components/PhotoWall";
+import PhotoSlideshow from "@/components/PhotoSlideshow";
 import VideoWall from "@/components/VideoWall";
 
 export const metadata: Metadata = {
@@ -178,7 +178,7 @@ export default function ServicesPage() {
 
       <div className="mt-8 divide-y divide-border">
         <PackageSection id="aerial" number="01" title="Aerial Photography" tiers={aerialTiers}>
-          <PhotoWall />
+          <PhotoSlideshow />
         </PackageSection>
         <PackageSection id="cinematic" number="02" title="Cinematic Video" tiers={cinematicTiers} />
         <PackageSection
