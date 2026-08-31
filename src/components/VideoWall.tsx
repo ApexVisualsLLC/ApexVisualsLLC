@@ -5,20 +5,28 @@ import { useEffect, useRef } from "react";
 const FILM_GRADE = "[filter:sepia(0.2)_contrast(1.05)_saturate(1.05)]";
 const FADE_WINDOW = 0.18;
 
-type Clip = { src: string; label: string };
+type Clip = { src: string; label: string; focus: string };
 
 const clips: Clip[] = [
-  { src: "/videos/jellystone-social-01.mp4", label: "Water slide" },
-  { src: "/videos/jellystone-social-02.mp4", label: "Racing slides" },
-  { src: "/videos/jellystone-social-04.mp4", label: "Toilet bowl slide" },
-  { src: "/videos/jellystone-social-05.mp4", label: "Lazy river" },
-  { src: "/videos/jellystone-social-06.mp4", label: "Racing slides" },
-  { src: "/videos/jellystone-social-07.mp4", label: "Lazy river tubes" },
-  { src: "/videos/jellystone-social-08.mp4", label: "Toilet bowl slide" },
-  { src: "/videos/jellystone-social-09.mp4", label: "Splash boat" },
+  { src: "/videos/jellystone-social-01.mp4", label: "Water slide", focus: "50% 75%" },
+  { src: "/videos/jellystone-social-02.mp4", label: "Racing slides", focus: "50% 88%" },
+  { src: "/videos/jellystone-social-04.mp4", label: "Toilet bowl slide", focus: "50% 55%" },
+  { src: "/videos/jellystone-social-05.mp4", label: "Lazy river", focus: "50% 68%" },
+  { src: "/videos/jellystone-social-06.mp4", label: "Racing slides", focus: "50% 58%" },
+  { src: "/videos/jellystone-social-07.mp4", label: "Lazy river tubes", focus: "50% 62%" },
+  { src: "/videos/jellystone-social-08.mp4", label: "Toilet bowl slide", focus: "50% 50%" },
+  { src: "/videos/jellystone-social-09.mp4", label: "Splash boat", focus: "50% 65%" },
 ];
 
-function LoopingClip({ src, className = "" }: { src: string; className?: string }) {
+function LoopingClip({
+  src,
+  focus = "50% 50%",
+  className = "",
+}: {
+  src: string;
+  focus?: string;
+  className?: string;
+}) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const frameRef = useRef(0);
 
@@ -72,6 +80,7 @@ function LoopingClip({ src, className = "" }: { src: string; className?: string 
       loop
       playsInline
       preload="auto"
+      style={{ objectPosition: focus }}
       className={`transition-opacity duration-75 ease-linear ${className}`}
     />
   );
@@ -84,6 +93,7 @@ export default function VideoWall() {
         <div className="relative col-span-2 row-span-2 overflow-hidden">
           <LoopingClip
             src="/videos/jellystone-social-featured.mp4"
+            focus="50% 48%"
             className={`h-full w-full object-cover ${FILM_GRADE}`}
           />
           <div
@@ -97,7 +107,11 @@ export default function VideoWall() {
 
         {clips.map((clip) => (
           <div key={clip.src} className="relative overflow-hidden">
-            <LoopingClip src={clip.src} className={`h-full w-full object-cover ${FILM_GRADE}`} />
+            <LoopingClip
+              src={clip.src}
+              focus={clip.focus}
+              className={`h-full w-full object-cover ${FILM_GRADE}`}
+            />
             <div
               className="pointer-events-none absolute inset-0"
               style={{

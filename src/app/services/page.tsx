@@ -5,31 +5,8 @@ import Reveal from "@/components/Reveal";
 import Faq from "@/components/Faq";
 import Magnetic from "@/components/Magnetic";
 import PackageComparison from "@/components/PackageComparison";
-import PhotoGallery, { type GalleryPhoto } from "@/components/PhotoGallery";
+import PhotoWall from "@/components/PhotoWall";
 import VideoWall from "@/components/VideoWall";
-
-const aerialGallery: GalleryPhoto[] = [
-  {
-    src: "/gallery/aerial-01.jpg",
-    alt: "Aerial drone photo of a water park pool complex in Utah, captured by Apex Visuals LLC",
-  },
-  {
-    src: "/gallery/aerial-02.jpg",
-    alt: "Aerial drone photo of a lazy river and pool deck at a Utah water park",
-  },
-  {
-    src: "/gallery/aerial-03.jpg",
-    alt: "Aerial drone photo of water slides at a Utah water park resort",
-  },
-  {
-    src: "/gallery/aerial-04.jpg",
-    alt: "Drone photo of a red rock canyon at sunset in Southern Utah",
-  },
-  {
-    src: "/gallery/aerial-05.jpg",
-    alt: "Drone photo overlooking layered red rock mountains in Southern Utah",
-  },
-];
 
 export const metadata: Metadata = {
   title: "Services & Pricing — Apex Visuals LLC | Drone Photography Utah",
@@ -130,7 +107,6 @@ function PackageSection({
   highlighted = false,
   badge,
   crossLink = true,
-  gallery,
   children,
 }: {
   id: string;
@@ -140,7 +116,6 @@ function PackageSection({
   highlighted?: boolean;
   badge?: string;
   crossLink?: boolean;
-  gallery?: GalleryPhoto[];
   children?: React.ReactNode;
 }) {
   return (
@@ -156,17 +131,6 @@ function PackageSection({
           )}
         </div>
       </Reveal>
-
-      {gallery && (
-        <Reveal delay={80}>
-          <p className="mt-6 text-xs font-semibold uppercase tracking-wider text-fg-faint">
-            Recent Work
-          </p>
-          <div className="mt-4">
-            <PhotoGallery photos={gallery} />
-          </div>
-        </Reveal>
-      )}
 
       {children && (
         <Reveal delay={80}>
@@ -213,13 +177,9 @@ export default function ServicesPage() {
       </Reveal>
 
       <div className="mt-8 divide-y divide-border">
-        <PackageSection
-          id="aerial"
-          number="01"
-          title="Aerial Photography"
-          tiers={aerialTiers}
-          gallery={aerialGallery}
-        />
+        <PackageSection id="aerial" number="01" title="Aerial Photography" tiers={aerialTiers}>
+          <PhotoWall />
+        </PackageSection>
         <PackageSection id="cinematic" number="02" title="Cinematic Video" tiers={cinematicTiers} />
         <PackageSection
           id="social-media"
