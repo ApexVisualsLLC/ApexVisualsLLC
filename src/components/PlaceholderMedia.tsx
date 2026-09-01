@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 
 const LINE_MOTIF =
@@ -59,6 +62,7 @@ export function VideoThumb({
   photoSrc,
   previewSrc,
   youtubeId,
+  vertical = false,
   onClick,
   className = "",
 }: {
@@ -77,10 +81,17 @@ export function VideoThumb({
      thumbnail as the poster (unless photoSrc is also set). Pair with onClick to open
      a VideoLightbox. */
   youtubeId?: string;
+  /* Matches the card's aspect ratio to a 9:16 source video. YouTube's own maxres
+     thumbnail for a vertical video is a 16:9 canvas with the real footage centered
+     and pillarboxed (full-height, blurred bars left/right) — a 9:16 card + object-cover
+     crops exactly to that centered footage, so no pillarbox and no content is lost. */
+  vertical?: boolean;
   onClick?: () => void;
   className?: string;
 }) {
-  const poster = photoSrc || (youtubeId ? `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg` : undefined);
+  const [poster, setPoster] = useState(
+    photoSrc || (youtubeId ? `https://i.ytimg.com/vi/${youtubeId}/maxresdefault.jpg` : undefined)
+  );
 
   return (
     <div
@@ -98,7 +109,7 @@ export function VideoThumb({
           : undefined
       }
       aria-label={onClick ? `Play video: ${title}` : undefined}
-      className={`group relative flex aspect-video w-full items-center justify-center overflow-hidden bg-gradient-to-br from-[#231a10] via-[#181209] to-[#0a0704] transition-transform duration-300 hover:-translate-y-1 ${FILM_GRADE} ${
+      className={`group relative flex ${vertical ? "aspect-[9/16]" : "aspect-video"} w-full items-center justify-center overflow-hidden bg-gradient-to-br from-[#231a10] via-[#181209] to-[#0a0704] transition-transform duration-300 hover:-translate-y-1 ${FILM_GRADE} ${
         onClick ? "cursor-pointer" : ""
       } ${className}`}
     >
@@ -107,8 +118,22 @@ export function VideoThumb({
           src={poster}
           alt={title}
           fill
-          sizes="(min-width: 1024px) 33vw, 100vw"
+          quality={90}
+          sizes={
+            featured
+              ? "100vw"
+              : "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          }
           className="object-cover"
+          onLoad={(e) => {
+            // maxresdefault.jpg 404s to a 120x90 gray placeholder (HTTP 200, not an
+            // error) when YouTube hasn't generated a max-res thumb for a video yet —
+            // fall back to hqdefault, which always exists, when that happens.
+            const img = e.currentTarget;
+            if (!photoSrc && youtubeId && img.naturalWidth <= 120) {
+              setPoster(`https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`);
+            }
+          }}
         />
       )}
       {!poster && <div className="absolute inset-0" style={{ backgroundImage: LINE_MOTIF }} />}

@@ -1,6 +1,64 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+
+declare global {
+  interface Window {
+    YT?: {
+      Player: new (
+        el: HTMLElement,
+        opts: {
+          events: {
+            onReady: (e: { target: YTPlayer }) => void;
+            onStateChange: (e: { data: number; target: YTPlayer }) => void;
+          };
+        }
+      ) => YTPlayer;
+      PlayerState: { PLAYING: number };
+    };
+    onYouTubeIframeAPIReady?: () => void;
+  }
+}
+
+type YTPlayer = {
+  getAvailableQualityLevels: () => string[];
+  getPlaybackQuality: () => string;
+  setPlaybackQuality: (quality: string) => void;
+  destroy: () => void;
+};
+
+let apiPromise: Promise<void> | null = null;
+
+// Loads the YouTube IFrame API script once and shares the promise across
+// every lightbox instance (the global callback can only be set once).
+function loadYouTubeIframeAPI(): Promise<void> {
+  if (apiPromise) return apiPromise;
+  apiPromise = new Promise((resolve) => {
+    if (window.YT?.Player) {
+      resolve();
+      return;
+    }
+    const previous = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => {
+      previous?.();
+      resolve();
+    };
+    const script = document.createElement("script");
+    script.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(script);
+  });
+  return apiPromise;
+}
+
+// Pushes playback to the highest quality YouTube reports as available.
+// Note: YouTube's algorithm auto-manages resolution based on player size
+// and connection speed and no longer guarantees a forced quality — this is
+// a best-effort request, applied on ready and again once playback starts
+// (quality can reset when buffering kicks in).
+function requestHighestQuality(player: YTPlayer) {
+  const levels = player.getAvailableQualityLevels();
+  if (levels[0]) player.setPlaybackQuality(levels[0]);
+}
 
 export default function VideoLightbox({
   youtubeId,
@@ -13,6 +71,9 @@ export default function VideoLightbox({
   vertical?: boolean;
   onClose: () => void;
 }) {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const playerRef = useRef<YTPlayer | null>(null);
+
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -24,6 +85,26 @@ export default function VideoLightbox({
       document.body.style.overflow = "";
     };
   }, [onClose]);
+
+  useEffect(() => {
+    let cancelled = false;
+    loadYouTubeIframeAPI().then(() => {
+      if (cancelled || !iframeRef.current || !window.YT) return;
+      playerRef.current = new window.YT.Player(iframeRef.current, {
+        events: {
+          onReady: (e) => requestHighestQuality(e.target),
+          onStateChange: (e) => {
+            if (e.data === window.YT!.PlayerState.PLAYING) requestHighestQuality(e.target);
+          },
+        },
+      });
+    });
+    return () => {
+      cancelled = true;
+      playerRef.current?.destroy();
+      playerRef.current = null;
+    };
+  }, [youtubeId]);
 
   return (
     <div
@@ -53,7 +134,8 @@ export default function VideoLightbox({
         onClick={(e) => e.stopPropagation()}
       >
         <iframe
-          src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`}
+          ref={iframeRef}
+          src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}`}
           title={title}
           className="absolute inset-0 h-full w-full"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
