@@ -124,9 +124,9 @@ export default function VideoWall() {
       </div>
 
       <div className="mt-6 flex items-baseline gap-3 border-t border-border pt-6">
-        <span className="font-serif text-3xl font-bold">250+</span>
+        <span className="font-serif text-3xl font-bold">150+</span>
         <span className="text-xs uppercase tracking-[0.15em] text-fg-faint">
-          Short-form videos created for Jellystone Zion
+          Short-form videos created for clients
         </span>
       </div>
     </div>
