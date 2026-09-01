@@ -56,6 +56,13 @@ const items: WorkItem[] = [
     youtubeId: "-TgBc5kIQK8",
     vertical: true,
   },
+  {
+    title: "Jellystone Zion Park Overview",
+    location: "Zion, Utah",
+    category: "Commercial",
+    youtubeId: "DDhS_1Op-RI",
+    vertical: true,
+  },
   { title: "Utah Red Rock Aerial", location: "Southern Utah", category: "Aerial" },
   { title: "Canyon Flyover", location: "Southern Utah", category: "Aerial" },
   { title: "Desert Landscape Drone Reel", location: "Southern Utah", category: "Aerial" },
