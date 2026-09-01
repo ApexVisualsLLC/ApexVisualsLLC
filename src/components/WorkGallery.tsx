@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { VideoThumb } from "@/components/PlaceholderMedia";
+import VideoLightbox from "@/components/VideoLightbox";
 import Reveal from "@/components/Reveal";
 
 type Category = "Commercial" | "Aerial" | "Cinematic";
@@ -13,16 +14,48 @@ type WorkItem = {
   category: Category;
   photoSrc?: string;
   previewSrc?: string;
+  youtubeId?: string;
+  vertical?: boolean;
 };
 
 /* REPLACE: add `previewSrc: "/videos/<file>.mp4"` to any item below once Russell drops a
    short muted preview clip into public/videos/ — it'll autoplay on hover. Until then these
    fall back to the static placeholder thumbnail (or photoSrc still, if set). */
 const items: WorkItem[] = [
-  { title: "Jellystone Zion — Aerial Grounds Overview", location: "Zion, Utah", category: "Commercial" },
-  { title: "Jellystone Zion — Ground Photography", location: "Zion, Utah", category: "Commercial" },
-  { title: "Jellystone Zion — Water Park in Slow Motion", location: "Zion, Utah", category: "Commercial" },
-  { title: "Jellystone Zion — Cinematic Brand Video", location: "Zion, Utah", category: "Commercial" },
+  {
+    title: "Jellystone Zion Camp-Resort — Park Highlight Video",
+    location: "Zion, Utah",
+    category: "Commercial",
+    youtubeId: "OIJLkrlNbNk",
+  },
+  {
+    title: "Jellystone Zion — Friday Night Party Video",
+    location: "Zion, Utah",
+    category: "Commercial",
+    youtubeId: "jWHG1yUGaK4",
+    vertical: true,
+  },
+  {
+    title: "Jellystone Zion Water Park — Golden Hour Video",
+    location: "Zion, Utah",
+    category: "Commercial",
+    youtubeId: "3S_L09IBwYM",
+    vertical: true,
+  },
+  {
+    title: "Jellystone Zion Racing Water Slides — 360 Aerial Video",
+    location: "Zion, Utah",
+    category: "Commercial",
+    youtubeId: "IWPkTmCEmZE",
+    vertical: true,
+  },
+  {
+    title: "Jellystone Zion Water Slide — 360° Tiny Planet Video",
+    location: "Zion, Utah",
+    category: "Commercial",
+    youtubeId: "-TgBc5kIQK8",
+    vertical: true,
+  },
   { title: "Utah Red Rock Aerial", location: "Southern Utah", category: "Aerial" },
   { title: "Canyon Flyover", location: "Southern Utah", category: "Aerial" },
   { title: "Desert Landscape Drone Reel", location: "Southern Utah", category: "Aerial" },
@@ -39,6 +72,9 @@ const items: WorkItem[] = [
 
 export default function WorkGallery() {
   const [active, setActive] = useState<(typeof tabs)[number]>("All");
+  const [openVideo, setOpenVideo] = useState<{ id: string; title: string; vertical: boolean } | null>(
+    null
+  );
   const visible = active === "All" ? items : items.filter((item) => item.category === active);
 
   return (
@@ -72,10 +108,38 @@ export default function WorkGallery() {
             delay={Math.min(i, 5) * 80}
             className={i === 0 ? "sm:col-span-2" : ""}
           >
-            <VideoThumb {...item} featured={i === 0} className="rounded-2xl" />
+            <VideoThumb
+              title={item.title}
+              location={item.location}
+              category={item.category}
+              photoSrc={item.photoSrc}
+              previewSrc={item.previewSrc}
+              youtubeId={item.youtubeId}
+              onClick={
+                item.youtubeId
+                  ? () =>
+                      setOpenVideo({
+                        id: item.youtubeId!,
+                        title: item.title,
+                        vertical: !!item.vertical,
+                      })
+                  : undefined
+              }
+              featured={i === 0}
+              className="rounded-2xl"
+            />
           </Reveal>
         ))}
       </div>
+
+      {openVideo && (
+        <VideoLightbox
+          youtubeId={openVideo.id}
+          title={openVideo.title}
+          vertical={openVideo.vertical}
+          onClose={() => setOpenVideo(null)}
+        />
+      )}
     </div>
   );
 }

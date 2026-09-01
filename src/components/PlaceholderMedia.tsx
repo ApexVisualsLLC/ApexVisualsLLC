@@ -58,6 +58,8 @@ export function VideoThumb({
   featured = false,
   photoSrc,
   previewSrc,
+  youtubeId,
+  onClick,
   className = "",
 }: {
   title: string;
@@ -71,23 +73,45 @@ export function VideoThumb({
      Drop files into public/videos/ and pass the path here once real footage is ready —
      until then this stays undefined and the static placeholder is shown. */
   previewSrc?: string;
+  /* YouTube video ID — when set, the card becomes clickable and uses the video's own
+     thumbnail as the poster (unless photoSrc is also set). Pair with onClick to open
+     a VideoLightbox. */
+  youtubeId?: string;
+  onClick?: () => void;
   className?: string;
 }) {
+  const poster = photoSrc || (youtubeId ? `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg` : undefined);
+
   return (
     <div
-      className={`group relative flex aspect-video items-center justify-center overflow-hidden bg-gradient-to-br from-[#231a10] via-[#181209] to-[#0a0704] transition-transform duration-300 hover:-translate-y-1 ${FILM_GRADE} ${className}`}
+      role={onClick ? "button" : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onClick={onClick}
+      onKeyDown={
+        onClick
+          ? (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onClick();
+              }
+            }
+          : undefined
+      }
+      aria-label={onClick ? `Play video: ${title}` : undefined}
+      className={`group relative flex aspect-video w-full items-center justify-center overflow-hidden bg-gradient-to-br from-[#231a10] via-[#181209] to-[#0a0704] transition-transform duration-300 hover:-translate-y-1 ${FILM_GRADE} ${
+        onClick ? "cursor-pointer" : ""
+      } ${className}`}
     >
-      {/* REPLACE: YouTube embed URL — [Commercial/Aerial/Cinematic] */}
-      {photoSrc && (
+      {poster && (
         <Image
-          src={photoSrc}
+          src={poster}
           alt={title}
           fill
           sizes="(min-width: 1024px) 33vw, 100vw"
           className="object-cover"
         />
       )}
-      {!photoSrc && <div className="absolute inset-0" style={{ backgroundImage: LINE_MOTIF }} />}
+      {!poster && <div className="absolute inset-0" style={{ backgroundImage: LINE_MOTIF }} />}
       <div className="absolute inset-0" style={{ backgroundImage: VIGNETTE }} />
       {previewSrc && (
         <video

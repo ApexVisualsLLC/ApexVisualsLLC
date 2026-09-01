@@ -11,7 +11,8 @@ import Testimonials from "@/components/Testimonials";
 import ViewfinderHUD from "@/components/ViewfinderHUD";
 import BookingStatus from "@/components/BookingStatus";
 import Magnetic from "@/components/Magnetic";
-import { PlaceholderPhoto, VideoThumb } from "@/components/PlaceholderMedia";
+import { PlaceholderPhoto } from "@/components/PlaceholderMedia";
+import FeaturedWork from "@/components/FeaturedWork";
 
 export const metadata: Metadata = {
   title: "Apex Visuals LLC — Aerial Drone Photography & Cinematic Video | Utah",
@@ -43,15 +44,6 @@ const services = [
     href: "/services",
     badge: "Most Popular",
   },
-];
-
-/* REPLACE: add `previewSrc: "/videos/<file>.mp4"` to any item below once Russell drops a
-   short muted preview clip into public/videos/ — it'll autoplay on hover. Until then these
-   fall back to the static placeholder thumbnail. */
-const featured: { title: string; location: string; category: string; previewSrc?: string }[] = [
-  { title: "Jellystone Zion — Aerial & Ground", location: "Zion, Utah", category: "Commercial" },
-  { title: "Red Rock Canyon Flyover", location: "Southern Utah", category: "Aerial" },
-  { title: "There's This Place I Go", location: "Maui, Hawaii", category: "Cinematic" },
 ];
 
 export default function HomePage() {
@@ -175,13 +167,7 @@ export default function HomePage() {
             </div>
           </Reveal>
 
-          <div className="mt-10 grid gap-6 sm:grid-cols-3">
-            {featured.map((item, i) => (
-              <Reveal key={item.title} delay={i * 100}>
-                <VideoThumb {...item} className="rounded-2xl" />
-              </Reveal>
-            ))}
-          </div>
+          <FeaturedWork />
         </div>
       </section>
 
