@@ -74,6 +74,12 @@ const items: WorkItem[] = [
     youtubeId: "zar_fTE1TUs",
   },
   {
+    title: "Nothing With You",
+    location: "Utah",
+    category: "Cinematic",
+    youtubeId: "xKVCmB_V0qY",
+  },
+  {
     title: "Desert Road Edit",
     location: "Southern Utah",
     category: "Cinematic",
