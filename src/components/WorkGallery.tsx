@@ -68,6 +68,12 @@ const items: WorkItem[] = [
   { title: "Desert Landscape Drone Reel", location: "Southern Utah", category: "Aerial" },
   { title: "Maui Waterfall Edit", location: "Maui, Hawaii", category: "Cinematic" },
   {
+    title: "Peace",
+    location: "Utah",
+    category: "Cinematic",
+    youtubeId: "zar_fTE1TUs",
+  },
+  {
     title: "Desert Road Edit",
     location: "Southern Utah",
     category: "Cinematic",
