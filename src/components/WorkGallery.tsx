@@ -65,7 +65,12 @@ const items: WorkItem[] = [
   },
   { title: "Utah Red Rock Aerial", location: "Southern Utah", category: "Aerial" },
   { title: "Canyon Flyover", location: "Southern Utah", category: "Aerial" },
-  { title: "Desert Landscape Drone Reel", location: "Southern Utah", category: "Aerial" },
+  {
+    title: "Desert Run",
+    location: "Southern Utah",
+    category: "Aerial",
+    youtubeId: "zgsXgRL6i6w",
+  },
   { title: "Maui Waterfall Edit", location: "Maui, Hawaii", category: "Cinematic" },
   {
     title: "Peace",
