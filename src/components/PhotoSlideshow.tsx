@@ -24,6 +24,21 @@ const photos: Photo[] = [
     alt: "Aerial drone photo of water slides at a Utah water park resort",
     caption: "Water slides at the resort",
   },
+  {
+    src: "/gallery/aerial-06.jpg",
+    alt: "Aerial drone photo of the full water park complex in Utah, captured by Apex Visuals LLC",
+    caption: "Full park overview",
+  },
+  {
+    src: "/gallery/aerial-07.jpg",
+    alt: "Aerial drone photo of the racing slides and toilet bowl slide tower at a Utah water park",
+    caption: "Racing slides and slide tower",
+  },
+  {
+    src: "/gallery/aerial-08.jpg",
+    alt: "Aerial drone photo of the lazy river at golden hour with Southern Utah desert in the background",
+    caption: "Lazy river at golden hour",
+  },
 ];
 
 export default function PhotoSlideshow() {
