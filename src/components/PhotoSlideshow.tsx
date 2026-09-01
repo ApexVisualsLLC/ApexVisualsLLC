@@ -10,21 +10,6 @@ type Photo = { src: string; alt: string; caption: string };
 
 const photos: Photo[] = [
   {
-    src: "/gallery/aerial-01.jpg",
-    alt: "Aerial drone photo of a water park pool complex in Utah, captured by Apex Visuals LLC",
-    caption: "Water park pool complex",
-  },
-  {
-    src: "/gallery/aerial-02.jpg",
-    alt: "Aerial drone photo of a lazy river and pool deck at a Utah water park",
-    caption: "Lazy river and pool deck",
-  },
-  {
-    src: "/gallery/aerial-03.jpg",
-    alt: "Aerial drone photo of water slides at a Utah water park resort",
-    caption: "Water slides at the resort",
-  },
-  {
     src: "/gallery/aerial-06.jpg",
     alt: "Aerial drone photo of the full water park complex in Utah, captured by Apex Visuals LLC",
     caption: "Full park overview",
@@ -36,8 +21,8 @@ const photos: Photo[] = [
   },
   {
     src: "/gallery/aerial-08.jpg",
-    alt: "Aerial drone photo of the lazy river at golden hour with Southern Utah desert in the background",
-    caption: "Lazy river at golden hour",
+    alt: "Aerial drone photo of the lazy river with the Southern Utah desert in the background",
+    caption: "Lazy river with desert views",
   },
 ];
 
