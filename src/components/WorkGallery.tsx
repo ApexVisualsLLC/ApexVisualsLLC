@@ -11,7 +11,10 @@ const tabs: ("All" | Category)[] = ["All", "Commercial", "Aerial", "Cinematic"];
 type WorkItem = {
   title: string;
   location: string;
-  category: Category;
+  /* First category is the badge label shown on the card. Additional categories just add
+     the card to that tab too — e.g. a Commercial video that's also drone footage can list
+     ["Commercial", "Aerial"] to appear under both without leaving Commercial. */
+  categories: Category[];
   photoSrc?: string;
   previewSrc?: string;
   youtubeId?: string;
@@ -25,78 +28,68 @@ const items: WorkItem[] = [
   {
     title: "Jellystone Zion Camp-Resort — Park Highlight Video",
     location: "Zion, Utah",
-    category: "Commercial",
+    categories: ["Commercial"],
     youtubeId: "OIJLkrlNbNk",
   },
   {
     title: "Jellystone Zion — Friday Night Party Video",
     location: "Zion, Utah",
-    category: "Commercial",
+    categories: ["Commercial"],
     youtubeId: "jWHG1yUGaK4",
     vertical: true,
   },
   {
     title: "Jellystone Zion Water Park — Golden Hour Video",
     location: "Zion, Utah",
-    category: "Commercial",
+    categories: ["Commercial"],
     youtubeId: "3S_L09IBwYM",
     vertical: true,
   },
   {
     title: "Jellystone Zion Racing Water Slides — 360 Aerial Video",
     location: "Zion, Utah",
-    category: "Commercial",
+    categories: ["Commercial", "Aerial"],
     youtubeId: "IWPkTmCEmZE",
     vertical: true,
   },
   {
     title: "Jellystone Zion Water Slide — 360° Tiny Planet Video",
     location: "Zion, Utah",
-    category: "Commercial",
+    categories: ["Commercial", "Aerial"],
     youtubeId: "-TgBc5kIQK8",
     vertical: true,
   },
   {
     title: "Jellystone Zion Park Overview",
     location: "Zion, Utah",
-    category: "Commercial",
+    categories: ["Commercial"],
     youtubeId: "DDhS_1Op-RI",
     vertical: true,
   },
-  { title: "Utah Red Rock Aerial", location: "Southern Utah", category: "Aerial" },
-  { title: "Canyon Flyover", location: "Southern Utah", category: "Aerial" },
   {
     title: "Desert Run",
     location: "Southern Utah",
-    category: "Aerial",
+    categories: ["Aerial"],
     youtubeId: "zgsXgRL6i6w",
   },
-  { title: "Maui Waterfall Edit", location: "Maui, Hawaii", category: "Cinematic" },
   {
     title: "Peace",
     location: "Utah",
-    category: "Cinematic",
+    categories: ["Cinematic"],
     youtubeId: "zar_fTE1TUs",
   },
   {
     title: "Nothing With You",
     location: "Utah",
-    category: "Cinematic",
+    categories: ["Cinematic", "Aerial"],
     youtubeId: "xKVCmB_V0qY",
-  },
-  {
-    title: "Desert Road Edit",
-    location: "Southern Utah",
-    category: "Cinematic",
-    photoSrc: "/desert-road.jpg",
   },
   {
     title: "Maui Landscape",
     location: "Maui, Hawaii",
-    category: "Cinematic",
+    categories: ["Cinematic"],
     youtubeId: "qeaulLbKas4",
   },
-  { title: "Utah Arch Sunset", location: "Southern Utah", category: "Cinematic" },
 ];
 
 export default function WorkGallery() {
@@ -104,7 +97,8 @@ export default function WorkGallery() {
   const [openVideo, setOpenVideo] = useState<{ id: string; title: string; vertical: boolean } | null>(
     null
   );
-  const visible = active === "All" ? items : items.filter((item) => item.category === active);
+  const visible =
+    active === "All" ? items : items.filter((item) => item.categories.includes(active));
 
   return (
     <div>
@@ -130,20 +124,21 @@ export default function WorkGallery() {
         ))}
       </div>
 
-      <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-10 columns-1 gap-6 sm:columns-2 lg:columns-3">
         {visible.map((item, i) => (
           <Reveal
             key={item.title}
             delay={Math.min(i, 5) * 80}
-            className={i === 0 ? "sm:col-span-2" : ""}
+            className={`mb-6 break-inside-avoid ${i === 0 ? "[column-span:all]" : ""}`}
           >
             <VideoThumb
               title={item.title}
               location={item.location}
-              category={item.category}
+              category={item.categories[0]}
               photoSrc={item.photoSrc}
               previewSrc={item.previewSrc}
               youtubeId={item.youtubeId}
+              vertical={item.vertical}
               onClick={
                 item.youtubeId
                   ? () =>

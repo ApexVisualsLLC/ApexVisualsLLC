@@ -24,7 +24,12 @@ const featured: FeaturedItem[] = [
     category: "Commercial",
     youtubeId: "OIJLkrlNbNk",
   },
-  { title: "Red Rock Canyon Flyover", location: "Southern Utah", category: "Aerial" },
+  {
+    title: "Desert Run",
+    location: "Southern Utah",
+    category: "Aerial",
+    youtubeId: "zgsXgRL6i6w",
+  },
   {
     title: "Maui Landscape",
     location: "Maui, Hawaii",
@@ -41,13 +46,14 @@ export default function FeaturedWork() {
   return (
     <div className="mt-10 grid gap-6 sm:grid-cols-3">
       {featured.map((item, i) => (
-        <Reveal key={item.title} delay={i * 100}>
+        <Reveal key={item.title} delay={i * 100} className="self-start">
           <VideoThumb
             title={item.title}
             location={item.location}
             category={item.category}
             previewSrc={item.previewSrc}
             youtubeId={item.youtubeId}
+            vertical={item.vertical}
             onClick={
               item.youtubeId
                 ? () =>
