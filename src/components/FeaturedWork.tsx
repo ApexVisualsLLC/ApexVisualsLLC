@@ -25,7 +25,12 @@ const featured: FeaturedItem[] = [
     youtubeId: "OIJLkrlNbNk",
   },
   { title: "Red Rock Canyon Flyover", location: "Southern Utah", category: "Aerial" },
-  { title: "There's This Place I Go", location: "Maui, Hawaii", category: "Cinematic" },
+  {
+    title: "Maui Landscape",
+    location: "Maui, Hawaii",
+    category: "Cinematic",
+    youtubeId: "qeaulLbKas4",
+  },
 ];
 
 export default function FeaturedWork() {

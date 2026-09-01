@@ -90,7 +90,12 @@ const items: WorkItem[] = [
     category: "Cinematic",
     photoSrc: "/desert-road.jpg",
   },
-  { title: "There's This Place I Go", location: "Maui, Hawaii", category: "Cinematic" },
+  {
+    title: "Maui Landscape",
+    location: "Maui, Hawaii",
+    category: "Cinematic",
+    youtubeId: "qeaulLbKas4",
+  },
   { title: "Utah Arch Sunset", location: "Southern Utah", category: "Cinematic" },
 ];
 
