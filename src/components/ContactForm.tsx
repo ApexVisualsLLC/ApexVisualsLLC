@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xrpzovbw";
 
@@ -16,6 +16,17 @@ type Status = "idle" | "submitting" | "success" | "error";
 
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
+  const resultRef = useRef<HTMLElement>(null);
+
+  // On mobile, submitting closes the on-screen keyboard and collapses the
+  // long form down to a short confirmation box — without this, the scroll
+  // position can land past the confirmation (or on the error text) and it
+  // looks like nothing happened even though the submit succeeded.
+  useEffect(() => {
+    if (status === "success" || status === "error") {
+      resultRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [status]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -44,7 +55,10 @@ export default function ContactForm() {
 
   if (status === "success") {
     return (
-      <div className="rounded-2xl border border-fg/30 bg-panel p-8 text-center">
+      <div
+        ref={resultRef as React.RefObject<HTMLDivElement>}
+        className="rounded-2xl border border-fg/30 bg-panel p-8 text-center"
+      >
         <p className="font-serif text-2xl font-bold">Message sent.</p>
         <p className="mt-3 text-fg-muted">
           Thanks for reaching out — we&apos;ll review your project and follow up within 24
@@ -145,7 +159,7 @@ export default function ContactForm() {
         </label>
 
         {status === "error" && (
-          <p className="text-sm text-fg">
+          <p ref={resultRef as React.RefObject<HTMLParagraphElement>} className="text-sm text-fg">
             Something went wrong sending your message. Please try again, or reach out directly
             using the info below.
           </p>
