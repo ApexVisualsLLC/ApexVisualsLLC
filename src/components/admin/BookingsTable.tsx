@@ -1,0 +1,153 @@
+import { acceptBooking, declineBooking, retrySendAcceptanceEmail } from "@/app/admin/actions";
+import type { Booking, BookingPackage } from "@/lib/db/schema";
+import { DURATION_OPTIONS_MINUTES } from "@/lib/booking/validation";
+
+const PACKAGE_LABELS: Record<BookingPackage, string> = {
+  "20-photos": "20 Edited Aerial Photos",
+  "photo-video-bundle": "20 Photos + Video Bundle",
+  other: "Custom Project",
+};
+
+const STATUS_LABELS: Record<string, string> = {
+  pending: "Pending",
+  accepted: "Accepted",
+  declined: "Declined",
+};
+
+function formatWhen(date: Date | null): string {
+  if (!date) return "—";
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Denver",
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZoneName: "short",
+  }).format(date);
+}
+
+export type EmailStatusInfo = {
+  status: "sent" | "failed";
+  errorMessage: string | null;
+};
+
+export default function BookingsTable({
+  bookings,
+  emailStatusByBookingId,
+}: {
+  bookings: Booking[];
+  emailStatusByBookingId: Map<number, EmailStatusInfo>;
+}) {
+  if (bookings.length === 0) {
+    return <p className="text-sm text-fg-muted">No booking requests yet.</p>;
+  }
+
+  return (
+    <div className="space-y-6">
+      {bookings.map((booking) => {
+        const readyForReview = booking.status === "pending" && booking.requestedStartAt;
+        const emailStatus = emailStatusByBookingId.get(booking.id);
+
+        return (
+          <div key={booking.id} className="rounded-2xl border border-border p-6">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <p className="font-serif text-lg font-bold">{booking.clientName}</p>
+                <p className="text-sm text-fg-muted">{booking.clientEmail}</p>
+                {booking.clientPhone && <p className="text-sm text-fg-muted">{booking.clientPhone}</p>}
+              </div>
+              <span className="rounded-full border border-border px-3 py-1 text-xs font-semibold uppercase tracking-wider text-fg-faint">
+                {STATUS_LABELS[booking.status] ?? booking.status}
+              </span>
+            </div>
+
+            <dl className="mt-4 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
+              <div>
+                <dt className="text-fg-faint">Package</dt>
+                <dd>{PACKAGE_LABELS[booking.package as BookingPackage] ?? booking.package}</dd>
+              </div>
+              <div>
+                <dt className="text-fg-faint">Requested Time</dt>
+                <dd>{formatWhen(booking.requestedStartAt)}</dd>
+              </div>
+              {booking.status === "accepted" && (
+                <div>
+                  <dt className="text-fg-faint">Duration</dt>
+                  <dd>{(booking.durationMinutes ?? 0) / 60} hour(s)</dd>
+                </div>
+              )}
+              {booking.status === "declined" && booking.declineReason && (
+                <div className="sm:col-span-2">
+                  <dt className="text-fg-faint">Decline Reason</dt>
+                  <dd>{booking.declineReason}</dd>
+                </div>
+              )}
+            </dl>
+
+            <p className="mt-4 whitespace-pre-wrap text-sm text-fg-muted">{booking.projectDetails}</p>
+
+            {emailStatus?.status === "failed" && (
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-fg/30 bg-bg p-4 text-sm">
+                <span>
+                  Confirmation email failed to send
+                  {emailStatus.errorMessage ? `: ${emailStatus.errorMessage}` : "."}
+                </span>
+                <form action={retrySendAcceptanceEmail}>
+                  <input type="hidden" name="bookingId" value={booking.id} />
+                  <button
+                    type="submit"
+                    className="rounded-full border border-fg/30 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider hover:border-fg hover:bg-fg hover:text-bg"
+                  >
+                    Retry
+                  </button>
+                </form>
+              </div>
+            )}
+
+            {readyForReview && (
+              <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-border pt-6">
+                <form action={acceptBooking} className="flex items-center gap-2">
+                  <input type="hidden" name="bookingId" value={booking.id} />
+                  <select
+                    name="durationMinutes"
+                    defaultValue={60}
+                    className="rounded-lg border border-border bg-bg px-3 py-2 text-sm text-fg outline-none focus:border-fg/50"
+                  >
+                    {DURATION_OPTIONS_MINUTES.map((minutes) => (
+                      <option key={minutes} value={minutes}>
+                        {minutes / 60} hour{minutes === 60 ? "" : "s"}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    type="submit"
+                    className="rounded-full bg-fg px-5 py-2 text-sm font-semibold text-bg transition-opacity hover:opacity-85"
+                  >
+                    Accept
+                  </button>
+                </form>
+
+                <form action={declineBooking} className="flex items-center gap-2">
+                  <input type="hidden" name="bookingId" value={booking.id} />
+                  <input
+                    name="declineReason"
+                    type="text"
+                    placeholder="Reason (optional)"
+                    className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm text-fg outline-none placeholder:text-fg-faint/60 focus:border-fg/50"
+                  />
+                  <button
+                    type="submit"
+                    className="rounded-full border border-border px-5 py-2 text-sm font-semibold text-fg-muted hover:border-fg/40 hover:text-fg"
+                  >
+                    Decline
+                  </button>
+                </form>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}

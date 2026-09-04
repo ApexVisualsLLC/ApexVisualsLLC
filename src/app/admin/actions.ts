@@ -1,0 +1,127 @@
+"use server";
+
+import { timingSafeEqual } from "crypto";
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+import { eq } from "drizzle-orm";
+import { db } from "@/lib/db/client";
+import { bookings } from "@/lib/db/schema";
+import { createAdminSession, deleteAdminSession } from "@/lib/auth/session";
+import { verifyAdminSession } from "@/lib/auth/dal";
+import { acceptBookingSchema, declineBookingSchema } from "@/lib/booking/validation";
+import { sendAcceptanceEmail } from "@/lib/email/send-acceptance-email";
+
+export type AdminLoginState = {
+  error?: string;
+};
+
+function safeEquals(a: string, b: string): boolean {
+  const bufA = Buffer.from(a);
+  const bufB = Buffer.from(b);
+  // timingSafeEqual throws if lengths differ, so compare lengths separately
+  // (not in a way that itself leaks timing on the length, since password
+  // length isn't the secret we're protecting here).
+  if (bufA.length !== bufB.length) return false;
+  return timingSafeEqual(bufA, bufB);
+}
+
+export async function adminLogin(
+  _prevState: AdminLoginState,
+  formData: FormData
+): Promise<AdminLoginState> {
+  const password = String(formData.get("password") ?? "");
+  const expected = process.env.ADMIN_PASSWORD;
+
+  if (!expected) {
+    return { error: "Admin login is not configured yet." };
+  }
+  if (!password || !safeEquals(password, expected)) {
+    return { error: "Incorrect password." };
+  }
+
+  await createAdminSession();
+  redirect("/admin");
+}
+
+export async function adminLogout(): Promise<void> {
+  await deleteAdminSession();
+  redirect("/admin");
+}
+
+async function requireAdmin(): Promise<void> {
+  const isAdmin = await verifyAdminSession();
+  if (!isAdmin) {
+    redirect("/admin");
+  }
+}
+
+export async function acceptBooking(formData: FormData): Promise<void> {
+  await requireAdmin();
+
+  const parsed = acceptBookingSchema.safeParse({
+    bookingId: formData.get("bookingId"),
+    durationMinutes: formData.get("durationMinutes"),
+  });
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message ?? "Invalid accept request.");
+  }
+
+  const now = new Date();
+  const [updated] = await db
+    .update(bookings)
+    .set({
+      status: "accepted",
+      durationMinutes: parsed.data.durationMinutes,
+      acceptedAt: now,
+      updatedAt: now,
+    })
+    .where(eq(bookings.id, parsed.data.bookingId))
+    .returning();
+
+  if (updated) {
+    await sendAcceptanceEmail(updated);
+  }
+
+  revalidatePath("/admin");
+}
+
+export async function declineBooking(formData: FormData): Promise<void> {
+  await requireAdmin();
+
+  const parsed = declineBookingSchema.safeParse({
+    bookingId: formData.get("bookingId"),
+    declineReason: formData.get("declineReason"),
+  });
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message ?? "Invalid decline request.");
+  }
+
+  const now = new Date();
+  await db
+    .update(bookings)
+    .set({
+      status: "declined",
+      declineReason: parsed.data.declineReason,
+      declinedAt: now,
+      updatedAt: now,
+    })
+    .where(eq(bookings.id, parsed.data.bookingId));
+
+  revalidatePath("/admin");
+}
+
+export async function retrySendAcceptanceEmail(formData: FormData): Promise<void> {
+  await requireAdmin();
+
+  const bookingId = Number(formData.get("bookingId"));
+  if (!Number.isInteger(bookingId) || bookingId <= 0) {
+    throw new Error("Invalid booking id.");
+  }
+
+  const [booking] = await db.select().from(bookings).where(eq(bookings.id, bookingId)).limit(1);
+  if (booking && booking.status === "accepted") {
+    await sendAcceptanceEmail(booking);
+  }
+
+  revalidatePath("/admin");
+}
