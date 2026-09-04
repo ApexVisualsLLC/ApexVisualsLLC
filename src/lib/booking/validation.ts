@@ -1,6 +1,12 @@
 import { z } from "zod";
 import { BOOKING_PACKAGES } from "@/lib/db/schema";
 
+/** Fixed catalog pricing. "other" has no fixed price — Russell sets it at accept time. */
+export const CATALOG_PRICE_CENTS: Partial<Record<(typeof BOOKING_PACKAGES)[number], number>> = {
+  "20-photos": 17500,
+  "photo-video-bundle": 30000,
+};
+
 export const intakeSchema = z.object({
   package: z.enum(BOOKING_PACKAGES),
   clientName: z.string().trim().min(1, "Name is required").max(200),
@@ -25,13 +31,19 @@ export const chooseStartTimeSchema = z.object({
 
 export const DURATION_OPTIONS_MINUTES = [60, 120, 180] as const;
 
-export const acceptBookingSchema = z.object({
-  bookingId: z.coerce.number().int().positive(),
-  durationMinutes: z.coerce.number().refine(
-    (n) => (DURATION_OPTIONS_MINUTES as readonly number[]).includes(n),
-    { message: "Duration must be 1, 2, or 3 hours" }
-  ),
-});
+export const acceptBookingSchema = z
+  .object({
+    bookingId: z.coerce.number().int().positive(),
+    durationMinutes: z.coerce.number().refine(
+      (n) => (DURATION_OPTIONS_MINUTES as readonly number[]).includes(n),
+      { message: "Duration must be 1, 2, or 3 hours" }
+    ),
+    totalPriceDollars: z.coerce.number().positive("Enter a total price"),
+  })
+  .transform((data) => ({
+    ...data,
+    totalPriceCents: Math.round(data.totalPriceDollars * 100),
+  }));
 
 export const declineBookingSchema = z.object({
   bookingId: z.coerce.number().int().positive(),

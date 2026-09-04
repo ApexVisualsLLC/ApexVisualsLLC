@@ -1,4 +1,4 @@
-import { and, eq, gte, isNotNull, lt } from "drizzle-orm";
+import { and, gte, inArray, isNotNull, lt } from "drizzle-orm";
 import { db } from "@/lib/db/client";
 import { bookings } from "@/lib/db/schema";
 import { getBusyRanges as getGoogleCalendarBusyRanges } from "./google-calendar-source";
@@ -15,7 +15,14 @@ function overlaps(slotStart: Date, slotEnd: Date, busy: BusyRange): boolean {
   return slotStart < busy.end && slotEnd > busy.start;
 }
 
-/** Busy ranges from Apex's own confirmed bookings — always real, never placeholder. */
+/**
+ * Busy ranges from Apex's own confirmed bookings — always real, never
+ * placeholder. Includes "deposit_paid" as well as "accepted": a booking that
+ * hasn't been paid for yet already holds the slot once Russell accepts it,
+ * and must keep holding it after the deposit clears too, or the slot would
+ * briefly become bookable again by someone else right after money changes
+ * hands.
+ */
 async function getAcceptedBookingRanges(rangeStart: Date, rangeEnd: Date): Promise<BusyRange[]> {
   const rows = await db
     .select({
@@ -25,7 +32,7 @@ async function getAcceptedBookingRanges(rangeStart: Date, rangeEnd: Date): Promi
     .from(bookings)
     .where(
       and(
-        eq(bookings.status, "accepted"),
+        inArray(bookings.status, ["accepted", "deposit_paid"]),
         isNotNull(bookings.requestedStartAt),
         isNotNull(bookings.durationMinutes),
         gte(bookings.requestedStartAt, rangeStart),

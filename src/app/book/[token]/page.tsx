@@ -15,10 +15,13 @@ export const metadata: Metadata = {
 
 export default async function BookingLinkPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ token: string }>;
+  searchParams: Promise<{ deposit?: string }>;
 }) {
   const { token } = await params;
+  const { deposit } = await searchParams;
 
   const [booking] = await db.select().from(bookings).where(eq(bookings.bookingToken, token)).limit(1);
 
@@ -47,7 +50,7 @@ export default async function BookingLinkPage({
           {needsTimeSelection ? (
             <AvailabilityPicker bookingToken={booking.bookingToken} />
           ) : (
-            <BookingProgress booking={booking} />
+            <BookingProgress booking={booking} depositReturnStatus={deposit} />
           )}
         </div>
       </Reveal>

@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { desc, inArray } from "drizzle-orm";
 import { verifyAdminSession } from "@/lib/auth/dal";
 import { db } from "@/lib/db/client";
-import { bookings, bookingEmailLog } from "@/lib/db/schema";
+import { bookings, bookingEmailLog, bookingCalendarSyncLog } from "@/lib/db/schema";
 import AdminLoginForm from "@/components/admin/AdminLoginForm";
-import BookingsTable, { type EmailStatusInfo } from "@/components/admin/BookingsTable";
+import BookingsTable, { type EmailStatusInfo, type CalendarSyncStatusInfo } from "@/components/admin/BookingsTable";
 import { adminLogout } from "./actions";
 
 export const metadata: Metadata = {
@@ -21,21 +21,41 @@ export default async function AdminPage() {
 
   const allBookings = await db.select().from(bookings).orderBy(desc(bookings.createdAt));
 
-  const acceptedIds = allBookings.filter((b) => b.status === "accepted").map((b) => b.id);
+  // A deposit_paid booking can still have a failed acceptance email or a
+  // failed calendar sync worth retrying, so both statuses are included here.
+  const relevantIds = allBookings
+    .filter((b) => b.status === "accepted" || b.status === "deposit_paid")
+    .map((b) => b.id);
   const emailStatusByBookingId = new Map<number, EmailStatusInfo>();
+  const calendarSyncStatusByBookingId = new Map<number, CalendarSyncStatusInfo>();
 
-  if (acceptedIds.length > 0) {
-    const logs = await db
-      .select()
-      .from(bookingEmailLog)
-      .where(inArray(bookingEmailLog.bookingId, acceptedIds))
-      .orderBy(desc(bookingEmailLog.createdAt));
+  if (relevantIds.length > 0) {
+    const [emailLogs, calendarLogs] = await Promise.all([
+      db
+        .select()
+        .from(bookingEmailLog)
+        .where(inArray(bookingEmailLog.bookingId, relevantIds))
+        .orderBy(desc(bookingEmailLog.createdAt)),
+      db
+        .select()
+        .from(bookingCalendarSyncLog)
+        .where(inArray(bookingCalendarSyncLog.bookingId, relevantIds))
+        .orderBy(desc(bookingCalendarSyncLog.createdAt)),
+    ]);
 
     // Logs are ordered newest-first, so the first entry seen per booking is the latest.
-    for (const log of logs) {
+    for (const log of emailLogs) {
       if (!emailStatusByBookingId.has(log.bookingId)) {
         emailStatusByBookingId.set(log.bookingId, {
           status: log.status as "sent" | "failed",
+          errorMessage: log.errorMessage,
+        });
+      }
+    }
+    for (const log of calendarLogs) {
+      if (!calendarSyncStatusByBookingId.has(log.bookingId)) {
+        calendarSyncStatusByBookingId.set(log.bookingId, {
+          status: log.status as "created" | "failed",
           errorMessage: log.errorMessage,
         });
       }
@@ -57,7 +77,11 @@ export default async function AdminPage() {
       </div>
 
       <div className="mt-10">
-        <BookingsTable bookings={allBookings} emailStatusByBookingId={emailStatusByBookingId} />
+        <BookingsTable
+          bookings={allBookings}
+          emailStatusByBookingId={emailStatusByBookingId}
+          calendarSyncStatusByBookingId={calendarSyncStatusByBookingId}
+        />
       </div>
     </div>
   );
