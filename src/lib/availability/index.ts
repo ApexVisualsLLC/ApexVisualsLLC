@@ -1,7 +1,8 @@
 import { and, eq, gte, isNotNull, lt } from "drizzle-orm";
 import { db } from "@/lib/db/client";
 import { bookings } from "@/lib/db/schema";
-import { getBusyRanges } from "./mock-source";
+import { getBusyRanges as getGoogleCalendarBusyRanges } from "./google-calendar-source";
+import { getBusyRanges as getMockBusyRanges } from "./mock-source";
 import { BUSINESS_TIME_ZONE, zonedToday, zonedWallTimeToUtc } from "./timezone";
 import type { AvailabilitySlot, BusyRange } from "./types";
 
@@ -45,11 +46,19 @@ export async function getAvailableSlots(
   rangeStart: Date = new Date(),
   rangeEnd: Date = new Date(Date.now() + DEFAULT_LOOKAHEAD_DAYS * 24 * 60 * 60 * 1000)
 ): Promise<AvailabilitySlot[]> {
-  const [mockBusy, bookedBusy] = await Promise.all([
-    getBusyRanges(rangeStart, rangeEnd),
+  // GOOGLE_CALENDAR_ID unset means the real calendar isn't wired up yet (e.g.
+  // local dev) — falls back to the placeholder schedule. Once it's set, a
+  // real Calendar API failure is allowed to throw and surface as a visible
+  // error rather than silently falling back to fake availability data.
+  const getExternalBusyRanges = process.env.GOOGLE_CALENDAR_ID
+    ? getGoogleCalendarBusyRanges
+    : getMockBusyRanges;
+
+  const [externalBusy, bookedBusy] = await Promise.all([
+    getExternalBusyRanges(rangeStart, rangeEnd),
     getAcceptedBookingRanges(rangeStart, rangeEnd),
   ]);
-  const busyRanges = [...mockBusy, ...bookedBusy];
+  const busyRanges = [...externalBusy, ...bookedBusy];
 
   const slots: AvailabilitySlot[] = [];
   const today = zonedToday(BUSINESS_TIME_ZONE);

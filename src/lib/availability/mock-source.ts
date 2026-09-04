@@ -2,13 +2,13 @@ import type { BusyRange } from "./types";
 import { BUSINESS_TIME_ZONE, zonedDayOfWeek, zonedToday, zonedWallTimeToUtc } from "./timezone";
 
 /**
- * PLACEHOLDER — swap target for Phase-2 real Google Calendar free/busy data.
+ * Local-dev fallback, used only when GOOGLE_CALENDAR_ID isn't set (see
+ * availability/index.ts) — keeps local testing possible without live Google
+ * credentials. In production this is fully replaced by
+ * google-calendar-source.ts, which has this same function signature.
  *
  * Returns deterministic fake "Russell is busy" blocks (class schedule, etc.),
- * shaped exactly like what Google's free/busy API returns. When the real
- * Calendar integration is ready, write a new module with this same signature
- * (e.g. google-calendar-source.ts) and swap the single import in
- * `availability/index.ts` — nothing else needs to change.
+ * shaped exactly like what Google's free/busy API returns.
  */
 export async function getBusyRanges(rangeStart: Date, rangeEnd: Date): Promise<BusyRange[]> {
   const busy: BusyRange[] = [];
