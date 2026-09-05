@@ -6,6 +6,7 @@ import { bookingCalendarSyncLog, bookingEmailLog, bookings, stripeWebhookEvents 
 import { getStripeClient } from "@/lib/stripe/client";
 import { createBookingCalendarEvent } from "@/lib/calendar/create-booking-event";
 import { sendDepositReceivedEmail } from "@/lib/email/send-deposit-received-email";
+import { sendDeliveryEmail } from "@/lib/email/send-delivery-email";
 
 export const runtime = "nodejs";
 
@@ -89,49 +90,84 @@ export async function POST(request: Request): Promise<Response> {
 
   const paymentIntentId =
     typeof session.payment_intent === "string" ? session.payment_intent : (session.payment_intent?.id ?? null);
+  // Default to "deposit" for backward compatibility with any Checkout
+  // Session created before this metadata field existed — harmless since
+  // sessions are short-lived and none should still be in flight.
+  const paymentType = session.metadata?.paymentType === "final" ? "final" : "deposit";
 
-  await db
-    .update(bookings)
-    .set({
-      status: "deposit_paid",
-      depositPaidAt: new Date(),
-      stripePaymentIntentId: paymentIntentId,
-      updatedAt: new Date(),
-    })
-    .where(and(eq(bookings.id, bookingId), eq(bookings.status, "accepted")));
+  if (paymentType === "deposit") {
+    await db
+      .update(bookings)
+      .set({
+        status: "deposit_paid",
+        depositPaidAt: new Date(),
+        stripePaymentIntentId: paymentIntentId,
+        updatedAt: new Date(),
+      })
+      .where(and(eq(bookings.id, bookingId), eq(bookings.status, "accepted")));
 
-  const [current] = await db.select().from(bookings).where(eq(bookings.id, bookingId)).limit(1);
+    const [current] = await db.select().from(bookings).where(eq(bookings.id, bookingId)).limit(1);
 
-  if (current && current.status === "deposit_paid") {
-    if (!current.calendarEventId) {
-      try {
-        const calendarEventId = await createBookingCalendarEvent(current);
-        await db.update(bookings).set({ calendarEventId }).where(eq(bookings.id, current.id));
-        await db
-          .insert(bookingCalendarSyncLog)
-          .values({ bookingId: current.id, status: "created", errorMessage: null });
-      } catch (err) {
-        const message = err instanceof Error ? err.message : "Unknown calendar error";
-        console.error("Calendar event creation failed:", message);
-        await db
-          .insert(bookingCalendarSyncLog)
-          .values({ bookingId: current.id, status: "failed", errorMessage: message });
+    if (current && current.status === "deposit_paid") {
+      if (!current.calendarEventId) {
+        try {
+          const calendarEventId = await createBookingCalendarEvent(current);
+          await db.update(bookings).set({ calendarEventId }).where(eq(bookings.id, current.id));
+          await db
+            .insert(bookingCalendarSyncLog)
+            .values({ bookingId: current.id, status: "created", errorMessage: null });
+        } catch (err) {
+          const message = err instanceof Error ? err.message : "Unknown calendar error";
+          console.error("Calendar event creation failed:", message);
+          await db
+            .insert(bookingCalendarSyncLog)
+            .values({ bookingId: current.id, status: "failed", errorMessage: message });
+        }
+      }
+
+      const [sentEmail] = await db
+        .select({ id: bookingEmailLog.id })
+        .from(bookingEmailLog)
+        .where(
+          and(
+            eq(bookingEmailLog.bookingId, current.id),
+            eq(bookingEmailLog.emailType, "deposit_confirmation"),
+            eq(bookingEmailLog.status, "sent")
+          )
+        )
+        .limit(1);
+      if (!sentEmail) {
+        await sendDepositReceivedEmail(current);
       }
     }
+  } else {
+    await db
+      .update(bookings)
+      .set({
+        status: "completed",
+        deliveredAt: new Date(),
+        finalPaymentIntentId: paymentIntentId,
+        updatedAt: new Date(),
+      })
+      .where(and(eq(bookings.id, bookingId), eq(bookings.status, "preview_ready")));
 
-    const [sentEmail] = await db
-      .select({ id: bookingEmailLog.id })
-      .from(bookingEmailLog)
-      .where(
-        and(
-          eq(bookingEmailLog.bookingId, current.id),
-          eq(bookingEmailLog.emailType, "deposit_confirmation"),
-          eq(bookingEmailLog.status, "sent")
+    const [current] = await db.select().from(bookings).where(eq(bookings.id, bookingId)).limit(1);
+
+    if (current && current.status === "completed") {
+      const [sentEmail] = await db
+        .select({ id: bookingEmailLog.id })
+        .from(bookingEmailLog)
+        .where(
+          and(
+            eq(bookingEmailLog.bookingId, current.id),
+            eq(bookingEmailLog.emailType, "delivery"),
+            eq(bookingEmailLog.status, "sent")
+          )
         )
-      )
-      .limit(1);
-    if (!sentEmail) {
-      await sendDepositReceivedEmail(current);
+        .limit(1);
+      if (!sentEmail) {
+        await sendDeliveryEmail(current);
+      }
     }
   }
 

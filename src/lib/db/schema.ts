@@ -5,7 +5,14 @@ import { pgTable, serial, integer, text, timestamp } from "drizzle-orm/pg-core";
  * enum type — new statuses are a one-line code change and no migration,
  * instead of an ALTER TYPE.
  */
-export const BOOKING_STATUSES = ["pending", "accepted", "deposit_paid", "declined"] as const;
+export const BOOKING_STATUSES = [
+  "pending",
+  "accepted",
+  "deposit_paid",
+  "preview_ready",
+  "completed",
+  "declined",
+] as const;
 export type BookingStatus = (typeof BOOKING_STATUSES)[number];
 
 export const BOOKING_PACKAGES = ["20-photos", "photo-video-bundle", "other"] as const;
@@ -29,6 +36,14 @@ export const bookings = pgTable("bookings", {
   stripeCheckoutSessionId: text("stripe_checkout_session_id"),
   stripePaymentIntentId: text("stripe_payment_intent_id"),
   calendarEventId: text("calendar_event_id"),
+  originalPhotoKeys: text("original_photo_keys").array(),
+  previewPhotoKeys: text("preview_photo_keys").array(),
+  previewVideoKey: text("preview_video_key"),
+  masterVideoKey: text("master_video_key"),
+  previewReadyAt: timestamp("preview_ready_at", { withTimezone: true }),
+  finalCheckoutSessionId: text("final_checkout_session_id"),
+  finalPaymentIntentId: text("final_payment_intent_id"),
+  deliveredAt: timestamp("delivered_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   acceptedAt: timestamp("accepted_at", { withTimezone: true }),
@@ -38,7 +53,13 @@ export const bookings = pgTable("bookings", {
 export type Booking = typeof bookings.$inferSelect;
 export type NewBooking = typeof bookings.$inferInsert;
 
-export const EMAIL_TYPES = ["acceptance", "deposit_confirmation", "decline"] as const;
+export const EMAIL_TYPES = [
+  "acceptance",
+  "deposit_confirmation",
+  "decline",
+  "preview_ready",
+  "delivery",
+] as const;
 export type EmailType = (typeof EMAIL_TYPES)[number];
 
 export const EMAIL_LOG_STATUSES = ["sent", "failed"] as const;

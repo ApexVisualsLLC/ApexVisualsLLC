@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { acceptBooking, declineBooking, retryCalendarSync, retryEmail } from "@/app/admin/actions";
 import type { Booking, BookingPackage, EmailType } from "@/lib/db/schema";
 import { CATALOG_PRICE_CENTS, DURATION_OPTIONS_MINUTES } from "@/lib/booking/validation";
@@ -12,6 +13,8 @@ const STATUS_LABELS: Record<string, string> = {
   pending: "Pending",
   accepted: "Accepted",
   deposit_paid: "Deposit Paid",
+  preview_ready: "Preview Ready",
+  completed: "Completed",
   declined: "Declined",
 };
 
@@ -86,7 +89,7 @@ export default function BookingsTable({
                 <dt className="text-fg-faint">Requested Time</dt>
                 <dd>{formatWhen(booking.requestedStartAt)}</dd>
               </div>
-              {(booking.status === "accepted" || booking.status === "deposit_paid") && (
+              {["accepted", "deposit_paid", "preview_ready", "completed"].includes(booking.status) && (
                 <div>
                   <dt className="text-fg-faint">Duration</dt>
                   <dd>{(booking.durationMinutes ?? 0) / 60} hour(s)</dd>
@@ -97,7 +100,8 @@ export default function BookingsTable({
                   <dt className="text-fg-faint">Price / Deposit</dt>
                   <dd>
                     {formatCents(booking.totalPriceCents)} total — {formatCents(booking.depositAmountCents)}{" "}
-                    deposit {booking.status === "deposit_paid" ? "(paid)" : "(awaiting payment)"}
+                    deposit {booking.status === "accepted" ? "(awaiting payment)" : "(paid)"}
+                    {booking.status === "completed" && " — final balance paid"}
                   </dd>
                 </div>
               )}
@@ -220,6 +224,17 @@ export default function BookingsTable({
                     Decline
                   </button>
                 </form>
+              </div>
+            )}
+
+            {(booking.status === "deposit_paid" || booking.status === "preview_ready") && (
+              <div className="mt-6 border-t border-border pt-6">
+                <Link
+                  href={`/admin/bookings/${booking.id}`}
+                  className="inline-block rounded-full border border-border px-5 py-2 text-sm font-semibold text-fg transition-colors hover:border-fg/40"
+                >
+                  {booking.status === "preview_ready" ? "Manage Files" : "Upload Files"}
+                </Link>
               </div>
             )}
           </div>

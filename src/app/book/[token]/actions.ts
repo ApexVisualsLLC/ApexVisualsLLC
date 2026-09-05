@@ -83,7 +83,7 @@ export async function startDepositCheckout(
 
   let redirectTarget: string;
   try {
-    redirectTarget = await getOrCreateCheckoutUrl(booking, bookingToken);
+    redirectTarget = await getOrCreateCheckoutUrl(booking, bookingToken, "deposit");
   } catch (err) {
     console.error("Stripe checkout session error:", err instanceof Error ? err.message : err);
     return { error: "Could not start checkout — please try again in a moment." };
@@ -94,23 +94,74 @@ export async function startDepositCheckout(
   redirect(redirectTarget);
 }
 
-async function getOrCreateCheckoutUrl(booking: Booking, bookingToken: string): Promise<string> {
-  const stripe = getStripeClient();
+export type StartFinalPaymentCheckoutState = {
+  error?: string;
+};
 
-  if (booking.stripeCheckoutSessionId) {
-    const existing = await stripe.checkout.sessions.retrieve(booking.stripeCheckoutSessionId);
+export async function startFinalPaymentCheckout(
+  _prevState: StartFinalPaymentCheckoutState,
+  formData: FormData
+): Promise<StartFinalPaymentCheckoutState> {
+  const bookingToken = String(formData.get("bookingToken") ?? "");
+
+  const [booking] = await db
+    .select()
+    .from(bookings)
+    .where(eq(bookings.bookingToken, bookingToken))
+    .limit(1);
+
+  if (!booking) {
+    return { error: "Booking not found." };
+  }
+  if (booking.status !== "preview_ready") {
+    return { error: "This booking isn't awaiting final payment right now." };
+  }
+  if (!booking.totalPriceCents || !booking.depositAmountCents) {
+    return { error: "Pricing hasn't been finalized yet — check back soon." };
+  }
+
+  let redirectTarget: string;
+  try {
+    redirectTarget = await getOrCreateCheckoutUrl(booking, bookingToken, "final");
+  } catch (err) {
+    console.error("Stripe checkout session error:", err instanceof Error ? err.message : err);
+    return { error: "Could not start checkout — please try again in a moment." };
+  }
+
+  redirect(redirectTarget);
+}
+
+type PaymentType = "deposit" | "final";
+
+async function getOrCreateCheckoutUrl(
+  booking: Booking,
+  bookingToken: string,
+  paymentType: PaymentType
+): Promise<string> {
+  const stripe = getStripeClient();
+  const existingSessionId =
+    paymentType === "deposit" ? booking.stripeCheckoutSessionId : booking.finalCheckoutSessionId;
+
+  if (existingSessionId) {
+    const existing = await stripe.checkout.sessions.retrieve(existingSessionId);
     if (existing.status === "open" && existing.url) {
       return existing.url;
     }
     if (existing.status === "complete") {
       // The webhook likely just hasn't landed yet — send them back to the
       // booking page rather than starting a second, redundant checkout.
-      return `/book/${bookingToken}?deposit=success`;
+      return `/book/${bookingToken}?${paymentType}=success`;
     }
     // "expired" falls through to creating a fresh session below.
   }
 
   const packageLabel = PACKAGE_LABELS[booking.package as BookingPackage] ?? booking.package;
+  const amountCents =
+    paymentType === "deposit"
+      ? booking.depositAmountCents!
+      : booking.totalPriceCents! - booking.depositAmountCents!;
+  const lineItemLabel = paymentType === "deposit" ? "Deposit" : "Remaining Balance";
+
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     payment_method_types: ["card"],
@@ -120,23 +171,25 @@ async function getOrCreateCheckoutUrl(booking: Booking, bookingToken: string): P
         quantity: 1,
         price_data: {
           currency: "usd",
-          unit_amount: booking.depositAmountCents!,
-          product_data: { name: `Deposit — ${packageLabel}` },
+          unit_amount: amountCents,
+          product_data: { name: `${lineItemLabel} — ${packageLabel}` },
         },
       },
     ],
-    metadata: { bookingId: String(booking.id) },
-    success_url: `${SITE_URL}/book/${bookingToken}?deposit=success`,
-    cancel_url: `${SITE_URL}/book/${bookingToken}?deposit=cancelled`,
+    metadata: { bookingId: String(booking.id), paymentType },
+    success_url: `${SITE_URL}/book/${bookingToken}?${paymentType}=success`,
+    cancel_url: `${SITE_URL}/book/${bookingToken}?${paymentType}=cancelled`,
   });
 
   if (!session.url) {
     throw new Error("Stripe did not return a checkout URL.");
   }
 
+  const sessionIdColumn =
+    paymentType === "deposit" ? { stripeCheckoutSessionId: session.id } : { finalCheckoutSessionId: session.id };
   await db
     .update(bookings)
-    .set({ stripeCheckoutSessionId: session.id, updatedAt: new Date() })
+    .set({ ...sessionIdColumn, updatedAt: new Date() })
     .where(eq(bookings.id, booking.id));
 
   return session.url;

@@ -12,6 +12,8 @@ import { acceptBookingSchema, declineBookingSchema } from "@/lib/booking/validat
 import { sendAcceptanceEmail } from "@/lib/email/send-acceptance-email";
 import { sendDepositReceivedEmail } from "@/lib/email/send-deposit-received-email";
 import { sendDeclineEmail } from "@/lib/email/send-decline-email";
+import { sendPreviewReadyEmail } from "@/lib/email/send-preview-ready-email";
+import { sendDeliveryEmail } from "@/lib/email/send-delivery-email";
 import { createBookingCalendarEvent } from "@/lib/calendar/create-booking-event";
 
 export type AdminLoginState = {
@@ -153,6 +155,10 @@ export async function retryEmail(formData: FormData): Promise<void> {
       await sendDepositReceivedEmail(booking);
     } else if (emailType === "decline" && booking.status === "declined") {
       await sendDeclineEmail(booking);
+    } else if (emailType === "preview_ready" && booking.status === "preview_ready") {
+      await sendPreviewReadyEmail(booking);
+    } else if (emailType === "delivery" && booking.status === "completed") {
+      await sendDeliveryEmail(booking);
     }
   }
 
