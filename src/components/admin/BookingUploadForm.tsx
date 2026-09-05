@@ -34,14 +34,12 @@ function uploadFileWithProgress(
 
 export default function BookingUploadForm({
   bookingId,
-  isBundle,
   existingPhotoCount,
   hasPreviewVideo,
   hasMasterVideo,
   hasGeneratedPreviews,
 }: {
   bookingId: number;
-  isBundle: boolean;
   existingPhotoCount: number;
   hasPreviewVideo: boolean;
   hasMasterVideo: boolean;
@@ -143,13 +141,9 @@ export default function BookingUploadForm({
     <div className="space-y-8">
       <div className="rounded-2xl border border-border p-6">
         <p className="text-sm text-fg-muted">
-          {existingPhotoCount} photo{existingPhotoCount === 1 ? "" : "s"} uploaded so far
-          {isBundle && (
-            <>
-              {" "}· preview video {hasPreviewVideo ? "✓" : "not uploaded"} · master video{" "}
-              {hasMasterVideo ? "✓" : "not uploaded"}
-            </>
-          )}
+          {existingPhotoCount} photo{existingPhotoCount === 1 ? "" : "s"} uploaded so far · preview
+          video {hasPreviewVideo ? "✓" : "not uploaded"} · master video{" "}
+          {hasMasterVideo ? "✓" : "not uploaded"}
         </p>
 
         <div className="mt-6 space-y-5">
@@ -164,31 +158,29 @@ export default function BookingUploadForm({
             />
           </label>
 
-          {isBundle && (
-            <>
-              <label className="block">
-                <span className="text-sm font-medium text-fg-muted">
-                  Preview video (your own watermarked/lower-res export)
-                </span>
-                <input
-                  ref={previewVideoInputRef}
-                  type="file"
-                  accept="video/*"
-                  className="mt-2 w-full rounded-lg border border-border bg-transparent px-4 py-3 text-sm text-fg outline-none file:mr-4 file:rounded-full file:border-0 file:bg-fg file:px-4 file:py-2 file:text-xs file:font-semibold file:text-bg"
-                />
-              </label>
+          <label className="block">
+            <span className="text-sm font-medium text-fg-muted">
+              Preview video (optional — your own watermarked/lower-res export)
+            </span>
+            <input
+              ref={previewVideoInputRef}
+              type="file"
+              accept="video/*"
+              className="mt-2 w-full rounded-lg border border-border bg-transparent px-4 py-3 text-sm text-fg outline-none file:mr-4 file:rounded-full file:border-0 file:bg-fg file:px-4 file:py-2 file:text-xs file:font-semibold file:text-bg"
+            />
+          </label>
 
-              <label className="block">
-                <span className="text-sm font-medium text-fg-muted">Full-quality master video</span>
-                <input
-                  ref={masterVideoInputRef}
-                  type="file"
-                  accept="video/*"
-                  className="mt-2 w-full rounded-lg border border-border bg-transparent px-4 py-3 text-sm text-fg outline-none file:mr-4 file:rounded-full file:border-0 file:bg-fg file:px-4 file:py-2 file:text-xs file:font-semibold file:text-bg"
-                />
-              </label>
-            </>
-          )}
+          <label className="block">
+            <span className="text-sm font-medium text-fg-muted">
+              Full-quality master video (optional)
+            </span>
+            <input
+              ref={masterVideoInputRef}
+              type="file"
+              accept="video/*"
+              className="mt-2 w-full rounded-lg border border-border bg-transparent px-4 py-3 text-sm text-fg outline-none file:mr-4 file:rounded-full file:border-0 file:bg-fg file:px-4 file:py-2 file:text-xs file:font-semibold file:text-bg"
+            />
+          </label>
 
           {Object.entries(progress).length > 0 && (
             <div className="space-y-2">

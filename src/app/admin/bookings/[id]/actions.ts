@@ -66,12 +66,6 @@ export async function requestUploadUrls(
     if (!(UPLOAD_SLOTS as readonly string[]).includes(file.slot)) {
       return { error: `Invalid upload slot: ${file.slot}` };
     }
-    if (
-      (file.slot === "preview-video" || file.slot === "master-video") &&
-      booking.package !== "photo-video-bundle"
-    ) {
-      return { error: "Video uploads are only for the photo + video bundle package." };
-    }
     if (!ALLOWED_CONTENT_TYPES.has(file.contentType)) {
       return { error: `Unsupported file type: ${file.contentType}` };
     }

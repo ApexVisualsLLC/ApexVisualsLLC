@@ -55,7 +55,6 @@ export default async function AdminBookingDetailPage({
   }
 
   const packageLabel = PACKAGE_LABELS[booking.package as BookingPackage] ?? booking.package;
-  const isBundle = booking.package === "photo-video-bundle";
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-16 md:px-10 md:py-24">
@@ -67,7 +66,6 @@ export default async function AdminBookingDetailPage({
       <div className="mt-10">
         <BookingUploadForm
           bookingId={booking.id}
-          isBundle={isBundle}
           existingPhotoCount={booking.originalPhotoKeys?.length ?? 0}
           hasPreviewVideo={!!booking.previewVideoKey}
           hasMasterVideo={!!booking.masterVideoKey}
