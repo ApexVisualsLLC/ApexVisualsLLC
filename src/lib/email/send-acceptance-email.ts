@@ -22,6 +22,10 @@ function formatBookingTime(date: Date): string {
   }).format(date);
 }
 
+function formatCents(cents: number): string {
+  return `$${(cents / 100).toFixed(2)}`;
+}
+
 const SITE_URL = "https://apexvisualsutah.com";
 
 /**
@@ -46,19 +50,29 @@ export async function sendAcceptanceEmail(booking: Booking): Promise<void> {
   const packageLabel = PACKAGE_LABELS[booking.package as BookingPackage] ?? booking.package;
   const whenText = formatBookingTime(booking.requestedStartAt);
 
+  const depositLines =
+    booking.totalPriceCents && booking.depositAmountCents
+      ? [
+          `Total: ${formatCents(booking.totalPriceCents)} — deposit due now to lock it in: ${formatCents(booking.depositAmountCents)}`,
+          `The remaining ${formatCents(booking.totalPriceCents - booking.depositAmountCents)} is due once your edited photos/videos are ready for you to preview.`,
+          "",
+        ]
+      : [];
+
   try {
     const resend = getResendClient();
     const { error } = await resend.emails.send({
       from: fromEmail,
       to: booking.clientEmail,
-      subject: "Your Apex Visuals shoot is confirmed",
+      subject: "Your Apex Visuals shoot request was accepted — pay your deposit to lock it in",
       text: [
         `Hi ${booking.clientName},`,
         "",
-        `Your shoot is confirmed for ${whenText}.`,
+        `Good news — we can do your shoot on ${whenText}.`,
         `Package: ${packageLabel}`,
         "",
-        `View your booking anytime: ${bookingUrl}`,
+        ...depositLines,
+        `Pay your deposit and view your booking anytime: ${bookingUrl}`,
         "",
         "If anything about the time needs to change, just reply to this email.",
         "",

@@ -62,10 +62,18 @@ export default function BookingProgress({
         <p className="mt-3 text-fg-muted">{packageLabel}</p>
         <p className="mt-1 text-fg-muted">{formatWhen(booking.requestedStartAt)}</p>
         {booking.totalPriceCents && booking.depositAmountCents && (
-          <p className="mt-3 text-fg-muted">
-            Total: {formatCents(booking.totalPriceCents)} — deposit due now:{" "}
-            {formatCents(booking.depositAmountCents)}
-          </p>
+          <>
+            <p className="mt-3 text-fg-muted">
+              Total: {formatCents(booking.totalPriceCents)} — deposit due now:{" "}
+              {formatCents(booking.depositAmountCents)}
+            </p>
+            <p className="mt-1 text-xs text-fg-faint">
+              Paying the deposit locks in your shoot date. The remaining{" "}
+              {formatCents(booking.totalPriceCents - booking.depositAmountCents)} is due once your
+              edited photos{booking.package === "photo-video-bundle" ? "/video" : ""} are ready for
+              you to preview — you'll get the final files right after that's settled.
+            </p>
+          </>
         )}
         {depositReturnStatus === "success" ? (
           <p className="mt-6 text-sm text-fg-muted">
