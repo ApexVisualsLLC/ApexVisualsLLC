@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Booking, BookingPackage } from "@/lib/db/schema";
 import { DEPOSIT_POLICY_TEXT, RESCHEDULE_REMINDER_TEXT } from "@/lib/booking/policy";
 import PayDepositButton from "./PayDepositButton";
@@ -139,7 +140,13 @@ export default function BookingProgress({
               edited photos{booking.package === "photo-video-bundle" ? "/video" : ""} are ready for
               you to preview — you&apos;ll get the final files right after that&apos;s settled.
             </p>
-            <p className="mt-1 text-xs text-fg-faint">{DEPOSIT_POLICY_TEXT}</p>
+            <p className="mt-1 text-xs text-fg-faint">
+              {DEPOSIT_POLICY_TEXT}{" "}
+              <Link href="/policies" className="underline hover:text-fg">
+                Full terms &amp; policies
+              </Link>
+              .
+            </p>
           </>
         )}
         {depositReturnStatus === "success" ? (

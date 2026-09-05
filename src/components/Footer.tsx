@@ -70,7 +70,12 @@ export default function Footer() {
 
         <div className="mt-12 flex flex-col gap-2 border-t border-border pt-6 text-xs text-fg-faint md:flex-row md:items-center md:justify-between">
           <p>&copy; {year} Apex Visuals LLC. All rights reserved.</p>
-          <p>Serving Provo, Orem, Lehi, and Utah County.</p>
+          <div className="flex flex-wrap gap-x-4 gap-y-1">
+            <Link href="/policies" className="hover:text-fg">
+              Terms & Policies
+            </Link>
+            <p>Serving Provo, Orem, Lehi, and Utah County.</p>
+          </div>
         </div>
       </div>
     </footer>
