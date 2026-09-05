@@ -7,6 +7,7 @@ import { db } from "@/lib/db/client";
 import { bookings, type Booking, type BookingPackage } from "@/lib/db/schema";
 import { chooseStartTimeSchema } from "@/lib/booking/validation";
 import { getStripeClient } from "@/lib/stripe/client";
+import { sendNewRequestEmail } from "@/lib/email/send-new-request-email";
 
 const SITE_URL = "https://apexvisualsutah.com";
 
@@ -47,14 +48,19 @@ export async function chooseStartTime(
     return { error: "This booking has already been scheduled." };
   }
 
-  await db
+  const [updated] = await db
     .update(bookings)
     .set({
       requestedStartAt: parsed.data.startAt,
       requestedStartAtAlt: parsed.data.startAtAlt ?? null,
       updatedAt: new Date(),
     })
-    .where(eq(bookings.id, booking.id));
+    .where(eq(bookings.id, booking.id))
+    .returning();
+
+  if (updated) {
+    await sendNewRequestEmail(updated);
+  }
 
   revalidatePath(`/book/${parsed.data.bookingToken}`);
   return {};

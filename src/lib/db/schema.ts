@@ -57,6 +57,7 @@ export type Booking = typeof bookings.$inferSelect;
 export type NewBooking = typeof bookings.$inferInsert;
 
 export const EMAIL_TYPES = [
+  "new_request",
   "acceptance",
   "deposit_confirmation",
   "decline",

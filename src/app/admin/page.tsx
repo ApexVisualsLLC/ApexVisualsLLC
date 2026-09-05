@@ -21,12 +21,15 @@ export default async function AdminPage() {
 
   const allBookings = await db.select().from(bookings).orderBy(desc(bookings.createdAt));
 
-  // Each of these statuses can have its own email worth retrying (acceptance,
-  // deposit confirmation, decline, preview ready, delivery), and a
-  // deposit_paid booking can also have a failed calendar sync.
+  // Each of these statuses can have its own email worth retrying (new
+  // request, acceptance, deposit confirmation, decline, preview ready,
+  // delivery), and a deposit_paid booking can also have a failed calendar
+  // sync.
   const relevantIds = allBookings
     .filter((b) =>
-      ["accepted", "deposit_paid", "preview_ready", "completed", "declined"].includes(b.status)
+      ["pending", "accepted", "deposit_paid", "preview_ready", "completed", "declined"].includes(
+        b.status
+      )
     )
     .map((b) => b.id);
   const emailStatusByBookingId = new Map<number, EmailStatusInfo>();

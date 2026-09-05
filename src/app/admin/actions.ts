@@ -9,6 +9,7 @@ import { bookingCalendarSyncLog, bookings, type EmailType } from "@/lib/db/schem
 import { createAdminSession, deleteAdminSession } from "@/lib/auth/session";
 import { verifyAdminSession } from "@/lib/auth/dal";
 import { acceptBookingSchema, declineBookingSchema } from "@/lib/booking/validation";
+import { sendNewRequestEmail } from "@/lib/email/send-new-request-email";
 import { sendAcceptanceEmail } from "@/lib/email/send-acceptance-email";
 import { sendDepositReceivedEmail } from "@/lib/email/send-deposit-received-email";
 import { sendDeclineEmail } from "@/lib/email/send-decline-email";
@@ -154,7 +155,9 @@ export async function retryEmail(formData: FormData): Promise<void> {
 
   const [booking] = await db.select().from(bookings).where(eq(bookings.id, bookingId)).limit(1);
   if (booking) {
-    if (emailType === "acceptance" && booking.status === "accepted") {
+    if (emailType === "new_request" && booking.status === "pending" && booking.requestedStartAt) {
+      await sendNewRequestEmail(booking);
+    } else if (emailType === "acceptance" && booking.status === "accepted") {
       await sendAcceptanceEmail(booking);
     } else if (emailType === "deposit_confirmation" && booking.status === "deposit_paid") {
       await sendDepositReceivedEmail(booking);
