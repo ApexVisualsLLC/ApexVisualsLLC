@@ -4,15 +4,34 @@ import { getGoogleServiceAccountCredentials } from "@/lib/google/credentials";
 import type { BusyRange } from "./types";
 
 /**
- * Real replacement for mock-source.ts. Reads free/busy data from the
- * "Apex Visuals Bookings" Google Calendar via the service account it's
- * shared with (read-only — "See only free/busy" sharing is all this needs).
+ * Which calendars count as "Russell is busy" for booking purposes. Always
+ * includes the dedicated "Apex Visuals Bookings" calendar (where confirmed
+ * shoots get written), plus any personal/school/other calendars listed in
+ * GOOGLE_AVAILABILITY_CALENDAR_IDS — each must be shared with the service
+ * account (read-only "See only free/busy" is enough). Without the extra
+ * calendars, availability only reflects Apex bookings and ignores
+ * everything else on Russell's real schedule.
  */
-export async function getBusyRanges(rangeStart: Date, rangeEnd: Date): Promise<BusyRange[]> {
-  const calendarId = process.env.GOOGLE_CALENDAR_ID;
-  if (!calendarId) {
+function getCalendarIdsToCheck(): string[] {
+  const bookingCalendarId = process.env.GOOGLE_CALENDAR_ID;
+  if (!bookingCalendarId) {
     throw new Error("GOOGLE_CALENDAR_ID is not set.");
   }
+  const extraIds = (process.env.GOOGLE_AVAILABILITY_CALENDAR_IDS ?? "")
+    .split(",")
+    .map((id) => id.trim())
+    .filter(Boolean);
+
+  return Array.from(new Set([bookingCalendarId, ...extraIds]));
+}
+
+/**
+ * Real replacement for mock-source.ts. Reads free/busy data from every
+ * calendar in getCalendarIdsToCheck() via the service account they're each
+ * shared with.
+ */
+export async function getBusyRanges(rangeStart: Date, rangeEnd: Date): Promise<BusyRange[]> {
+  const calendarIds = getCalendarIdsToCheck();
 
   const { clientEmail, privateKey } = getGoogleServiceAccountCredentials();
   const auth = new google.auth.JWT({
@@ -26,18 +45,24 @@ export async function getBusyRanges(rangeStart: Date, rangeEnd: Date): Promise<B
     requestBody: {
       timeMin: rangeStart.toISOString(),
       timeMax: rangeEnd.toISOString(),
-      items: [{ id: calendarId }],
+      items: calendarIds.map((id) => ({ id })),
     },
   });
 
-  const calendarResult = res.data.calendars?.[calendarId];
-  if (calendarResult?.errors?.length) {
-    throw new Error(
-      `Google Calendar free/busy lookup failed: ${JSON.stringify(calendarResult.errors)}`
-    );
+  const busy: BusyRange[] = [];
+  for (const calendarId of calendarIds) {
+    const calendarResult = res.data.calendars?.[calendarId];
+    if (calendarResult?.errors?.length) {
+      throw new Error(
+        `Google Calendar free/busy lookup failed for ${calendarId}: ${JSON.stringify(calendarResult.errors)}`
+      );
+    }
+    for (const range of calendarResult?.busy ?? []) {
+      if (range.start && range.end) {
+        busy.push({ start: new Date(range.start), end: new Date(range.end) });
+      }
+    }
   }
 
-  return (calendarResult?.busy ?? [])
-    .filter((range) => range.start && range.end)
-    .map((range) => ({ start: new Date(range.start as string), end: new Date(range.end as string) }));
+  return busy;
 }

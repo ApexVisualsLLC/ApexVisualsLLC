@@ -3,7 +3,7 @@ import { db } from "@/lib/db/client";
 import { bookings } from "@/lib/db/schema";
 import { getBusyRanges as getGoogleCalendarBusyRanges } from "./google-calendar-source";
 import { getBusyRanges as getMockBusyRanges } from "./mock-source";
-import { BUSINESS_TIME_ZONE, zonedToday, zonedWallTimeToUtc } from "./timezone";
+import { BUSINESS_TIME_ZONE, zonedDayOfWeek, zonedToday, zonedWallTimeToUtc } from "./timezone";
 import type { AvailabilitySlot, BusyRange } from "./types";
 
 const BUSINESS_HOURS_START = 8; // 8am Denver
@@ -84,6 +84,12 @@ export async function getAvailableSlots(
     const y = Number(map.year);
     const m = Number(map.month) - 1;
     const d = Number(map.day);
+
+    // No work on Sundays, ever — regardless of what any calendar shows.
+    if (zonedDayOfWeek(BUSINESS_TIME_ZONE, cursor) === 0) {
+      cursor.setUTCDate(cursor.getUTCDate() + 1);
+      continue;
+    }
 
     for (let hour = BUSINESS_HOURS_START; hour < BUSINESS_HOURS_END; hour++) {
       const slotStart = zonedWallTimeToUtc(BUSINESS_TIME_ZONE, y, m, d, hour, 0);
