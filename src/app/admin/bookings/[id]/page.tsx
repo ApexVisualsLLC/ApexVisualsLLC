@@ -68,7 +68,7 @@ export default async function AdminBookingDetailPage({
           bookingId={booking.id}
           existingPhotoCount={booking.originalPhotoKeys?.length ?? 0}
           hasPreviewVideo={!!booking.previewVideoKey}
-          hasMasterVideo={!!booking.masterVideoKey}
+          masterVideoCount={booking.masterVideoKeys?.length ?? 0}
           hasGeneratedPreviews={booking.status === "preview_ready"}
         />
       </div>

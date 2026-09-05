@@ -103,10 +103,13 @@ export async function confirmUploadsComplete(
 
   const newOriginalPhotoKeys = uploaded.filter((u) => u.slot === "original-photo").map((u) => u.key);
   const newPreviewVideoKey = uploaded.find((u) => u.slot === "preview-video")?.key;
-  const newMasterVideoKey = uploaded.find((u) => u.slot === "master-video")?.key;
+  const newMasterVideoKeys = uploaded.filter((u) => u.slot === "master-video").map((u) => u.key);
 
   const mergedOriginalPhotoKeys = Array.from(
     new Set([...(booking.originalPhotoKeys ?? []), ...newOriginalPhotoKeys])
+  );
+  const mergedMasterVideoKeys = Array.from(
+    new Set([...(booking.masterVideoKeys ?? []), ...newMasterVideoKeys])
   );
 
   await db
@@ -114,7 +117,7 @@ export async function confirmUploadsComplete(
     .set({
       originalPhotoKeys: mergedOriginalPhotoKeys,
       previewVideoKey: newPreviewVideoKey ?? booking.previewVideoKey,
-      masterVideoKey: newMasterVideoKey ?? booking.masterVideoKey,
+      masterVideoKeys: mergedMasterVideoKeys,
       updatedAt: new Date(),
     })
     .where(eq(bookings.id, bookingId));

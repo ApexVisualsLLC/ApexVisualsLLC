@@ -39,7 +39,7 @@ export const bookings = pgTable("bookings", {
   originalPhotoKeys: text("original_photo_keys").array(),
   previewPhotoKeys: text("preview_photo_keys").array(),
   previewVideoKey: text("preview_video_key"),
-  masterVideoKey: text("master_video_key"),
+  masterVideoKeys: text("master_video_keys").array(),
   previewReadyAt: timestamp("preview_ready_at", { withTimezone: true }),
   finalCheckoutSessionId: text("final_checkout_session_id"),
   finalPaymentIntentId: text("final_payment_intent_id"),

@@ -38,7 +38,7 @@ export default function BookingProgress({
   previewPhotoUrls = [],
   previewVideoUrl,
   downloadPhotoUrls = [],
-  downloadVideoUrl,
+  downloadVideoUrls = [],
 }: {
   booking: Booking;
   depositReturnStatus?: string;
@@ -46,7 +46,7 @@ export default function BookingProgress({
   previewPhotoUrls?: PhotoUrl[];
   previewVideoUrl?: string;
   downloadPhotoUrls?: PhotoUrl[];
-  downloadVideoUrl?: string;
+  downloadVideoUrls?: PhotoUrl[];
 }) {
   const packageLabel = PACKAGE_LABELS[booking.package as BookingPackage] ?? booking.package;
 
@@ -60,11 +60,7 @@ export default function BookingProgress({
             Full-quality, unwatermarked downloads below — available anytime, no expiration.
           </p>
         </div>
-        <CompletedDownloads
-          photos={downloadPhotoUrls}
-          videoUrl={downloadVideoUrl}
-          videoFilename={booking.masterVideoKey?.split("/").pop()}
-        />
+        <CompletedDownloads photos={downloadPhotoUrls} videos={downloadVideoUrls} />
       </div>
     );
   }

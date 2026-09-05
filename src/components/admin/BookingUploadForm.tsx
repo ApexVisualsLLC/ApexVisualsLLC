@@ -36,13 +36,13 @@ export default function BookingUploadForm({
   bookingId,
   existingPhotoCount,
   hasPreviewVideo,
-  hasMasterVideo,
+  masterVideoCount,
   hasGeneratedPreviews,
 }: {
   bookingId: number;
   existingPhotoCount: number;
   hasPreviewVideo: boolean;
-  hasMasterVideo: boolean;
+  masterVideoCount: number;
   hasGeneratedPreviews: boolean;
 }) {
   const router = useRouter();
@@ -62,12 +62,12 @@ export default function BookingUploadForm({
 
     const photoFiles = Array.from(photoInputRef.current?.files ?? []);
     const previewVideoFile = previewVideoInputRef.current?.files?.[0] ?? null;
-    const masterVideoFile = masterVideoInputRef.current?.files?.[0] ?? null;
+    const masterVideoFiles = Array.from(masterVideoInputRef.current?.files ?? []);
 
     const selected: { slot: UploadSlot; file: File }[] = [
       ...photoFiles.map((file) => ({ slot: "original-photo" as UploadSlot, file })),
       ...(previewVideoFile ? [{ slot: "preview-video" as UploadSlot, file: previewVideoFile }] : []),
-      ...(masterVideoFile ? [{ slot: "master-video" as UploadSlot, file: masterVideoFile }] : []),
+      ...masterVideoFiles.map((file) => ({ slot: "master-video" as UploadSlot, file })),
     ];
 
     if (selected.length === 0) {
@@ -142,8 +142,8 @@ export default function BookingUploadForm({
       <div className="rounded-2xl border border-border p-6">
         <p className="text-sm text-fg-muted">
           {existingPhotoCount} photo{existingPhotoCount === 1 ? "" : "s"} uploaded so far · preview
-          video {hasPreviewVideo ? "✓" : "not uploaded"} · master video{" "}
-          {hasMasterVideo ? "✓" : "not uploaded"}
+          video {hasPreviewVideo ? "✓" : "not uploaded"} · {masterVideoCount} master video
+          {masterVideoCount === 1 ? "" : "s"} uploaded
         </p>
 
         <div className="mt-6 space-y-5">
@@ -172,12 +172,13 @@ export default function BookingUploadForm({
 
           <label className="block">
             <span className="text-sm font-medium text-fg-muted">
-              Full-quality master video (optional)
+              Full-quality master video(s) (optional — select multiple if you have several)
             </span>
             <input
               ref={masterVideoInputRef}
               type="file"
               accept="video/*"
+              multiple
               className="mt-2 w-full rounded-lg border border-border bg-transparent px-4 py-3 text-sm text-fg outline-none file:mr-4 file:rounded-full file:border-0 file:bg-fg file:px-4 file:py-2 file:text-xs file:font-semibold file:text-bg"
             />
           </label>

@@ -53,10 +53,8 @@ export default async function BookingLinkPage({
       : undefined;
   const downloadPhotoUrls =
     booking.status === "completed" ? await urlsForKeys(booking.originalPhotoKeys ?? []) : [];
-  const downloadVideoUrl =
-    booking.status === "completed" && booking.masterVideoKey
-      ? await createPresignedDownloadUrl(booking.masterVideoKey, filenameFromKey(booking.masterVideoKey))
-      : undefined;
+  const downloadVideoUrls =
+    booking.status === "completed" ? await urlsForKeys(booking.masterVideoKeys ?? []) : [];
 
   // The photo/video gallery needs real room — widen the container for those
   // two states rather than cramming a masonry grid into the narrow column
@@ -89,7 +87,7 @@ export default async function BookingLinkPage({
               previewPhotoUrls={previewPhotoUrls}
               previewVideoUrl={previewVideoUrl}
               downloadPhotoUrls={downloadPhotoUrls}
-              downloadVideoUrl={downloadVideoUrl}
+              downloadVideoUrls={downloadVideoUrls}
             />
           )}
         </div>
