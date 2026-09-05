@@ -21,10 +21,11 @@ export default async function AdminPage() {
 
   const allBookings = await db.select().from(bookings).orderBy(desc(bookings.createdAt));
 
-  // A deposit_paid booking can still have a failed acceptance email or a
-  // failed calendar sync worth retrying, so both statuses are included here.
+  // Each of these statuses can have its own email worth retrying (acceptance,
+  // deposit confirmation, decline), and a deposit_paid booking can also have
+  // a failed calendar sync.
   const relevantIds = allBookings
-    .filter((b) => b.status === "accepted" || b.status === "deposit_paid")
+    .filter((b) => b.status === "accepted" || b.status === "deposit_paid" || b.status === "declined")
     .map((b) => b.id);
   const emailStatusByBookingId = new Map<number, EmailStatusInfo>();
   const calendarSyncStatusByBookingId = new Map<number, CalendarSyncStatusInfo>();
@@ -47,6 +48,7 @@ export default async function AdminPage() {
     for (const log of emailLogs) {
       if (!emailStatusByBookingId.has(log.bookingId)) {
         emailStatusByBookingId.set(log.bookingId, {
+          emailType: log.emailType as EmailStatusInfo["emailType"],
           status: log.status as "sent" | "failed",
           errorMessage: log.errorMessage,
         });

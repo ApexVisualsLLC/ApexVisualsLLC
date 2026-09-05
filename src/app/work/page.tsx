@@ -46,7 +46,7 @@ export default function WorkPage() {
         </Magnetic>
         <Magnetic>
           <Link
-            href="/contact"
+            href="/book"
             className="inline-block rounded-full bg-fg px-5 py-2.5 text-sm font-semibold tracking-wide text-bg transition-opacity hover:opacity-85"
           >
             Start a Project

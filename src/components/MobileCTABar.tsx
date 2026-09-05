@@ -15,7 +15,7 @@ export default function MobileCTABar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  if (pathname === "/contact") return null;
+  if (pathname === "/contact" || pathname.startsWith("/book")) return null;
 
   return (
     <div
@@ -27,7 +27,7 @@ export default function MobileCTABar() {
       <div className="flex items-center justify-between gap-4 px-5 py-3">
         <p className="text-sm font-medium text-fg-muted">Ready to elevate your brand?</p>
         <Link
-          href="/contact"
+          href="/book"
           className="shrink-0 rounded-full bg-fg px-5 py-2.5 text-sm font-semibold tracking-wide text-bg transition-opacity hover:opacity-85"
         >
           START A PROJECT

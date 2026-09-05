@@ -68,7 +68,7 @@ export default function Nav() {
 
         <Magnetic className="hidden md:inline-block">
           <Link
-            href="/contact"
+            href="/book"
             className="inline-block rounded-full bg-fg px-5 py-2.5 text-sm font-semibold tracking-wide text-bg transition-opacity hover:opacity-85"
           >
             START A PROJECT
@@ -118,7 +118,7 @@ export default function Nav() {
             );
           })}
           <Link
-            href="/contact"
+            href="/book"
             onClick={closeMenu}
             className="mt-3 rounded-full bg-fg px-5 py-3 text-center text-sm font-semibold tracking-wide text-bg"
           >

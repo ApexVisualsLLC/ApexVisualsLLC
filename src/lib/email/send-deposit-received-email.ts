@@ -2,6 +2,7 @@ import "server-only";
 import { getResendClient } from "./resend-client";
 import { db } from "@/lib/db/client";
 import { bookingEmailLog, type Booking, type BookingPackage } from "@/lib/db/schema";
+import { RESCHEDULE_REMINDER_TEXT } from "@/lib/booking/policy";
 
 const PACKAGE_LABELS: Record<BookingPackage, string> = {
   "20-photos": "20 Edited Aerial Photos",
@@ -47,6 +48,8 @@ export async function sendDepositReceivedEmail(booking: Booking): Promise<void> 
         "",
         `We received your ${formatCents(booking.depositAmountCents)} deposit for your ${packageLabel} shoot — you're officially locked in.`,
         `Remaining balance (due after your preview gallery): ${formatCents(remainingCents)}`,
+        "",
+        RESCHEDULE_REMINDER_TEXT,
         "",
         `View your booking anytime: ${bookingUrl}`,
         "",

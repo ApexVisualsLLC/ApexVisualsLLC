@@ -1,10 +1,5 @@
-import {
-  acceptBooking,
-  declineBooking,
-  retryCalendarSync,
-  retrySendAcceptanceEmail,
-} from "@/app/admin/actions";
-import type { Booking, BookingPackage } from "@/lib/db/schema";
+import { acceptBooking, declineBooking, retryCalendarSync, retryEmail } from "@/app/admin/actions";
+import type { Booking, BookingPackage, EmailType } from "@/lib/db/schema";
 import { CATALOG_PRICE_CENTS, DURATION_OPTIONS_MINUTES } from "@/lib/booking/validation";
 
 const PACKAGE_LABELS: Record<BookingPackage, string> = {
@@ -38,6 +33,7 @@ function formatWhen(date: Date | null): string {
 }
 
 export type EmailStatusInfo = {
+  emailType: EmailType;
   status: "sent" | "failed";
   errorMessage: string | null;
 };
@@ -121,8 +117,9 @@ export default function BookingsTable({
                   Confirmation email failed to send
                   {emailStatus.errorMessage ? `: ${emailStatus.errorMessage}` : "."}
                 </span>
-                <form action={retrySendAcceptanceEmail}>
+                <form action={retryEmail}>
                   <input type="hidden" name="bookingId" value={booking.id} />
+                  <input type="hidden" name="emailType" value={emailStatus.emailType} />
                   <button
                     type="submit"
                     className="rounded-full border border-fg/30 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider hover:border-fg hover:bg-fg hover:text-bg"

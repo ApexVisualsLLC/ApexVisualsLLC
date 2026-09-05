@@ -74,7 +74,7 @@ export default function HomePage() {
           </p>
           <Magnetic className="mt-10 inline-block">
             <Link
-              href="/contact"
+              href="/book"
               className="inline-block rounded-full bg-fg px-8 py-3.5 text-sm font-semibold tracking-wide text-bg transition-opacity hover:opacity-85"
             >
               START A PROJECT
@@ -206,7 +206,7 @@ export default function HomePage() {
             </h2>
             <Magnetic className="mt-10 inline-block">
               <Link
-                href="/contact"
+                href="/book"
                 className="inline-block rounded-full bg-fg px-8 py-3.5 text-sm font-semibold tracking-wide text-bg transition-opacity hover:opacity-85"
               >
                 START A PROJECT

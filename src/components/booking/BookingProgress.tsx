@@ -1,4 +1,5 @@
 import type { Booking, BookingPackage } from "@/lib/db/schema";
+import { DEPOSIT_POLICY_TEXT, RESCHEDULE_REMINDER_TEXT } from "@/lib/booking/policy";
 import PayDepositButton from "./PayDepositButton";
 import DepositPendingRefresh from "./DepositPendingRefresh";
 
@@ -50,6 +51,7 @@ export default function BookingProgress({
             gallery.
           </p>
         )}
+        <p className="mt-4 text-xs text-fg-faint">{RESCHEDULE_REMINDER_TEXT}</p>
       </div>
     );
   }
@@ -71,8 +73,9 @@ export default function BookingProgress({
               Paying the deposit locks in your shoot date. The remaining{" "}
               {formatCents(booking.totalPriceCents - booking.depositAmountCents)} is due once your
               edited photos{booking.package === "photo-video-bundle" ? "/video" : ""} are ready for
-              you to preview — you'll get the final files right after that's settled.
+              you to preview — you&apos;ll get the final files right after that&apos;s settled.
             </p>
+            <p className="mt-1 text-xs text-fg-faint">{DEPOSIT_POLICY_TEXT}</p>
           </>
         )}
         {depositReturnStatus === "success" ? (

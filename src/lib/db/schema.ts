@@ -38,7 +38,7 @@ export const bookings = pgTable("bookings", {
 export type Booking = typeof bookings.$inferSelect;
 export type NewBooking = typeof bookings.$inferInsert;
 
-export const EMAIL_TYPES = ["acceptance", "deposit_confirmation"] as const;
+export const EMAIL_TYPES = ["acceptance", "deposit_confirmation", "decline"] as const;
 export type EmailType = (typeof EMAIL_TYPES)[number];
 
 export const EMAIL_LOG_STATUSES = ["sent", "failed"] as const;

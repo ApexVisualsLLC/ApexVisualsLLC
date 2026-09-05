@@ -82,7 +82,7 @@ export default function AboutPage() {
 
             <Magnetic className="mt-10 inline-block">
               <Link
-                href="/contact"
+                href="/book"
                 className="group relative inline-block border border-fg/50 px-9 py-4 text-sm font-semibold tracking-wide text-fg transition-colors duration-300 hover:bg-fg hover:text-bg"
               >
                 <span className="pointer-events-none absolute -left-2.5 -top-2.5 h-4 w-4 border-l border-t border-fg/50 transition-colors duration-300 group-hover:border-fg" />

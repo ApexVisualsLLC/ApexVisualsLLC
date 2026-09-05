@@ -2,6 +2,7 @@ import "server-only";
 import { getResendClient } from "./resend-client";
 import { db } from "@/lib/db/client";
 import { bookingEmailLog, type Booking, type BookingPackage } from "@/lib/db/schema";
+import { DEPOSIT_POLICY_TEXT } from "@/lib/booking/policy";
 
 const PACKAGE_LABELS: Record<BookingPackage, string> = {
   "20-photos": "20 Edited Aerial Photos",
@@ -55,6 +56,8 @@ export async function sendAcceptanceEmail(booking: Booking): Promise<void> {
       ? [
           `Total: ${formatCents(booking.totalPriceCents)} — deposit due now to lock it in: ${formatCents(booking.depositAmountCents)}`,
           `The remaining ${formatCents(booking.totalPriceCents - booking.depositAmountCents)} is due once your edited photos/videos are ready for you to preview.`,
+          "",
+          DEPOSIT_POLICY_TEXT,
           "",
         ]
       : [];

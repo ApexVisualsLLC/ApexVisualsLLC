@@ -89,7 +89,7 @@ function TierCard({ tier, highlighted = false }: { tier: Tier; highlighted?: boo
       <p className="mt-4 flex-1 text-sm leading-relaxed text-fg-muted">{tier.description}</p>
       <Magnetic className="mt-8 inline-block">
         <Link
-          href="/contact"
+          href="/book"
           className="inline-block rounded-full border border-fg/30 px-5 py-2.5 text-center text-sm font-semibold tracking-wide transition-colors hover:border-fg hover:bg-fg hover:text-bg"
         >
           Start a Project
