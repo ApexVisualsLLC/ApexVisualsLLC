@@ -86,8 +86,13 @@ export default function BookingsTable({
                 <dd>{PACKAGE_LABELS[booking.package as BookingPackage] ?? booking.package}</dd>
               </div>
               <div>
-                <dt className="text-fg-faint">Requested Time</dt>
-                <dd>{formatWhen(booking.requestedStartAt)}</dd>
+                <dt className="text-fg-faint">
+                  {booking.requestedStartAtAlt ? "Requested Times" : "Requested Time"}
+                </dt>
+                <dd>
+                  {formatWhen(booking.requestedStartAt)}
+                  {booking.requestedStartAtAlt && <> or {formatWhen(booking.requestedStartAtAlt)}</>}
+                </dd>
               </div>
               {["accepted", "deposit_paid", "preview_ready", "completed"].includes(booking.status) && (
                 <div>
@@ -156,6 +161,28 @@ export default function BookingsTable({
               <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-border pt-6">
                 <form action={acceptBooking} className="flex flex-wrap items-center gap-2">
                   <input type="hidden" name="bookingId" value={booking.id} />
+                  {booking.requestedStartAtAlt && (
+                    <div className="flex w-full flex-col gap-1.5 text-sm">
+                      <span className="text-fg-faint">Which time works?</span>
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="chosenStartAt"
+                          value={booking.requestedStartAt!.toISOString()}
+                          defaultChecked
+                        />
+                        {formatWhen(booking.requestedStartAt)}
+                      </label>
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="chosenStartAt"
+                          value={booking.requestedStartAtAlt.toISOString()}
+                        />
+                        {formatWhen(booking.requestedStartAtAlt)}
+                      </label>
+                    </div>
+                  )}
                   <select
                     name="durationMinutes"
                     defaultValue={60}

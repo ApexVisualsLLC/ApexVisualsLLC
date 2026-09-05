@@ -27,6 +27,7 @@ export async function chooseStartTime(
   const parsed = chooseStartTimeSchema.safeParse({
     bookingToken: formData.get("bookingToken"),
     startAt: formData.get("startAt"),
+    startAtAlt: formData.get("startAtAlt"),
   });
 
   if (!parsed.success) {
@@ -48,7 +49,11 @@ export async function chooseStartTime(
 
   await db
     .update(bookings)
-    .set({ requestedStartAt: parsed.data.startAt, updatedAt: new Date() })
+    .set({
+      requestedStartAt: parsed.data.startAt,
+      requestedStartAtAlt: parsed.data.startAtAlt ?? null,
+      updatedAt: new Date(),
+    })
     .where(eq(bookings.id, booking.id));
 
   revalidatePath(`/book/${parsed.data.bookingToken}`);

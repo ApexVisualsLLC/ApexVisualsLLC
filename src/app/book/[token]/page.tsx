@@ -70,7 +70,7 @@ export default async function BookingLinkPage({
         </h1>
         <p className="mt-4 text-fg-muted">
           {needsTimeSelection
-            ? "Choose a start time that works for you — we'll confirm the exact duration once we review your project."
+            ? "Choose one or two times that could work for you — we'll confirm whichever fits best, along with the exact duration, once we review your project."
             : "This link stays the same through the whole process — bookmark it to check back anytime."}
         </p>
       </Reveal>

@@ -1,0 +1,1 @@
+ALTER TABLE "bookings" ADD COLUMN "requested_start_at_alt" timestamp with time zone;

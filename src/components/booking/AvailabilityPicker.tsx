@@ -38,11 +38,21 @@ function ContactLinks() {
   );
 }
 
+const MAX_SELECTED_TIMES = 2;
+
 export default function AvailabilityPicker({ bookingToken }: { bookingToken: string }) {
   const [slots, setSlots] = useState<Slot[] | null>(null);
   const [loadError, setLoadError] = useState(false);
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string[]>([]);
   const [state, formAction, isPending] = useActionState(chooseStartTime, initialState);
+
+  function toggleSelected(startAt: string) {
+    setSelected((prev) => {
+      if (prev.includes(startAt)) return prev.filter((s) => s !== startAt);
+      if (prev.length >= MAX_SELECTED_TIMES) return prev;
+      return [...prev, startAt];
+    });
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -94,44 +104,48 @@ export default function AvailabilityPicker({ bookingToken }: { bookingToken: str
   return (
     <form action={formAction} className="space-y-8">
       <input type="hidden" name="bookingToken" value={bookingToken} />
-      <input type="hidden" name="startAt" value={selected ?? ""} />
+      <input type="hidden" name="startAt" value={selected[0] ?? ""} />
+      <input type="hidden" name="startAtAlt" value={selected[1] ?? ""} />
 
       <div className="space-y-6">
         {Array.from(byDay.entries()).map(([day, daySlots]) => (
           <div key={day}>
             <p className="text-xs font-semibold uppercase tracking-wider text-fg-faint">{day}</p>
             <div className="mt-3 flex flex-wrap gap-2">
-              {daySlots.map((slot) => (
-                <button
-                  key={slot.startAt}
-                  type="button"
-                  onClick={() => setSelected(slot.startAt)}
-                  title={
-                    slot.sunsetAt
-                      ? `Arrive at ${formatTime(new Date(slot.startAt))} to shoot golden-hour light — sunset is at ${formatTime(new Date(slot.sunsetAt))}`
-                      : undefined
-                  }
-                  // Inline style, not a Tailwind border-color utility: globals.css's
-                  // unlayered `* { border-color }` reset outranks any layered
-                  // Tailwind utility under CSS cascade-layer rules, regardless of
-                  // specificity — only an inline style reliably wins here.
-                  style={
-                    slot.sunsetAt && selected !== slot.startAt
-                      ? { borderColor: "rgba(245, 158, 11, 0.4)" }
-                      : undefined
-                  }
-                  className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
-                    selected === slot.startAt
-                      ? "border-fg bg-fg text-bg"
-                      : slot.sunsetAt
-                        ? "text-amber-400"
-                        : "border-border text-fg-muted hover:border-fg/40 hover:text-fg"
-                  }`}
-                >
-                  {formatTime(new Date(slot.startAt))}
-                  {slot.sunsetAt && ` — Sunset (${formatTime(new Date(slot.sunsetAt))})`}
-                </button>
-              ))}
+              {daySlots.map((slot) => {
+                const isSelected = selected.includes(slot.startAt);
+                return (
+                  <button
+                    key={slot.startAt}
+                    type="button"
+                    onClick={() => toggleSelected(slot.startAt)}
+                    title={
+                      slot.sunsetAt
+                        ? `Arrive at ${formatTime(new Date(slot.startAt))} to shoot golden-hour light — sunset is at ${formatTime(new Date(slot.sunsetAt))}`
+                        : undefined
+                    }
+                    // Inline style, not a Tailwind border-color utility: globals.css's
+                    // unlayered `* { border-color }` reset outranks any layered
+                    // Tailwind utility under CSS cascade-layer rules, regardless of
+                    // specificity — only an inline style reliably wins here.
+                    style={
+                      slot.sunsetAt && !isSelected
+                        ? { borderColor: "rgba(245, 158, 11, 0.4)" }
+                        : undefined
+                    }
+                    className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                      isSelected
+                        ? "border-fg bg-fg text-bg"
+                        : slot.sunsetAt
+                          ? "text-amber-400"
+                          : "border-border text-fg-muted hover:border-fg/40 hover:text-fg"
+                    }`}
+                  >
+                    {formatTime(new Date(slot.startAt))}
+                    {slot.sunsetAt && ` — Sunset (${formatTime(new Date(slot.sunsetAt))})`}
+                  </button>
+                );
+              })}
             </div>
           </div>
         ))}
@@ -146,10 +160,10 @@ export default function AvailabilityPicker({ bookingToken }: { bookingToken: str
 
       <button
         type="submit"
-        disabled={!selected || isPending}
+        disabled={selected.length === 0 || isPending}
         className="w-full rounded-full bg-fg px-8 py-3.5 text-sm font-semibold tracking-wide text-bg transition-opacity hover:opacity-85 disabled:opacity-40 sm:w-auto"
       >
-        {isPending ? "Requesting…" : "Request This Time"}
+        {isPending ? "Requesting…" : selected.length === 2 ? "Request These Times" : "Request This Time"}
       </button>
     </form>
   );

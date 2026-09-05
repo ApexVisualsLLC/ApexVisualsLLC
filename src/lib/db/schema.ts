@@ -28,6 +28,9 @@ export const bookings = pgTable("bookings", {
   clientPhone: text("client_phone"),
   projectDetails: text("project_details").notNull(),
   requestedStartAt: timestamp("requested_start_at", { withTimezone: true }),
+  // Optional second candidate time — clients may offer two options and
+  // Russell picks whichever works when he accepts. Cleared once accepted.
+  requestedStartAtAlt: timestamp("requested_start_at_alt", { withTimezone: true }),
   durationMinutes: integer("duration_minutes"),
   declineReason: text("decline_reason"),
   totalPriceCents: integer("total_price_cents"),

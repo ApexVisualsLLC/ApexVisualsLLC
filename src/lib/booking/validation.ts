@@ -22,12 +22,27 @@ export const intakeSchema = z.object({
 
 export type IntakeInput = z.infer<typeof intakeSchema>;
 
-export const chooseStartTimeSchema = z.object({
-  bookingToken: z.string().min(1),
-  startAt: z.coerce.date().refine((d) => d.getTime() > Date.now(), {
-    message: "That time has already passed",
-  }),
-});
+/** Treats an empty/missing form field as "not provided" rather than an invalid date. */
+const optionalDate = z.preprocess(
+  (v) => (v === "" || v === null || v === undefined ? undefined : v),
+  z.coerce.date().optional()
+);
+
+export const chooseStartTimeSchema = z
+  .object({
+    bookingToken: z.string().min(1),
+    startAt: z.coerce.date().refine((d) => d.getTime() > Date.now(), {
+      message: "That time has already passed",
+    }),
+    // Optional second choice — the client can offer one or two times.
+    startAtAlt: optionalDate.refine((d) => !d || d.getTime() > Date.now(), {
+      message: "That time has already passed",
+    }),
+  })
+  .refine((data) => !data.startAtAlt || data.startAtAlt.getTime() !== data.startAt.getTime(), {
+    message: "Pick two different times",
+    path: ["startAtAlt"],
+  });
 
 export const DURATION_OPTIONS_MINUTES = [60, 120, 180] as const;
 
@@ -39,6 +54,8 @@ export const acceptBookingSchema = z
       { message: "Duration must be 1, 2, or 3 hours" }
     ),
     totalPriceDollars: z.coerce.number().positive("Enter a total price"),
+    // Which of the client's one or two candidate times Russell is accepting.
+    chosenStartAt: optionalDate,
   })
   .transform((data) => ({
     ...data,

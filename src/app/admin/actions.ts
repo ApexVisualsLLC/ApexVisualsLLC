@@ -67,6 +67,7 @@ export async function acceptBooking(formData: FormData): Promise<void> {
     bookingId: formData.get("bookingId"),
     durationMinutes: formData.get("durationMinutes"),
     totalPriceDollars: formData.get("totalPriceDollars"),
+    chosenStartAt: formData.get("chosenStartAt"),
   });
   if (!parsed.success) {
     throw new Error(parsed.error.issues[0]?.message ?? "Invalid accept request.");
@@ -83,6 +84,10 @@ export async function acceptBooking(formData: FormData): Promise<void> {
       depositAmountCents,
       acceptedAt: now,
       updatedAt: now,
+      // If the client offered two times, this locks in whichever Russell
+      // picked as the single, final time. The other one is discarded.
+      ...(parsed.data.chosenStartAt ? { requestedStartAt: parsed.data.chosenStartAt } : {}),
+      requestedStartAtAlt: null,
     })
     // Guards against a double form-submit re-triggering the email below.
     .where(and(eq(bookings.id, parsed.data.bookingId), eq(bookings.status, "pending")))
