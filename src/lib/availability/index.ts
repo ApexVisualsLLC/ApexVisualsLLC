@@ -11,8 +11,21 @@ const BUSINESS_HOURS_END = 19; // 7pm Denver
 const SLOT_GRANULARITY_MINUTES = 60;
 const DEFAULT_LOOKAHEAD_DAYS = 14;
 
-function overlaps(slotStart: Date, slotEnd: Date, busy: BusyRange): boolean {
-  return slotStart < busy.end && slotEnd > busy.start;
+// Real-world buffer around anything already on Russell's schedule: enough
+// time before a shoot to get home, grab gear, and drive out, and enough
+// time after to pack up and get back before whatever's next.
+const BUFFER_BEFORE_MINUTES = 60;
+const BUFFER_AFTER_MINUTES = 90;
+
+/** Whether `busy` overlaps the candidate slot, or leaves it too little buffer on either side. */
+function conflictsWithBuffer(slotStart: Date, slotEnd: Date, busy: BusyRange): boolean {
+  if (busy.end <= slotStart) {
+    return (slotStart.getTime() - busy.end.getTime()) / 60000 < BUFFER_BEFORE_MINUTES;
+  }
+  if (busy.start >= slotEnd) {
+    return (busy.start.getTime() - slotEnd.getTime()) / 60000 < BUFFER_AFTER_MINUTES;
+  }
+  return true; // overlaps the slot itself
 }
 
 /**
@@ -97,7 +110,7 @@ export async function getAvailableSlots(
 
       if (slotStart < rangeStart || slotStart < new Date()) continue;
       if (slotStart >= rangeEnd) continue;
-      if (busyRanges.some((busy) => overlaps(slotStart, slotEnd, busy))) continue;
+      if (busyRanges.some((busy) => conflictsWithBuffer(slotStart, slotEnd, busy))) continue;
 
       slots.push({ startAt: slotStart });
     }
