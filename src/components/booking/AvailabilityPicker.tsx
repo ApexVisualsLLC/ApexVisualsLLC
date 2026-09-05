@@ -124,20 +124,11 @@ export default function AvailabilityPicker({ bookingToken }: { bookingToken: str
                         ? `Arrive at ${formatTime(new Date(slot.startAt))} to shoot golden-hour light — sunset is at ${formatTime(new Date(slot.sunsetAt))}`
                         : undefined
                     }
-                    // Inline style, not a Tailwind border-color utility: globals.css's
-                    // unlayered `* { border-color }` reset outranks any layered
-                    // Tailwind utility under CSS cascade-layer rules, regardless of
-                    // specificity — only an inline style reliably wins here.
-                    style={
-                      slot.sunsetAt && !isSelected
-                        ? { borderColor: "rgba(245, 158, 11, 0.4)" }
-                        : undefined
-                    }
                     className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
                       isSelected
                         ? "border-fg bg-fg text-bg"
                         : slot.sunsetAt
-                          ? "text-amber-400"
+                          ? "border-amber-500/40 text-amber-400 hover:border-amber-400"
                           : "border-border text-fg-muted hover:border-fg/40 hover:text-fg"
                     }`}
                   >

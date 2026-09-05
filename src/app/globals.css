@@ -31,8 +31,19 @@ body {
   font-family: var(--font-body);
 }
 
-* {
-  border-color: var(--color-border);
+/*
+ * Layered (not a bare top-level rule) so Tailwind's own cascade-layer order
+ * applies: unlayered CSS always beats layered CSS regardless of specificity,
+ * so a bare `* { border-color }` here would silently out-rank every
+ * border-color utility class (border-fg/30, hover:border-fg/40, etc.)
+ * anywhere in the app, no matter how specific. Putting it in the same
+ * `base` layer Tailwind's own preflight uses lets `@layer utilities`
+ * classes win again, as expected.
+ */
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
 }
 
 ::selection {
