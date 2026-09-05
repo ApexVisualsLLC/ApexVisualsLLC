@@ -11,6 +11,7 @@ declare global {
           events: {
             onReady: (e: { target: YTPlayer }) => void;
             onStateChange: (e: { data: number; target: YTPlayer }) => void;
+            onPlaybackQualityChange: (e: { data: string; target: YTPlayer }) => void;
           };
         }
       ) => YTPlayer;
@@ -51,14 +52,21 @@ function loadYouTubeIframeAPI(): Promise<void> {
 }
 
 // Pushes playback to the highest quality YouTube reports as available.
-// Note: YouTube's algorithm auto-manages resolution based on player size
-// and connection speed and no longer guarantees a forced quality — this is
-// a best-effort request, applied on ready and again once playback starts
-// (quality can reset when buffering kicks in).
+// Note: YouTube's algorithm auto-manages resolution based on player size and
+// connection speed and no longer guarantees a forced quality — this is a
+// best-effort request. A single call is easily overridden by YouTube's own
+// adaptive bitrate logic in the first second or two of playback, so callers
+// re-assert this repeatedly (see RETRY_DELAYS_MS and onPlaybackQualityChange
+// below) rather than relying on one shot.
 function requestHighestQuality(player: YTPlayer) {
   const levels = player.getAvailableQualityLevels();
   if (levels[0]) player.setPlaybackQuality(levels[0]);
 }
+
+// How long after playback starts to keep re-requesting the top quality —
+// covers the window where YouTube's own bitrate ramp-up tends to override a
+// single early request.
+const RETRY_DELAYS_MS = [250, 750, 1500, 3000];
 
 export default function VideoLightbox({
   youtubeId,
@@ -88,19 +96,38 @@ export default function VideoLightbox({
 
   useEffect(() => {
     let cancelled = false;
+    const retryTimers: ReturnType<typeof setTimeout>[] = [];
+
     loadYouTubeIframeAPI().then(() => {
       if (cancelled || !iframeRef.current || !window.YT) return;
       playerRef.current = new window.YT.Player(iframeRef.current, {
         events: {
           onReady: (e) => requestHighestQuality(e.target),
           onStateChange: (e) => {
-            if (e.data === window.YT!.PlayerState.PLAYING) requestHighestQuality(e.target);
+            if (e.data !== window.YT!.PlayerState.PLAYING) return;
+            requestHighestQuality(e.target);
+            // A single request is easily overridden by YouTube's own bitrate
+            // ramp-up right as playback begins, so keep re-asserting for the
+            // first few seconds instead of trusting the first call to stick.
+            for (const delay of RETRY_DELAYS_MS) {
+              retryTimers.push(setTimeout(() => requestHighestQuality(e.target), delay));
+            }
+          },
+          // Self-correcting: if YouTube drops quality on its own after our
+          // request took effect, ask again immediately rather than waiting
+          // for the fixed retry schedule above to catch it.
+          onPlaybackQualityChange: (e) => {
+            const levels = e.target.getAvailableQualityLevels();
+            if (levels[0] && e.data !== levels[0]) {
+              e.target.setPlaybackQuality(levels[0]);
+            }
           },
         },
       });
     });
     return () => {
       cancelled = true;
+      for (const timer of retryTimers) clearTimeout(timer);
       playerRef.current?.destroy();
       playerRef.current = null;
     };
@@ -135,7 +162,7 @@ export default function VideoLightbox({
       >
         <iframe
           ref={iframeRef}
-          src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}`}
+          src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&enablejsapi=1&vq=hd1080&origin=${encodeURIComponent(window.location.origin)}`}
           title={title}
           className="absolute inset-0 h-full w-full"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
