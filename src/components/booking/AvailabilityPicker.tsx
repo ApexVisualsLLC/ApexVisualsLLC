@@ -3,7 +3,7 @@
 import { useActionState, useEffect, useState } from "react";
 import { chooseStartTime, type ChooseStartTimeState } from "@/app/book/[token]/actions";
 
-type Slot = { startAt: string };
+type Slot = { startAt: string; sunsetAt?: string };
 
 const initialState: ChooseStartTimeState = {};
 
@@ -92,13 +92,30 @@ export default function AvailabilityPicker({ bookingToken }: { bookingToken: str
                   key={slot.startAt}
                   type="button"
                   onClick={() => setSelected(slot.startAt)}
+                  title={
+                    slot.sunsetAt
+                      ? `Arrive at ${formatTime(new Date(slot.startAt))} to shoot golden-hour light — sunset is at ${formatTime(new Date(slot.sunsetAt))}`
+                      : undefined
+                  }
+                  // Inline style, not a Tailwind border-color utility: globals.css's
+                  // unlayered `* { border-color }` reset outranks any layered
+                  // Tailwind utility under CSS cascade-layer rules, regardless of
+                  // specificity — only an inline style reliably wins here.
+                  style={
+                    slot.sunsetAt && selected !== slot.startAt
+                      ? { borderColor: "rgba(245, 158, 11, 0.4)" }
+                      : undefined
+                  }
                   className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
                     selected === slot.startAt
                       ? "border-fg bg-fg text-bg"
-                      : "border-border text-fg-muted hover:border-fg/40 hover:text-fg"
+                      : slot.sunsetAt
+                        ? "text-amber-400"
+                        : "border-border text-fg-muted hover:border-fg/40 hover:text-fg"
                   }`}
                 >
                   {formatTime(new Date(slot.startAt))}
+                  {slot.sunsetAt && ` — Sunset (${formatTime(new Date(slot.sunsetAt))})`}
                 </button>
               ))}
             </div>

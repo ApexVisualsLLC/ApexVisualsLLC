@@ -3,11 +3,12 @@ import { db } from "@/lib/db/client";
 import { bookings } from "@/lib/db/schema";
 import { getBusyRanges as getGoogleCalendarBusyRanges } from "./google-calendar-source";
 import { getBusyRanges as getMockBusyRanges } from "./mock-source";
+import { getSunsetAt, SUNSET_ARRIVAL_LEAD_MINUTES } from "./sunset";
 import { BUSINESS_TIME_ZONE, zonedDayOfWeek, zonedToday, zonedWallTimeToUtc } from "./timezone";
 import type { AvailabilitySlot, BusyRange } from "./types";
 
 const BUSINESS_HOURS_START = 8; // 8am Denver
-const BUSINESS_HOURS_END = 19; // 7pm Denver
+const BUSINESS_HOURS_END = 20; // 8pm Denver (last bookable start time is 7pm)
 const SLOT_GRANULARITY_MINUTES = 60;
 const DEFAULT_LOOKAHEAD_DAYS = 14;
 
@@ -113,6 +114,25 @@ export async function getAvailableSlots(
       if (busyRanges.some((busy) => conflictsWithBuffer(slotStart, slotEnd, busy))) continue;
 
       slots.push({ startAt: slotStart });
+    }
+
+    // Golden-hour arrival slot: outside the normal business-hours window
+    // (sunset in summer runs well past 8pm), gated only by the buffer rules
+    // and Sunday block above — the whole point is shooting for the light,
+    // not the clock.
+    const noonThatDay = zonedWallTimeToUtc(BUSINESS_TIME_ZONE, y, m, d, 12, 0);
+    const sunsetAt = getSunsetAt(noonThatDay);
+    const sunsetArrivalAt = new Date(sunsetAt.getTime() - SUNSET_ARRIVAL_LEAD_MINUTES * 60000);
+    const sunsetArrivalEnd = new Date(sunsetArrivalAt.getTime() + SLOT_GRANULARITY_MINUTES * 60000);
+
+    if (
+      sunsetArrivalAt >= rangeStart &&
+      sunsetArrivalAt >= new Date() &&
+      sunsetArrivalAt < rangeEnd &&
+      !busyRanges.some((busy) => conflictsWithBuffer(sunsetArrivalAt, sunsetArrivalEnd, busy)) &&
+      !slots.some((s) => s.startAt.getTime() === sunsetArrivalAt.getTime())
+    ) {
+      slots.push({ startAt: sunsetArrivalAt, sunsetAt });
     }
 
     cursor.setUTCDate(cursor.getUTCDate() + 1);

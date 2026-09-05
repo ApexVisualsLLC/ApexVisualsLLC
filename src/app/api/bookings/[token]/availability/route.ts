@@ -24,7 +24,10 @@ export async function GET(
   try {
     const slots = await getAvailableSlots();
     return NextResponse.json({
-      slots: slots.map((slot) => ({ startAt: slot.startAt.toISOString() })),
+      slots: slots.map((slot) => ({
+        startAt: slot.startAt.toISOString(),
+        sunsetAt: slot.sunsetAt?.toISOString(),
+      })),
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
