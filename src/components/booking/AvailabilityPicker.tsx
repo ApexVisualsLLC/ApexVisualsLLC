@@ -24,6 +24,20 @@ function formatTime(date: Date): string {
   }).format(date);
 }
 
+function ContactLinks() {
+  return (
+    <>
+      <a href="mailto:russfilmz808@gmail.com" className="underline hover:text-fg">
+        Email
+      </a>{" "}
+      or{" "}
+      <a href="tel:+18088664664" className="underline hover:text-fg">
+        call
+      </a>
+    </>
+  );
+}
+
 export default function AvailabilityPicker({ bookingToken }: { bookingToken: string }) {
   const [slots, setSlots] = useState<Slot[] | null>(null);
   const [loadError, setLoadError] = useState(false);
@@ -52,7 +66,7 @@ export default function AvailabilityPicker({ bookingToken }: { bookingToken: str
     return (
       <p className="text-sm text-fg-muted">
         Couldn&apos;t load available times right now. Please refresh the page, or reach out
-        directly.
+        directly. <ContactLinks />
       </p>
     );
   }
@@ -65,7 +79,7 @@ export default function AvailabilityPicker({ bookingToken }: { bookingToken: str
     return (
       <p className="text-sm text-fg-muted">
         No open times found right now — reach out directly and we&apos;ll find something that
-        works.
+        works. <ContactLinks />
       </p>
     );
   }
@@ -122,6 +136,11 @@ export default function AvailabilityPicker({ bookingToken }: { bookingToken: str
           </div>
         ))}
       </div>
+
+      <p className="text-xs text-fg-faint">
+        Don&apos;t see a time that works, or need a date further out than what&apos;s shown here?{" "}
+        <ContactLinks /> and we&apos;ll find something.
+      </p>
 
       {state.error && <p className="text-sm text-fg">{state.error}</p>}
 
