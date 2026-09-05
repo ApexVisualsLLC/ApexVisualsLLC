@@ -18,6 +18,11 @@ const DEFAULT_LOOKAHEAD_DAYS = 14;
 const BUFFER_BEFORE_MINUTES = 60;
 const BUFFER_AFTER_MINUTES = 90;
 
+// An hourly slot this close to the sunset arrival time is effectively the
+// same booking option twice (e.g. 7:00pm and 7:11pm) — replace it with the
+// sunset slot rather than offering both.
+const SUNSET_REPLACE_NEARBY_MINUTES = 15;
+
 /** Whether `busy` overlaps the candidate slot, or leaves it too little buffer on either side. */
 function conflictsWithBuffer(slotStart: Date, slotEnd: Date, busy: BusyRange): boolean {
   if (busy.end <= slotStart) {
@@ -129,9 +134,12 @@ export async function getAvailableSlots(
       sunsetArrivalAt >= rangeStart &&
       sunsetArrivalAt >= new Date() &&
       sunsetArrivalAt < rangeEnd &&
-      !busyRanges.some((busy) => conflictsWithBuffer(sunsetArrivalAt, sunsetArrivalEnd, busy)) &&
-      !slots.some((s) => s.startAt.getTime() === sunsetArrivalAt.getTime())
+      !busyRanges.some((busy) => conflictsWithBuffer(sunsetArrivalAt, sunsetArrivalEnd, busy))
     ) {
+      for (let i = slots.length - 1; i >= 0; i--) {
+        const minutesApart = Math.abs(slots[i].startAt.getTime() - sunsetArrivalAt.getTime()) / 60000;
+        if (minutesApart < SUNSET_REPLACE_NEARBY_MINUTES) slots.splice(i, 1);
+      }
       slots.push({ startAt: sunsetArrivalAt, sunsetAt });
     }
 
