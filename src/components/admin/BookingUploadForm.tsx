@@ -4,12 +4,42 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   confirmUploadsComplete,
+  deleteUploadedFile,
   generateWatermarkedPreviews,
   requestUploadUrls,
   type ConfirmedUpload,
   type UploadFileRequest,
 } from "@/app/admin/bookings/[id]/actions";
 import type { UploadSlot } from "@/lib/storage/keys";
+
+/** Keys are never guarded (not server-only), so this stays a plain inline helper. */
+function filenameFromKey(key: string): string {
+  return key.split("/").pop() ?? key;
+}
+
+function FileRow({
+  filename,
+  isDeleting,
+  onDelete,
+}: {
+  filename: string;
+  isDeleting: boolean;
+  onDelete: () => void;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-3 py-1 text-sm">
+      <span className="truncate text-fg-muted">{filename}</span>
+      <button
+        type="button"
+        onClick={onDelete}
+        disabled={isDeleting}
+        className="shrink-0 text-xs font-medium text-fg-faint hover:text-fg disabled:opacity-40"
+      >
+        {isDeleting ? "Deleting…" : "Delete"}
+      </button>
+    </div>
+  );
+}
 
 function uploadFileWithProgress(
   url: string,
@@ -34,15 +64,15 @@ function uploadFileWithProgress(
 
 export default function BookingUploadForm({
   bookingId,
-  existingPhotoCount,
-  hasPreviewVideo,
-  masterVideoCount,
+  originalPhotoKeys,
+  previewVideoKey,
+  masterVideoKeys,
   hasGeneratedPreviews,
 }: {
   bookingId: number;
-  existingPhotoCount: number;
-  hasPreviewVideo: boolean;
-  masterVideoCount: number;
+  originalPhotoKeys: string[];
+  previewVideoKey: string | null;
+  masterVideoKeys: string[];
   hasGeneratedPreviews: boolean;
 }) {
   const router = useRouter();
@@ -50,11 +80,34 @@ export default function BookingUploadForm({
   const previewVideoInputRef = useRef<HTMLInputElement>(null);
   const masterVideoInputRef = useRef<HTMLInputElement>(null);
 
+  const existingPhotoCount = originalPhotoKeys.length;
+
   const [isUploading, setIsUploading] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [deletingKey, setDeletingKey] = useState<string | null>(null);
   const [progress, setProgress] = useState<Record<string, number>>({});
   const [error, setError] = useState<string | null>(null);
   const [uploadMessage, setUploadMessage] = useState<string | null>(null);
+
+  async function handleDelete(slot: UploadSlot, key: string) {
+    if (!window.confirm(`Delete ${filenameFromKey(key)}? This can't be undone.`)) return;
+    setError(null);
+    setUploadMessage(null);
+    setDeletingKey(key);
+    try {
+      const { error: deleteError } = await deleteUploadedFile(bookingId, slot, key);
+      if (deleteError) {
+        setError(deleteError);
+        return;
+      }
+      setUploadMessage(`Deleted ${filenameFromKey(key)}.`);
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Delete failed.");
+    } finally {
+      setDeletingKey(null);
+    }
+  }
 
   async function handleUpload() {
     setError(null);
@@ -142,9 +195,37 @@ export default function BookingUploadForm({
       <div className="rounded-2xl border border-border p-6">
         <p className="text-sm text-fg-muted">
           {existingPhotoCount} photo{existingPhotoCount === 1 ? "" : "s"} uploaded so far · preview
-          video {hasPreviewVideo ? "✓" : "not uploaded"} · {masterVideoCount} master video
-          {masterVideoCount === 1 ? "" : "s"} uploaded
+          video {previewVideoKey ? "✓" : "not uploaded"} · {masterVideoKeys.length} master video
+          {masterVideoKeys.length === 1 ? "" : "s"} uploaded
         </p>
+
+        {(originalPhotoKeys.length > 0 || previewVideoKey || masterVideoKeys.length > 0) && (
+          <div className="mt-4 max-h-64 space-y-1.5 overflow-y-auto rounded-lg border border-border p-3">
+            {originalPhotoKeys.map((key) => (
+              <FileRow
+                key={key}
+                filename={filenameFromKey(key)}
+                isDeleting={deletingKey === key}
+                onDelete={() => handleDelete("original-photo", key)}
+              />
+            ))}
+            {previewVideoKey && (
+              <FileRow
+                filename={filenameFromKey(previewVideoKey)}
+                isDeleting={deletingKey === previewVideoKey}
+                onDelete={() => handleDelete("preview-video", previewVideoKey)}
+              />
+            )}
+            {masterVideoKeys.map((key) => (
+              <FileRow
+                key={key}
+                filename={filenameFromKey(key)}
+                isDeleting={deletingKey === key}
+                onDelete={() => handleDelete("master-video", key)}
+              />
+            ))}
+          </div>
+        )}
 
         <div className="mt-6 space-y-5">
           <label className="block">

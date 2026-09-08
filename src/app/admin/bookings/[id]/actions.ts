@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { and, eq, inArray } from "drizzle-orm";
-import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { db } from "@/lib/db/client";
 import { bookingEmailLog, bookings } from "@/lib/db/schema";
 import { verifyAdminSession } from "@/lib/auth/dal";
@@ -219,5 +219,73 @@ export async function generateWatermarkedPreviews(
 
   revalidatePath(`/admin/bookings/${bookingId}`);
   revalidatePath("/admin");
+  return { ok: true };
+}
+
+/**
+ * Removes one uploaded file — for fixing a wrong photo or video without
+ * touching anything else about the booking. Deleting an original photo also
+ * removes its watermarked preview (if one was generated), so a stale preview
+ * never outlives the original it was made from.
+ */
+export async function deleteUploadedFile(
+  bookingId: number,
+  slot: UploadSlot,
+  key: string
+): Promise<{ ok?: boolean; error?: string }> {
+  await requireAdmin();
+
+  const [booking] = await db.select().from(bookings).where(eq(bookings.id, bookingId)).limit(1);
+  if (!booking) return { error: "Booking not found." };
+  if (!UPLOAD_ELIGIBLE_STATUSES.includes(booking.status as (typeof UPLOAD_ELIGIBLE_STATUSES)[number])) {
+    return { error: "This booking isn't in a state where files can be changed." };
+  }
+  // Every real key for this booking is built under this exact prefix — this
+  // is what stops a forged key from touching another booking's files.
+  if (!key.startsWith(`bookings/${bookingId}/`)) {
+    return { error: "Invalid file." };
+  }
+
+  const r2 = getR2Client();
+  const bucket = getR2BucketName();
+
+  try {
+    await r2.send(new DeleteObjectCommand({ Bucket: bucket, Key: key }));
+
+    if (slot === "original-photo") {
+      const previewKey = buildPreviewPhotoKey(bookingId, key);
+      try {
+        await r2.send(new DeleteObjectCommand({ Bucket: bucket, Key: previewKey }));
+      } catch {
+        // Fine if it never existed — previews may not be generated yet.
+      }
+      await db
+        .update(bookings)
+        .set({
+          originalPhotoKeys: (booking.originalPhotoKeys ?? []).filter((k) => k !== key),
+          previewPhotoKeys: (booking.previewPhotoKeys ?? []).filter((k) => k !== previewKey),
+          updatedAt: new Date(),
+        })
+        .where(eq(bookings.id, bookingId));
+    } else if (slot === "preview-video") {
+      await db
+        .update(bookings)
+        .set({ previewVideoKey: null, updatedAt: new Date() })
+        .where(eq(bookings.id, bookingId));
+    } else if (slot === "master-video") {
+      await db
+        .update(bookings)
+        .set({
+          masterVideoKeys: (booking.masterVideoKeys ?? []).filter((k) => k !== key),
+          updatedAt: new Date(),
+        })
+        .where(eq(bookings.id, bookingId));
+    }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unknown storage error";
+    return { error: `Failed to delete file: ${message}` };
+  }
+
+  revalidatePath(`/admin/bookings/${bookingId}`);
   return { ok: true };
 }
