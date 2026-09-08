@@ -53,3 +53,33 @@ export async function createBookingCalendarEvent(booking: Booking): Promise<stri
   }
   return res.data.id;
 }
+
+/**
+ * Removes a shoot's calendar event, e.g. when the booking itself is deleted
+ * from the admin dashboard — otherwise a stale block would sit on Russell's
+ * calendar forever with nothing in the app pointing back to it. A 404/410
+ * (already gone) counts as success, since the end state we want is already
+ * true.
+ */
+export async function deleteBookingCalendarEvent(eventId: string): Promise<void> {
+  const calendarId = process.env.GOOGLE_CALENDAR_ID;
+  if (!calendarId) {
+    throw new Error("GOOGLE_CALENDAR_ID is not set.");
+  }
+
+  const { clientEmail, privateKey } = getGoogleServiceAccountCredentials();
+  const auth = new google.auth.JWT({
+    email: clientEmail,
+    key: privateKey,
+    scopes: ["https://www.googleapis.com/auth/calendar.events"],
+  });
+  const calendar = google.calendar({ version: "v3", auth });
+
+  try {
+    await calendar.events.delete({ calendarId, eventId });
+  } catch (err) {
+    const status = (err as { response?: { status?: number } })?.response?.status;
+    if (status === 404 || status === 410) return;
+    throw err;
+  }
+}

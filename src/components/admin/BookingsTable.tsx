@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { acceptBooking, declineBooking, retryCalendarSync, retryEmail } from "@/app/admin/actions";
+import { acceptBooking, declineBooking, deleteBooking, retryCalendarSync, retryEmail } from "@/app/admin/actions";
 import type { Booking, BookingPackage, EmailType } from "@/lib/db/schema";
 import { CATALOG_PRICE_CENTS, DURATION_OPTIONS_MINUTES } from "@/lib/booking/validation";
+import ConfirmDeleteButton from "./ConfirmDeleteButton";
 
 const PACKAGE_LABELS: Record<BookingPackage, string> = {
   "20-photos": "20 Edited Aerial Photos",
@@ -75,9 +76,16 @@ export default function BookingsTable({
                 <p className="text-sm text-fg-muted">{booking.clientEmail}</p>
                 {booking.clientPhone && <p className="text-sm text-fg-muted">{booking.clientPhone}</p>}
               </div>
-              <span className="rounded-full border border-border px-3 py-1 text-xs font-semibold uppercase tracking-wider text-fg-faint">
-                {STATUS_LABELS[booking.status] ?? booking.status}
-              </span>
+              <div className="flex flex-col items-end gap-2">
+                <span className="rounded-full border border-border px-3 py-1 text-xs font-semibold uppercase tracking-wider text-fg-faint">
+                  {STATUS_LABELS[booking.status] ?? booking.status}
+                </span>
+                <ConfirmDeleteButton
+                  bookingId={booking.id}
+                  clientName={booking.clientName}
+                  action={deleteBooking}
+                />
+              </div>
             </div>
 
             <dl className="mt-4 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">

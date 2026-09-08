@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { and, eq, inArray } from "drizzle-orm";
 import { db } from "@/lib/db/client";
-import { bookingCalendarSyncLog, bookings, type EmailType } from "@/lib/db/schema";
+import { bookingCalendarSyncLog, bookingEmailLog, bookings, type EmailType } from "@/lib/db/schema";
 import { createAdminSession, deleteAdminSession } from "@/lib/auth/session";
 import { verifyAdminSession } from "@/lib/auth/dal";
 import { acceptBookingSchema, declineBookingSchema } from "@/lib/booking/validation";
@@ -15,7 +15,7 @@ import { sendDepositReceivedEmail } from "@/lib/email/send-deposit-received-emai
 import { sendDeclineEmail } from "@/lib/email/send-decline-email";
 import { sendPreviewReadyEmail } from "@/lib/email/send-preview-ready-email";
 import { sendDeliveryEmail } from "@/lib/email/send-delivery-email";
-import { createBookingCalendarEvent } from "@/lib/calendar/create-booking-event";
+import { createBookingCalendarEvent, deleteBookingCalendarEvent } from "@/lib/calendar/create-booking-event";
 
 export type AdminLoginState = {
   error?: string;
@@ -196,6 +196,45 @@ export async function retryCalendarSync(formData: FormData): Promise<void> {
         .values({ bookingId: booking.id, status: "failed", errorMessage: message });
     }
   }
+
+  revalidatePath("/admin");
+}
+
+/**
+ * Permanently removes a booking request — for clearing out test entries,
+ * spam, or anything else that doesn't need to stick around. Also removes
+ * its calendar event if one exists, so nothing is left blocking a real time
+ * slot. Deliberately does not touch any uploaded photos/video in R2 — if a
+ * completed booking is ever deleted by mistake, the files themselves are
+ * still recoverable there rather than being destroyed along with the row.
+ */
+export async function deleteBooking(formData: FormData): Promise<void> {
+  await requireAdmin();
+
+  const bookingId = Number(formData.get("bookingId"));
+  if (!Number.isInteger(bookingId) || bookingId <= 0) {
+    throw new Error("Invalid booking id.");
+  }
+
+  const [booking] = await db.select().from(bookings).where(eq(bookings.id, bookingId)).limit(1);
+  if (!booking) {
+    revalidatePath("/admin");
+    return;
+  }
+
+  if (booking.calendarEventId) {
+    try {
+      await deleteBookingCalendarEvent(booking.calendarEventId);
+    } catch (err) {
+      // Don't block deleting the booking record over a calendar hiccup —
+      // worst case a stale event lingers and can be removed by hand.
+      console.error("Failed to delete calendar event for booking", bookingId, err);
+    }
+  }
+
+  await db.delete(bookingEmailLog).where(eq(bookingEmailLog.bookingId, bookingId));
+  await db.delete(bookingCalendarSyncLog).where(eq(bookingCalendarSyncLog.bookingId, bookingId));
+  await db.delete(bookings).where(eq(bookings.id, bookingId));
 
   revalidatePath("/admin");
 }
