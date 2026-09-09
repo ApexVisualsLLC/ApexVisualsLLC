@@ -16,6 +16,7 @@ export function PlaceholderPhoto({
   priority = false,
   className = "",
   labelPosition = "center",
+  filterClassName = FILM_GRADE,
 }: {
   label: string;
   /* Real photo path (e.g. "/hero.jpg"). Omit to show the placeholder gradient + label. */
@@ -24,10 +25,12 @@ export function PlaceholderPhoto({
   priority?: boolean;
   className?: string;
   labelPosition?: "center" | "bottom";
+  /* Overrides the default film-grade filter for this instance only. */
+  filterClassName?: string;
 }) {
   return (
     <div
-      className={`relative flex overflow-hidden bg-gradient-to-br from-[#231a10] via-[#14100c] to-[#0a0704] ${FILM_GRADE} ${
+      className={`relative flex overflow-hidden bg-gradient-to-br from-[#231a10] via-[#14100c] to-[#0a0704] ${filterClassName} ${
         labelPosition === "bottom" ? "items-end pb-10" : "items-center"
       } justify-center ${className}`}
       role={src ? undefined : "img"}

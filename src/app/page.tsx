@@ -58,6 +58,7 @@ export default function HomePage() {
             priority
             labelPosition="bottom"
             className="h-full w-full [&_img]:object-[center_38%]"
+            filterClassName="[filter:sepia(0.35)_contrast(1.08)_brightness(0.96)_saturate(1.25)]"
           />
         </Parallax>
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-bg" />
