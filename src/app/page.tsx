@@ -53,11 +53,11 @@ export default function HomePage() {
         <Parallax className="absolute inset-0 -top-24 h-[calc(100%+12rem)]" speed={0.25}>
           <PlaceholderPhoto
             label="Hero background — Russell's landscape shot"
-            src="/hero-timp-fence.jpg"
-            alt="Split-rail fence framing a view of Mount Timpanogos in Utah, captured by Apex Visuals LLC"
+            src="/hero-timp-sunset.jpg"
+            alt="Mount Timpanogos lit by sunset light under dramatic pink clouds, captured by Apex Visuals LLC"
             priority
             labelPosition="bottom"
-            className="h-full w-full"
+            className="h-full w-full [&_img]:object-[center_38%]"
           />
         </Parallax>
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-bg" />
