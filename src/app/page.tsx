@@ -58,9 +58,11 @@ export default function HomePage() {
             priority
             labelPosition="bottom"
             className="h-full w-full [&_img]:object-[center_38%]"
+            filterClassName="[filter:contrast(1.05)_brightness(1.1)_saturate(1.3)]"
+            vignette={false}
           />
         </Parallax>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-bg" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/15 to-bg" />
         <ViewfinderHUD />
 
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">

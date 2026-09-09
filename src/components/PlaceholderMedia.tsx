@@ -16,6 +16,8 @@ export function PlaceholderPhoto({
   priority = false,
   className = "",
   labelPosition = "center",
+  filterClassName = FILM_GRADE,
+  vignette = true,
 }: {
   label: string;
   /* Real photo path (e.g. "/hero.jpg"). Omit to show the placeholder gradient + label. */
@@ -24,10 +26,14 @@ export function PlaceholderPhoto({
   priority?: boolean;
   className?: string;
   labelPosition?: "center" | "bottom";
+  /* Overrides the default film-grade filter for this instance only. */
+  filterClassName?: string;
+  /* Set false to skip the default corner-darkening vignette for this instance. */
+  vignette?: boolean;
 }) {
   return (
     <div
-      className={`relative flex overflow-hidden bg-gradient-to-br from-[#231a10] via-[#14100c] to-[#0a0704] ${FILM_GRADE} ${
+      className={`relative flex overflow-hidden bg-gradient-to-br from-[#231a10] via-[#14100c] to-[#0a0704] ${filterClassName} ${
         labelPosition === "bottom" ? "items-end pb-10" : "items-center"
       } justify-center ${className}`}
       role={src ? undefined : "img"}
@@ -44,7 +50,7 @@ export function PlaceholderPhoto({
         />
       )}
       {!src && <div className="absolute inset-0" style={{ backgroundImage: LINE_MOTIF }} />}
-      <div className="absolute inset-0" style={{ backgroundImage: VIGNETTE }} />
+      {vignette && <div className="absolute inset-0" style={{ backgroundImage: VIGNETTE }} />}
       {!src && (
         <span className="relative max-w-[80%] text-center text-xs uppercase tracking-[0.25em] text-fg-faint/60">
           {label}
