@@ -110,20 +110,20 @@ export default function FeaturedProject() {
         <Reveal delay={100}>
           <div className="grid grid-cols-2 gap-3">
             <Still
-              src="/jellystone/aerial-property.jpg"
-              alt="Aerial view of the whole Jellystone Zion property, with the water park and campground spread across the Utah desert"
+              src="/jellystone/aerial-waterpark-topdown.jpg"
+              alt="Top-down aerial of the Jellystone Zion water park: lazy river, pools, and slide complex laid out like a site plan"
               sizes="(min-width: 1024px) 55vw, 100vw"
               className="col-span-2 aspect-video"
             />
             <Still
-              src="/jellystone/aerial-topdown.jpg"
-              alt="Top-down aerial of the water park's lazy river and pools"
+              src="/jellystone/ground-crowd-golden-hour.jpg"
+              alt="Guests gathered at the water park at golden hour, with the slide tower and palm trees behind them"
               sizes="(min-width: 1024px) 27vw, 50vw"
               className="aspect-[4/3]"
             />
             <Still
-              src="/jellystone/aerial-golden.jpg"
-              alt="Red and white water slides at golden hour with a desert mesa behind"
+              src="/jellystone/aerial-lazy-river.jpg"
+              alt="Aerial view of the lazy river and slide tower under a summer sky, with swimmers and shade structures"
               sizes="(min-width: 1024px) 27vw, 50vw"
               className="aspect-[4/3]"
             />
