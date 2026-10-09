@@ -89,6 +89,9 @@ function LoopingClip({
 export default function VideoWall() {
   return (
     <div>
+      <p className="mb-3 text-xs uppercase tracking-[0.15em] text-fg-faint">
+        Raw clips shot on-site at Jellystone Zion
+      </p>
       <div className="grid grid-cols-4 auto-rows-[90px] gap-1.5 overflow-hidden rounded-2xl sm:auto-rows-[110px] md:auto-rows-[130px]">
         <div className="relative col-span-2 row-span-2 overflow-hidden">
           <LoopingClip

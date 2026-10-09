@@ -13,6 +13,7 @@ import BookingStatus from "@/components/BookingStatus";
 import Magnetic from "@/components/Magnetic";
 import { PlaceholderPhoto } from "@/components/PlaceholderMedia";
 import FeaturedWork from "@/components/FeaturedWork";
+import FeaturedProject from "@/components/FeaturedProject";
 
 export const metadata: Metadata = {
   title: "Apex Visuals LLC — Aerial Drone Photography & Cinematic Video | Utah",
@@ -121,6 +122,12 @@ export default function HomePage() {
               </Link>
             </Reveal>
           ))}
+        </div>
+      </section>
+
+      <section id="featured-project" className="scroll-mt-16 border-t border-border bg-panel">
+        <div className="mx-auto max-w-7xl px-6 py-20 md:px-10 md:py-28">
+          <FeaturedProject />
         </div>
       </section>
 

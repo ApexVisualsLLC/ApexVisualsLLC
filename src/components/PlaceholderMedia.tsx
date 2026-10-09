@@ -66,6 +66,7 @@ export function VideoThumb({
   previewSrc,
   youtubeId,
   vertical = false,
+  aspectClassName,
   onClick,
   className = "",
 }: {
@@ -73,6 +74,9 @@ export function VideoThumb({
   location: string;
   category: string;
   featured?: boolean;
+  /* Overrides the card's aspect ratio (e.g. "aspect-[4/3]") for footage that is neither
+     16:9 nor 9:16 — a 4:3 video's YouTube thumbnail is a 16:9 canvas with black bars baked in. */
+  aspectClassName?: string;
   /* Optional static poster photo (e.g. "/desert-road.jpg") shown in place of the gradient
      placeholder — a real still until a video preview/embed is ready. */
   photoSrc?: string;
@@ -112,7 +116,7 @@ export function VideoThumb({
           : undefined
       }
       aria-label={onClick ? `Play video: ${title}` : undefined}
-      className={`group relative flex ${vertical ? "aspect-[9/16]" : "aspect-video"} w-full items-center justify-center overflow-hidden bg-gradient-to-br from-[#231a10] via-[#181209] to-[#0a0704] transition-transform duration-300 hover:-translate-y-1 ${FILM_GRADE} ${
+      className={`group relative flex ${aspectClassName ?? (vertical ? "aspect-[9/16]" : "aspect-video")} w-full items-center justify-center overflow-hidden bg-gradient-to-br from-[#231a10] via-[#181209] to-[#0a0704] transition-transform duration-300 hover:-translate-y-1 ${FILM_GRADE} ${
         onClick ? "cursor-pointer" : ""
       } ${className}`}
     >

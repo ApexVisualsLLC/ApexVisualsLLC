@@ -3,8 +3,8 @@ const testimonials = [
   {
     quote:
       "Russell's aerial footage of our water park and campgrounds is some of the best marketing content we've ever had — guests see it and want to book a stay before they've even finished watching.",
-    name: "Jellystone Zion Park",
-    role: "Family Resort & Water Park, St. George, UT",
+    name: "Scott Nelson",
+    role: "Owner, Jellystone Zion Park — Family Resort & Water Park, St. George, UT",
   },
   {
     quote:

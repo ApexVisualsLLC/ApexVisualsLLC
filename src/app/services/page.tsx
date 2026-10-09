@@ -7,6 +7,7 @@ import Magnetic from "@/components/Magnetic";
 import PackageComparison from "@/components/PackageComparison";
 import PhotoSlideshow from "@/components/PhotoSlideshow";
 import VideoWall from "@/components/VideoWall";
+import FeaturedProject from "@/components/FeaturedProject";
 
 export const metadata: Metadata = {
   title: "Services & Pricing — Apex Visuals LLC | Drone Photography Utah",
@@ -208,6 +209,10 @@ export default function ServicesPage() {
           </p>
         </div>
       </Reveal>
+
+      <div id="featured-project" className="mt-24 scroll-mt-16 border-t border-border pt-20">
+        <FeaturedProject />
+      </div>
 
       <div className="mt-24">
         <Reveal>
