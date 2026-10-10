@@ -7,7 +7,7 @@ const faqs = [
   {
     question: "How long does delivery take?",
     answer:
-      "Aerial photography is typically delivered within 5 business days; the Photos + Aerial Video Bundle and cinematic video within 7. Need it sooner? Rush delivery within 48 hours is available for an additional 50% fee.",
+      "Aerial photography is typically delivered within 5 business days; the Photos + Aerial Video Bundle and cinematic video within 7. Need it sooner? Rush delivery may be available within 48 hours for an additional 50%, subject to confirmation before booking.",
   },
   {
     question: "What happens if weather delays my shoot?",

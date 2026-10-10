@@ -229,8 +229,8 @@ export default function ServicesPage() {
       <Reveal>
         <div className="mt-6 rounded-2xl border border-border bg-panel p-6 text-sm text-fg-muted">
           <p>
-            <span className="font-semibold text-fg">Rush delivery</span> is available within 48
-            hours for an additional 50% fee.
+            <span className="font-semibold text-fg">Rush delivery</span> may be available within
+            48 hours for an additional 50%, subject to confirmation before booking.
           </p>
           <p className="mt-2">
             <span className="font-semibold text-fg">Minimum project fee: $175.</span> Every
