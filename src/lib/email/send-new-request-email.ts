@@ -11,7 +11,7 @@ const PACKAGE_LABELS: Record<BookingPackage, string> = {
 
 // Where Russell actually reads his email — same address used everywhere
 // else on the site (footer, contact page, policies).
-const ADMIN_EMAIL = "russfilmz808@gmail.com";
+const ADMIN_EMAIL = "apexvisualsutah@gmail.com";
 const SITE_URL = "https://apexvisualsutah.com";
 
 function formatBookingTime(date: Date): string {
