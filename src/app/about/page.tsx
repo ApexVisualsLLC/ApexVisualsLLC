@@ -32,11 +32,11 @@ export default function AboutPage() {
     <div>
       <PlaceholderPhoto
         label="Russell on location"
-        src="/about-hero-maui-ravine.jpg"
-        alt="Russell standing on a rock overlooking a green ravine in Maui, Hawaii"
+        src="/about-hero-lake-ridge.jpg"
+        alt="Russell standing on a rocky ridge above a mountain lake, with autumn color on the slopes and clouds drifting across the peaks"
         priority
         labelPosition="bottom"
-        className="h-[55vh] min-h-[360px] w-full"
+        className="h-[55vh] min-h-[360px] w-full [&_img]:object-[center_75%]"
       />
 
       <div className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
@@ -52,10 +52,10 @@ export default function AboutPage() {
 
           <Reveal delay={100}>
             <PlaceholderPhoto
-              label="Russell overlooking Haleakala crater"
-              src="/about-portrait-haleakala.jpg"
-              alt="Russell sitting on a rock overlooking Haleakala crater in Maui, Hawaii at sunset"
-              className="aspect-[4/5] w-full rounded-2xl"
+              label="Portrait of Russell"
+              src="/about-portrait-golden-hour.jpg"
+              alt="Portrait of Russell in warm golden-hour light against a clear blue sky"
+              className="aspect-[4/5] w-full rounded-2xl [&_img]:object-[center_25%]"
             />
           </Reveal>
         </div>
