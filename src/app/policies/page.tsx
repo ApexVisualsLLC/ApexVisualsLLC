@@ -94,8 +94,8 @@ export default function PoliciesPage() {
           <h2 className="font-serif text-2xl font-bold">Questions</h2>
           <p className="mt-3 leading-relaxed text-fg-muted">
             Reach out anytime at{" "}
-            <a href="mailto:russfilmz808@gmail.com" className="text-fg hover:underline">
-              russfilmz808@gmail.com
+            <a href="mailto:apexvisualsutah@gmail.com" className="text-fg hover:underline">
+              apexvisualsutah@gmail.com
             </a>{" "}
             or{" "}
             <a href="tel:+18088664664" className="text-fg hover:underline">

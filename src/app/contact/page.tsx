@@ -69,8 +69,8 @@ export default function ContactPage() {
 
       <div className="mt-14 border-t border-border pt-8 text-sm text-fg-muted">
         <p>
-          <a href="mailto:russfilmz808@gmail.com" className="hover:text-fg">
-            russfilmz808@gmail.com
+          <a href="mailto:apexvisualsutah@gmail.com" className="hover:text-fg">
+            apexvisualsutah@gmail.com
           </a>
         </p>
         <p className="mt-1">

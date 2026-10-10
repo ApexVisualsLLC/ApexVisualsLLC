@@ -69,7 +69,7 @@ const localBusinessSchema = {
   image: `${siteUrl}/logo-full-white.png`,
   url: siteUrl,
   telephone: "+1-808-866-4664",
-  email: "russfilmz808@gmail.com",
+  email: "apexvisualsutah@gmail.com",
   address: {
     "@type": "PostalAddress",
     addressLocality: "Provo",

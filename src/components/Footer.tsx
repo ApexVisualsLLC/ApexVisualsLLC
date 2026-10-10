@@ -40,8 +40,8 @@ export default function Footer() {
             <p className="text-fg-faint">Apex Visuals LLC</p>
             <p>Provo, Utah</p>
             <p>
-              <a href="mailto:russfilmz808@gmail.com" className="hover:text-fg">
-                russfilmz808@gmail.com
+              <a href="mailto:apexvisualsutah@gmail.com" className="hover:text-fg">
+                apexvisualsutah@gmail.com
               </a>
             </p>
             <p>

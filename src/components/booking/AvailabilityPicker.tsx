@@ -27,7 +27,7 @@ function formatTime(date: Date): string {
 function ContactLinks() {
   return (
     <>
-      <a href="mailto:russfilmz808@gmail.com" className="underline hover:text-fg">
+      <a href="mailto:apexvisualsutah@gmail.com" className="underline hover:text-fg">
         Email
       </a>{" "}
       or{" "}
