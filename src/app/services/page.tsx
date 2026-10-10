@@ -22,7 +22,15 @@ export const metadata: Metadata = {
   },
 };
 
-type Tier = { name: string; price: string; description: string };
+type Tier = {
+  name: string;
+  price: string;
+  description: string;
+  /* Itemised inclusions, shown as a short list under the description. */
+  features?: string[];
+  /* Small print under the list, e.g. what needs a separate quote. */
+  note?: string;
+};
 
 const aerialTiers: Tier[] = [
   {
@@ -32,9 +40,18 @@ const aerialTiers: Tier[] = [
       "Up to 15 edited aerial photos for property listings, resort amenities and local business marketing. Delivered within 5 business days. Final scope is confirmed before booking.",
   },
   {
-    name: "Standard",
-    price: "Starting at $275",
-    description: "Up to 25 edited aerial stills plus a 60-second aerial highlight clip. Delivered within 5 business days.",
+    name: "Photos + Aerial Video Bundle",
+    price: "$300",
+    description: "Edited aerial photos and a short aerial highlight video from a single visit.",
+    features: [
+      "Up to 15 edited aerial photos",
+      "One edited 30-second aerial highlight video",
+      "One location, one visit, up to one hour on-site",
+      "One format: horizontal or vertical, chosen by the client",
+      "Delivery within 7 business days",
+      "One round of minor video revisions",
+    ],
+    note: "Ground footage, interviews, additional locations and extra video formats require a separate quote.",
   },
   {
     name: "Custom",
@@ -88,7 +105,20 @@ function TierCard({ tier, highlighted = false }: { tier: Tier; highlighted?: boo
     >
       <h3 className="font-serif text-xl font-bold">{tier.name}</h3>
       <p className="mt-2 text-lg font-semibold text-fg">{tier.price}</p>
-      <p className="mt-4 flex-1 text-sm leading-relaxed text-fg-muted">{tier.description}</p>
+      <div className="mt-4 flex-1">
+        <p className="text-sm leading-relaxed text-fg-muted">{tier.description}</p>
+        {tier.features && (
+          <ul className="mt-4 space-y-2 text-sm text-fg-muted">
+            {tier.features.map((feature) => (
+              <li key={feature} className="flex gap-3 leading-relaxed">
+                <span aria-hidden="true" className="mt-2.5 h-px w-3 shrink-0 bg-fg-faint" />
+                <span>{feature}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+        {tier.note && <p className="mt-4 text-xs leading-relaxed text-fg-faint">{tier.note}</p>}
+      </div>
       <Magnetic className="mt-8 inline-block">
         <Link
           href="/book"

@@ -10,7 +10,7 @@ const rows = [
   },
   {
     label: "Turnaround",
-    aerial: "5 business days",
+    aerial: "5 business days (7 with the video bundle)",
     cinematic: "7 business days",
     social: "Ongoing monthly",
   },

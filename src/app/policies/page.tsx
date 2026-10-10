@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/policies" },
 };
 
-const LAST_UPDATED = "September 2026";
+const LAST_UPDATED = "October 2026";
 
 type Section = {
   heading: string;
@@ -35,7 +35,7 @@ const sections: Section[] = [
   {
     heading: "Delivery Timeline",
     paragraphs: [
-      "Edited deliverables are completed within 5 business days of your shoot date. If a project needs longer for any reason, we'll reach out directly rather than leave you waiting.",
+      "Edited photo deliverables are completed within 5 business days of your shoot date. Video deliverables, including the Photos + Aerial Video Bundle and cinematic video, are completed within 7 business days. If a project needs longer for any reason, we'll reach out directly rather than leave you waiting.",
     ],
   },
   {
