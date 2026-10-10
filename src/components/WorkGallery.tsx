@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { VideoThumb } from "@/components/PlaceholderMedia";
 import VideoLightbox from "@/components/VideoLightbox";
 import Reveal from "@/components/Reveal";
@@ -21,7 +22,11 @@ type WorkItem = {
   vertical?: boolean;
   /* 4:3 footage whose YouTube thumbnail has black side bars baked in — see VideoThumb. */
   pillarboxed?: boolean;
+  /* Optional project page this video belongs to; adds a crawlable link under the card. */
+  projectHref?: string;
 };
+
+const JELLYSTONE_PROJECT = "/work/jellystone-zion";
 
 /* REPLACE: add `previewSrc: "/videos/<file>.mp4"` to any item below once Russell drops a
    short muted preview clip into public/videos/ — it'll autoplay on hover. Until then these
@@ -32,6 +37,7 @@ const items: WorkItem[] = [
     location: "Zion, Utah",
     categories: ["Commercial"],
     youtubeId: "OIJLkrlNbNk",
+    projectHref: JELLYSTONE_PROJECT,
     pillarboxed: true,
   },
   {
@@ -39,6 +45,7 @@ const items: WorkItem[] = [
     location: "Zion, Utah",
     categories: ["Commercial"],
     youtubeId: "jWHG1yUGaK4",
+    projectHref: JELLYSTONE_PROJECT,
     vertical: true,
   },
   {
@@ -46,6 +53,7 @@ const items: WorkItem[] = [
     location: "Zion, Utah",
     categories: ["Commercial"],
     youtubeId: "3S_L09IBwYM",
+    projectHref: JELLYSTONE_PROJECT,
     vertical: true,
   },
   {
@@ -53,6 +61,7 @@ const items: WorkItem[] = [
     location: "Zion, Utah",
     categories: ["Commercial", "Aerial"],
     youtubeId: "IWPkTmCEmZE",
+    projectHref: JELLYSTONE_PROJECT,
     vertical: true,
   },
   {
@@ -60,6 +69,7 @@ const items: WorkItem[] = [
     location: "Zion, Utah",
     categories: ["Commercial", "Aerial"],
     youtubeId: "-TgBc5kIQK8",
+    projectHref: JELLYSTONE_PROJECT,
     vertical: true,
   },
   {
@@ -67,6 +77,7 @@ const items: WorkItem[] = [
     location: "Zion, Utah",
     categories: ["Commercial"],
     youtubeId: "DDhS_1Op-RI",
+    projectHref: JELLYSTONE_PROJECT,
     vertical: true,
   },
   {
@@ -156,6 +167,14 @@ export default function WorkGallery() {
               featured={i === 0}
               className="rounded-2xl"
             />
+            {item.projectHref && (
+              <Link
+                href={item.projectHref}
+                className="mt-3 inline-block text-sm font-medium text-fg-muted transition-colors hover:text-fg"
+              >
+                View the Jellystone Zion project <span aria-hidden="true">&rarr;</span>
+              </Link>
+            )}
           </Reveal>
         ))}
       </div>

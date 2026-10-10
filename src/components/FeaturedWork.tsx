@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { VideoThumb } from "@/components/PlaceholderMedia";
 import VideoLightbox from "@/components/VideoLightbox";
 import Reveal from "@/components/Reveal";
@@ -14,6 +15,8 @@ type FeaturedItem = {
   vertical?: boolean;
   /* 4:3 footage whose YouTube thumbnail has black side bars baked in — see VideoThumb. */
   pillarboxed?: boolean;
+  /* Optional project page this video belongs to; adds a crawlable link under the card. */
+  projectHref?: string;
 };
 
 /* REPLACE: add `previewSrc: "/videos/<file>.mp4"` to any item below once Russell drops a
@@ -26,6 +29,7 @@ const featured: FeaturedItem[] = [
     category: "Commercial",
     youtubeId: "OIJLkrlNbNk",
     pillarboxed: true,
+    projectHref: "/work/jellystone-zion",
   },
   {
     title: "Desert Run",
@@ -70,6 +74,14 @@ export default function FeaturedWork() {
             }
             className="rounded-2xl"
           />
+          {item.projectHref && (
+            <Link
+              href={item.projectHref}
+              className="mt-3 inline-block text-sm font-medium text-fg-muted transition-colors hover:text-fg"
+            >
+              View the Jellystone Zion project <span aria-hidden="true">&rarr;</span>
+            </Link>
+          )}
         </Reveal>
       ))}
 

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 const siteUrl = "https://apexvisualsutah.com";
-const routes = ["", "/work", "/services", "/about", "/contact"];
+const routes = ["", "/work", "/work/jellystone-zion", "/services", "/about", "/contact"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return routes.map((route) => ({

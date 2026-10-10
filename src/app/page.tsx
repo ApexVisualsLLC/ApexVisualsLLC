@@ -32,17 +32,17 @@ const services = [
   {
     title: "Aerial Photography",
     description: "Drone stills for real estate and properties, captured from angles no one else gets.",
-    href: "/services",
+    href: "/services#aerial",
   },
   {
     title: "Cinematic Video",
     description: "Drone and ground footage combined into a produced, story-driven brand film.",
-    href: "/services",
+    href: "/services#cinematic",
   },
   {
     title: "Social Media Content",
     description: "Short-form Reels, TikToks, and monthly retainers — ready to post, every month.",
-    href: "/services",
+    href: "/services#social-media",
     badge: "Most Popular",
   },
 ];
@@ -70,9 +70,10 @@ export default function HomePage() {
           <h1 className="mt-5 font-serif text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl">
             We See What Others Miss.
           </h1>
-          <p className="mx-auto mt-6 max-w-xl text-base text-fg-muted sm:text-lg">
-            Licensed drone pilot and cinematographer serving businesses across Utah.
-            FAA Part 107 Certified.
+          <p className="mx-auto mt-6 max-w-2xl text-base text-fg-muted sm:text-lg">
+            Drone photography, cinematic video and recurring social media content for businesses
+            in Provo, Orem, Lehi and Utah County. Work directly with Russell Bowden, an FAA
+            Part 107 certified drone pilot, from planning through final delivery.
           </p>
           <Magnetic className="mt-10 inline-block">
             <Link

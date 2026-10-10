@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { trackEvent } from "@/lib/analytics";
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xrpzovbw";
 
@@ -45,6 +46,8 @@ export default function ContactForm() {
       if (response.ok) {
         setStatus("success");
         form.reset();
+        // Counted only once Formspree has accepted the message — never on click or on error.
+        trackEvent("generate_lead", { lead_source: "contact_form" });
       } else {
         setStatus("error");
       }

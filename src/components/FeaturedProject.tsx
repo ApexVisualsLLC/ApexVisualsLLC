@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Eyebrow from "@/components/Eyebrow";
 import Reveal from "@/components/Reveal";
 import { VideoThumb } from "@/components/PlaceholderMedia";
@@ -105,6 +106,13 @@ export default function FeaturedProject() {
               <span className="text-fg-faint"> &mdash; Owner, Jellystone Zion Park</span>
             </figcaption>
           </figure>
+
+          <Link
+            href="/work/jellystone-zion"
+            className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-fg transition-colors hover:text-fg-muted"
+          >
+            View the Jellystone Zion project <span aria-hidden="true">&rarr;</span>
+          </Link>
         </Reveal>
 
         <Reveal delay={100}>

@@ -28,7 +28,8 @@ const aerialTiers: Tier[] = [
   {
     name: "Starter",
     price: "Starting at $175",
-    description: "Up to 15 edited aerial stills. Ideal for real estate listings. Delivered within 5 business days.",
+    description:
+      "Up to 15 edited aerial photos for property listings, resort amenities and local business marketing. Delivered within 5 business days. Final scope is confirmed before booking.",
   },
   {
     name: "Standard",
