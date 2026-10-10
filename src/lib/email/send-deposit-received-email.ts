@@ -5,7 +5,7 @@ import { bookingEmailLog, type Booking, type BookingPackage } from "@/lib/db/sch
 import { RESCHEDULE_REMINDER_TEXT } from "@/lib/booking/policy";
 
 const PACKAGE_LABELS: Record<BookingPackage, string> = {
-  "20-photos": "20 Edited Aerial Photos",
+  "20-photos": "Up to 15 Edited Aerial Photos",
   "photo-video-bundle": "20 Photos + Video Bundle",
   other: "Custom Project",
 };

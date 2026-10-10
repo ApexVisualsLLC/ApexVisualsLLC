@@ -55,6 +55,7 @@ const sections: Section[] = [
     heading: "Privacy",
     paragraphs: [
       "Information you provide when booking is used only to plan, schedule, and deliver your project, and to process payment. We don't sell or share your information with third parties beyond what's needed to run the booking and payment systems themselves (for example, Stripe for payment processing).",
+      "This website uses Google Analytics and Vercel Analytics to understand, in aggregate, which pages visitors view. They collect anonymous usage data such as pages visited, device type, and approximate location. Booking links and the admin area are excluded, and nothing you enter in a booking is sent to either service.",
     ],
   },
   {

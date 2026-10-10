@@ -15,6 +15,8 @@ export const BOOKING_STATUSES = [
 ] as const;
 export type BookingStatus = (typeof BOOKING_STATUSES)[number];
 
+// "20-photos" is a legacy stored id for the $175 aerial package (now "Up to 15 Edited Aerial
+// Photos"). Existing bookings and the pricing map key off it, so only the display labels changed.
 export const BOOKING_PACKAGES = ["20-photos", "photo-video-bundle", "other"] as const;
 export type BookingPackage = (typeof BOOKING_PACKAGES)[number];
 

@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import GrainOverlay from "@/components/GrainOverlay";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 import MobileCTABar from "@/components/MobileCTABar";
 import "./globals.css";
 
@@ -118,6 +119,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Footer />
         <MobileCTABar />
         <Analytics />
+        <GoogleAnalytics />
       </body>
     </html>
   );

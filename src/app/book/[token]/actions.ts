@@ -12,7 +12,7 @@ import { sendNewRequestEmail } from "@/lib/email/send-new-request-email";
 const SITE_URL = "https://apexvisualsutah.com";
 
 const PACKAGE_LABELS: Record<BookingPackage, string> = {
-  "20-photos": "20 Edited Aerial Photos",
+  "20-photos": "Up to 15 Edited Aerial Photos",
   "photo-video-bundle": "20 Photos + Video Bundle",
   other: "Custom Project",
 };
