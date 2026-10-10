@@ -8,8 +8,10 @@ import { backupBookingsToSheet } from "@/lib/backup/backup-bookings";
  * the URL and tries to trigger it manually.
  */
 export async function GET(request: Request) {
+  // Fail closed: without this, an unset CRON_SECRET would make "Bearer undefined" a valid token.
+  const secret = process.env.CRON_SECRET;
   const authHeader = request.headers.get("authorization");
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!secret || authHeader !== `Bearer ${secret}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

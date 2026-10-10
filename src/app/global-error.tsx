@@ -48,6 +48,9 @@ export default function GlobalError({
             </button>
           </Magnetic>
           <Magnetic>
+            {/* A plain <a> on purpose: global-error replaces the root layout, so it needs a full
+                page load to get back to a working app (next/link would keep the broken tree). */}
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
             <a
               href="/"
               className="inline-block rounded-full border border-fg/30 px-6 py-3 text-sm font-semibold tracking-wide transition-colors hover:border-fg hover:bg-fg hover:text-bg"

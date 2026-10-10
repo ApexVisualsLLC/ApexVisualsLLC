@@ -16,13 +16,14 @@ function useCountUp(target: number, start: boolean) {
 
   useEffect(() => {
     if (!start) return;
+    let frame: number;
+
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setValue(target);
-      return;
+      frame = requestAnimationFrame(() => setValue(target));
+      return () => cancelAnimationFrame(frame);
     }
 
     const startTime = performance.now();
-    let frame: number;
 
     const tick = (now: number) => {
       const progress = Math.min((now - startTime) / DURATION_MS, 1);
