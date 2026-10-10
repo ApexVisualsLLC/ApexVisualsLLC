@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 const PACKAGE_LABELS: Record<BookingPackage, string> = {
   "20-photos": "Up to 15 Edited Aerial Photos",
-  "photo-video-bundle": "20 Photos + Video Bundle",
+  "photo-video-bundle": "Photos + Video Bundle",
   other: "Custom Project",
 };
 
