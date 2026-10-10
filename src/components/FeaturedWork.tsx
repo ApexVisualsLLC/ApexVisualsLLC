@@ -12,6 +12,8 @@ type FeaturedItem = {
   previewSrc?: string;
   youtubeId?: string;
   vertical?: boolean;
+  /* 4:3 footage whose YouTube thumbnail has black side bars baked in — see VideoThumb. */
+  pillarboxed?: boolean;
 };
 
 /* REPLACE: add `previewSrc: "/videos/<file>.mp4"` to any item below once Russell drops a
@@ -23,6 +25,7 @@ const featured: FeaturedItem[] = [
     location: "Zion, Utah",
     category: "Commercial",
     youtubeId: "OIJLkrlNbNk",
+    pillarboxed: true,
   },
   {
     title: "Desert Run",
@@ -54,6 +57,7 @@ export default function FeaturedWork() {
             previewSrc={item.previewSrc}
             youtubeId={item.youtubeId}
             vertical={item.vertical}
+            pillarboxed={item.pillarboxed}
             onClick={
               item.youtubeId
                 ? () =>

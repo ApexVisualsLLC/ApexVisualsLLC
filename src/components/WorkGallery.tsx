@@ -19,6 +19,8 @@ type WorkItem = {
   previewSrc?: string;
   youtubeId?: string;
   vertical?: boolean;
+  /* 4:3 footage whose YouTube thumbnail has black side bars baked in — see VideoThumb. */
+  pillarboxed?: boolean;
 };
 
 /* REPLACE: add `previewSrc: "/videos/<file>.mp4"` to any item below once Russell drops a
@@ -30,6 +32,7 @@ const items: WorkItem[] = [
     location: "Zion, Utah",
     categories: ["Commercial"],
     youtubeId: "OIJLkrlNbNk",
+    pillarboxed: true,
   },
   {
     title: "Jellystone Zion — Friday Night Party Video",
@@ -139,6 +142,7 @@ export default function WorkGallery() {
               previewSrc={item.previewSrc}
               youtubeId={item.youtubeId}
               vertical={item.vertical}
+              pillarboxed={item.pillarboxed}
               onClick={
                 item.youtubeId
                   ? () =>

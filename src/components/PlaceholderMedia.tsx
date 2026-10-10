@@ -67,6 +67,7 @@ export function VideoThumb({
   youtubeId,
   vertical = false,
   aspectClassName,
+  pillarboxed = false,
   onClick,
   className = "",
 }: {
@@ -77,6 +78,10 @@ export function VideoThumb({
   /* Overrides the card's aspect ratio (e.g. "aspect-[4/3]") for footage that is neither
      16:9 nor 9:16 — a 4:3 video's YouTube thumbnail is a 16:9 canvas with black bars baked in. */
   aspectClassName?: string;
+  /* Set for 4:3 footage inside a 16:9 card: its YouTube thumbnail has black bars baked into
+     the left and right edges, so the poster is scaled up just enough to crop them out. Use
+     aspectClassName instead when the card itself should become 4:3. */
+  pillarboxed?: boolean;
   /* Optional static poster photo (e.g. "/desert-road.jpg") shown in place of the gradient
      placeholder — a real still until a video preview/embed is ready. */
   photoSrc?: string;
@@ -131,7 +136,7 @@ export function VideoThumb({
               ? "100vw"
               : "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           }
-          className="object-cover"
+          className={`object-cover ${pillarboxed ? "scale-[1.34]" : ""}`}
           onLoad={(e) => {
             // maxresdefault.jpg 404s to a 120x90 gray placeholder (HTTP 200, not an
             // error) when YouTube hasn't generated a max-res thumb for a video yet —
